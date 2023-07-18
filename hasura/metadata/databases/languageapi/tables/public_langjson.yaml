@@ -1,0 +1,17 @@
+table:
+  name: langjson
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - alt
+        - cc
+        - gw
+        - hc
+        - lc
+        - ang
+        - ln
+        - lr
+        - ld
+      filter: {}

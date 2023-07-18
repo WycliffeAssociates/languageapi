@@ -1,0 +1,18 @@
+- name: allowed-queries
+  definition:
+    queries:
+      - name: langjson
+        query: |
+          query MyQuery {
+            langjson {
+              alt
+              ang
+              cc
+              gw
+              hc
+              lc
+              ld
+              ln
+              lr
+            }
+          }

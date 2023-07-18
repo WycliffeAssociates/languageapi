@@ -1,0 +1,902 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "id": "d2541188-4462-423e-bbd7-e3745986d324",
+  "prevId": "7a8c834a-438d-456b-8d52-83def6a05b3a",
+  "tables": {
+    "language": {
+      "name": "language",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ietf_code": {
+          "name": "ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "national_name": {
+          "name": "national_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "english_name": {
+          "name": "english_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "direction": {
+          "name": "direction",
+          "type": "direction",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "iso6393": {
+          "name": "iso6393",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_on": {
+          "name": "created_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_on": {
+          "name": "modified_on",
+          "type": "timestamp(0)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_oral_language": {
+          "name": "is_oral_language",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "home_country_alpha2": {
+          "name": "home_country_alpha2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "ietf_idx": {
+          "name": "ietf_idx",
+          "columns": [
+            "ietf_code"
+          ],
+          "isUnique": true
+        },
+        "id_idx": {
+          "name": "id_idx",
+          "columns": [
+            "id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "language_home_country_alpha2_country_alpha_2_fk": {
+          "name": "language_home_country_alpha2_country_alpha_2_fk",
+          "tableFrom": "language",
+          "tableTo": "country",
+          "columnsFrom": [
+            "home_country_alpha2"
+          ],
+          "columnsTo": [
+            "alpha_2"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "wa_language_meta": {
+      "name": "wa_language_meta",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ietf_code": {
+          "name": "ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_on_biel": {
+          "name": "show_on_biel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wa_language_meta_ietf_code_language_ietf_code_fk": {
+          "name": "wa_language_meta_ietf_code_language_ietf_code_fk",
+          "tableFrom": "wa_language_meta",
+          "tableTo": "language",
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "language_alternate_name": {
+      "name": "language_alternate_name",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ietf_code": {
+          "name": "ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "language_alternate_name_ietf_code_language_ietf_code_fk": {
+          "name": "language_alternate_name_ietf_code_language_ietf_code_fk",
+          "tableFrom": "language_alternate_name",
+          "tableTo": "language",
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "languages_to_languages": {
+      "name": "languages_to_languages",
+      "schema": "",
+      "columns": {
+        "gateway_language_ietf": {
+          "name": "gateway_language_ietf",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "gateway_language_to_ietf": {
+          "name": "gateway_language_to_ietf",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "languages_to_languages_gateway_language_ietf_language_ietf_code_fk": {
+          "name": "languages_to_languages_gateway_language_ietf_language_ietf_code_fk",
+          "tableFrom": "languages_to_languages",
+          "tableTo": "language",
+          "columnsFrom": [
+            "gateway_language_ietf"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "languages_to_languages_gateway_language_to_ietf_language_ietf_code_fk": {
+          "name": "languages_to_languages_gateway_language_to_ietf_language_ietf_code_fk",
+          "tableFrom": "languages_to_languages",
+          "tableTo": "language",
+          "columnsFrom": [
+            "gateway_language_to_ietf"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "languages_to_languages_gateway_language_ietf_gateway_language_to_ietf": {
+          "name": "languages_to_languages_gateway_language_ietf_gateway_language_to_ietf",
+          "columns": [
+            "gateway_language_ietf",
+            "gateway_language_to_ietf"
+          ]
+        }
+      }
+    },
+    "content": {
+      "name": "content",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(256)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "language_id": {
+          "name": "language_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "type": {
+          "name": "type",
+          "type": "type_id",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "domain": {
+          "name": "domain",
+          "type": "domain",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "resource_type": {
+          "name": "resource_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "git_id": {
+          "name": "git_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_on": {
+          "name": "created_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_on": {
+          "name": "modified_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "level": {
+          "name": "level",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "content_language_id_language_ietf_code_fk": {
+          "name": "content_language_id_language_ietf_code_fk",
+          "tableFrom": "content",
+          "tableTo": "language",
+          "columnsFrom": [
+            "language_id"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "wa_content_meta": {
+      "name": "wa_content_meta",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_on_biel": {
+          "name": "show_on_biel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "content_idx": {
+          "name": "content_idx",
+          "columns": [
+            "content_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "wa_content_meta_content_id_content_id_fk": {
+          "name": "wa_content_meta_content_id_content_id_fk",
+          "tableFrom": "wa_content_meta",
+          "tableTo": "content",
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "connected_content": {
+      "name": "connected_content",
+      "schema": "",
+      "columns": {
+        "content_id_1": {
+          "name": "content_id_1",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_id_2": {
+          "name": "content_id_2",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "connected_content_content_id_1_content_id_fk": {
+          "name": "connected_content_content_id_1_content_id_fk",
+          "tableFrom": "connected_content",
+          "tableTo": "content",
+          "columnsFrom": [
+            "content_id_1"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "connected_content_content_id_2_content_id_fk": {
+          "name": "connected_content_content_id_2_content_id_fk",
+          "tableFrom": "connected_content",
+          "tableTo": "content",
+          "columnsFrom": [
+            "content_id_2"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "connected_content_content_id_1_content_id_2": {
+          "name": "connected_content_content_id_1_content_id_2",
+          "columns": [
+            "content_id_1",
+            "content_id_2"
+          ]
+        }
+      }
+    },
+    "git_repo": {
+      "name": "git_repo",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repo_name": {
+          "name": "repo_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repo_url": {
+          "name": "repo_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "username_reponame_idx": {
+          "name": "username_reponame_idx",
+          "columns": [
+            "username",
+            "repo_name"
+          ],
+          "isUnique": true
+        },
+        "content_id_idx": {
+          "name": "content_id_idx",
+          "columns": [
+            "content_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "git_repo_content_id_content_id_fk": {
+          "name": "git_repo_content_id_content_id_fk",
+          "tableFrom": "git_repo",
+          "tableTo": "content",
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "rendering": {
+      "name": "rendering",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_type": {
+          "name": "file_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "file_size_bytes": {
+          "name": "file_size_bytes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "doesCoverAllContent": {
+          "name": "doesCoverAllContent",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_on": {
+          "name": "modified_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "rendering_unique_idx": {
+          "name": "rendering_unique_idx",
+          "columns": [
+            "url"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "rendering_content_id_content_id_fk": {
+          "name": "rendering_content_id_content_id_fk",
+          "tableFrom": "rendering",
+          "tableTo": "content",
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "scriptural_rendering_metadata": {
+      "name": "scriptural_rendering_metadata",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "rendering_id": {
+          "name": "rendering_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "book_slug": {
+          "name": "book_slug",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "book_name": {
+          "name": "book_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chapter": {
+          "name": "chapter",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sort": {
+          "name": "sort",
+          "type": "smallint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "scriptural_rendering_metadata_rendering_id_rendering_id_fk": {
+          "name": "scriptural_rendering_metadata_rendering_id_rendering_id_fk",
+          "tableFrom": "scriptural_rendering_metadata",
+          "tableTo": "rendering",
+          "columnsFrom": [
+            "rendering_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "nonscriptural_rendering_metadata": {
+      "name": "nonscriptural_rendering_metadata",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "rendering_id": {
+          "name": "rendering_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "additional_data": {
+          "name": "additional_data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "nonscriptural_rendering_metadata_rendering_id_rendering_id_fk": {
+          "name": "nonscriptural_rendering_metadata_rendering_id_rendering_id_fk",
+          "tableFrom": "nonscriptural_rendering_metadata",
+          "tableTo": "rendering",
+          "columnsFrom": [
+            "rendering_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "world_region": {
+      "name": "world_region",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "region": {
+          "name": "region",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_on": {
+          "name": "created_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_on": {
+          "name": "modified_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "region_name_idx": {
+          "name": "region_name_idx",
+          "columns": [
+            "region"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "country": {
+      "name": "country",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "world_region_id": {
+          "name": "world_region_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_on": {
+          "name": "created_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_on": {
+          "name": "modified_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alpha_2": {
+          "name": "alpha_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alpha_3": {
+          "name": "alpha_3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "population": {
+          "name": "population",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "alpha_2_idx": {
+          "name": "alpha_2_idx",
+          "columns": [
+            "alpha_2"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "country_world_region_id_world_region_id_fk": {
+          "name": "country_world_region_id_world_region_id_fk",
+          "tableFrom": "country",
+          "tableTo": "world_region",
+          "columnsFrom": [
+            "world_region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {}
+    },
+    "country_to_language": {
+      "name": "country_to_language",
+      "schema": "",
+      "columns": {
+        "language_ietf_code": {
+          "name": "language_ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country_alpha_2": {
+          "name": "country_alpha_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "country_to_language_language_ietf_code_language_ietf_code_fk": {
+          "name": "country_to_language_language_ietf_code_language_ietf_code_fk",
+          "tableFrom": "country_to_language",
+          "tableTo": "language",
+          "columnsFrom": [
+            "language_ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        },
+        "country_to_language_country_alpha_2_country_alpha_2_fk": {
+          "name": "country_to_language_country_alpha_2_country_alpha_2_fk",
+          "tableFrom": "country_to_language",
+          "tableTo": "country",
+          "columnsFrom": [
+            "country_alpha_2"
+          ],
+          "columnsTo": [
+            "alpha_2"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "country_to_language_language_ietf_code_country_alpha_2": {
+          "name": "country_to_language_language_ietf_code_country_alpha_2",
+          "columns": [
+            "language_ietf_code",
+            "country_alpha_2"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {
+    "direction": {
+      "name": "direction",
+      "values": {
+        "ltr": "ltr",
+        "rtl": "rtl"
+      }
+    },
+    "type_id": {
+      "name": "type_id",
+      "values": {
+        "text": "text",
+        "audio": "audio",
+        "video": "video",
+        "braille": "braille"
+      }
+    },
+    "domain": {
+      "name": "domain",
+      "values": {
+        "scripture": "scripture",
+        "gloss": "gloss",
+        "parascriptural": "parascriptural",
+        "peripheral": "peripheral"
+      }
+    }
+  },
+  "schemas": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  }
+}

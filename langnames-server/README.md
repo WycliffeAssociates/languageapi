@@ -1,0 +1,1 @@
+The langnames server is just a public R2 bucket in cloudflare in production. The intention for this folder is to be used for nginx to serve the file for local development.

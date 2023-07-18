@@ -1,0 +1,2 @@
+ALTER TABLE "languages_to_languages" ALTER COLUMN "gateway_language_ietf" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "languages_to_languages" ALTER COLUMN "gateway_language_to_ietf" SET NOT NULL;

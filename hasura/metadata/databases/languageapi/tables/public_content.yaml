@@ -1,0 +1,58 @@
+table:
+  name: content
+  schema: public
+object_relationships:
+  - name: language
+    using:
+      foreign_key_constraint_on: language_id
+array_relationships:
+  - name: connectedContentsByContentId2
+    using:
+      foreign_key_constraint_on:
+        column: content_id_2
+        table:
+          name: connected_content
+          schema: public
+  - name: connected_contents
+    using:
+      foreign_key_constraint_on:
+        column: content_id_1
+        table:
+          name: connected_content
+          schema: public
+  - name: git_repos
+    using:
+      foreign_key_constraint_on:
+        column: content_id
+        table:
+          name: git_repo
+          schema: public
+  - name: renderings
+    using:
+      foreign_key_constraint_on:
+        column: content_id
+        table:
+          name: rendering
+          schema: public
+  - name: wa_content_meta
+    using:
+      foreign_key_constraint_on:
+        column: content_id
+        table:
+          name: wa_content_meta
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - language_id
+        - level
+        - name
+        - git_id
+        - resource_type
+        - created_on
+        - modified_on
+        - domain
+        - type
+      filter: {}

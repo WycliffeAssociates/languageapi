@@ -1,0 +1,77 @@
+#TODO: There's a lot of placeholders in here
+version: "3.8"
+
+services:
+  # controller:
+  #   build:
+  #     context: ./controller
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - AzureWebJobsStorage=<YOUR_STORAGE_CONNECTION_STRING>
+  #     - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
+  #     - WEBSITE_CONTENTAZUREFILECONNECTIONSTRING=<YOUR_STORAGE_CONNECTION_STRING>
+  #     - WEBSITE_CONTENTSHARE=<YOUR_STORAGE_CONTENT_SHARE_NAME>
+  #   platform: linux/amd64
+  #   ports:
+  #     - 8081:80
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     db-migrate:
+  #       condition: service_completed_successfully
+  # db-migrate:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   entrypoint: ["drizzle migrate fo shizzle"]
+  #   environment:
+  #     - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=docker
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U docker"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 2s
+  hasura:
+    image: hasura/graphql-engine:v2.29.1
+    volumes:
+      - ./hasura/metadata:/hasura-metadata
+    ports:
+    - "8080:8080"
+    # depends_on:
+    #   azure-functions:
+    #     condition: service_started
+    environment:
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://docker:docker@postgres:5432/docker
+      PG_DATABASE_URL: postgres://docker:docker@postgres:5432/docker
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_DEV_MODE: "true"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+  # langnames-generator:
+  #   build:
+  #     context: ./langnames-generator
+  #     dockerfile: Dockerfile
+  # langnames-server:
+  #   build:
+  #     context: ./langnames-server
+  #     dockerfile: Dockerfile
+  #   ports:
+  #   - "8081:80"
+    
+volumes:
+  pgdata:

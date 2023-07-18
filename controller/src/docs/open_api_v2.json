@@ -1,0 +1,1499 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the API",
+    "title": "My API",
+    "version": "1.0.0"
+  },
+  "basePath": "/",
+  "paths": {
+    "/api/content": {
+      "delete": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of ietfCodes corresponding to languages to delete. Whereas inserts are namespaced, as: namespace-id, the client is expected to namespace (lowered, trimmed) to delete its ids",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "ids": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "ids"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmation message of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Delete one or more content/repo",
+        "operationId": "DeleteContent"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All content",
+            "schema": {
+              "properties": {
+                "data": {
+                  "items": {
+                    "properties": {
+                      "createdOn": {
+                        "x-nullable": true
+                      },
+                      "domain": {
+                        "enum": [
+                          "scripture",
+                          "gloss",
+                          "parascriptural",
+                          "peripheral"
+                        ],
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "gitId": {
+                        "type": "number",
+                        "x-nullable": true
+                      },
+                      "id": {
+                        "maxLength": 256,
+                        "type": "string"
+                      },
+                      "languageId": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "level": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "modifiedOn": {
+                        "x-nullable": true
+                      },
+                      "name": {
+                        "maxLength": 256,
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "resourceType": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "type": {
+                        "enum": [
+                          "text",
+                          "audio",
+                          "video",
+                          "braille"
+                        ],
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "languageId",
+                      "name",
+                      "type",
+                      "domain",
+                      "resourceType",
+                      "gitId",
+                      "level"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "ok",
+                "data"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Get content",
+        "operationId": "GetContent"
+      },
+      "post": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of projects/content",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/content"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with inserted content data",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Add one or more repo/content",
+        "operationId": "CreateContent"
+      }
+    },
+    "/api/country": {
+      "delete": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of ietfCodes corresponding to languages to delete",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "alpha2Codes": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "alpha2Codes"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmation message of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Delete one or more countries",
+        "operationId": "DeleteCountry"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All countries",
+            "schema": {
+              "properties": {
+                "data": {
+                  "items": {
+                    "properties": {
+                      "alpha2": {
+                        "type": "string"
+                      },
+                      "alpha3": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "createdOn": {
+                        "x-nullable": true
+                      },
+                      "id": {
+                        "type": "number"
+                      },
+                      "modifiedOn": {
+                        "x-nullable": true
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "population": {
+                        "type": "number",
+                        "x-nullable": true
+                      },
+                      "worldRegionId": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "worldRegionId",
+                      "alpha2",
+                      "alpha3",
+                      "population"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message",
+                "data"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Get country",
+        "operationId": "GetCountry"
+      },
+      "post": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of countries",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/country"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with inserted country data",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Add one or more country",
+        "operationId": "CreateCountry"
+      }
+    },
+    "/api/git": {
+      "delete": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of username and repo (composite key) used to delete git repos",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "userRepo": {
+                  "items": {
+                    "properties": {
+                      "repo": {
+                        "type": "string"
+                      },
+                      "username": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "username",
+                      "repo"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "userRepo"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmation message of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Delete one or git entries",
+        "operationId": "DeleteGit"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All git entries",
+            "schema": {
+              "properties": {
+                "data": {
+                  "items": {
+                    "properties": {
+                      "contentId": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "number"
+                      },
+                      "repoName": {
+                        "type": "string"
+                      },
+                      "repoUrl": {
+                        "type": "string"
+                      },
+                      "username": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "contentId",
+                      "username",
+                      "repoName",
+                      "repoUrl"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "ok",
+                "data"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Get git entries",
+        "operationId": "GetGit"
+      },
+      "post": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of git entries to add",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/git"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Confirmation of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Add one or more git entries",
+        "operationId": "CreateGit"
+      }
+    },
+    "/api/language": {
+      "delete": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of ietfCodes corresponding to languages to delete",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "ietfCodes": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "ietfCodes"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmation message of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Delete one or more languages",
+        "operationId": "DeleteLanguage"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All languages",
+            "schema": {
+              "properties": {
+                "data": {
+                  "items": {
+                    "properties": {
+                      "createdOn": {
+                        "x-nullable": true
+                      },
+                      "direction": {
+                        "enum": [
+                          "ltr",
+                          "rtl"
+                        ],
+                        "type": "string"
+                      },
+                      "englishName": {
+                        "type": "string"
+                      },
+                      "homeCountryAlpha2": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "string"
+                      },
+                      "ietfCode": {
+                        "type": "string"
+                      },
+                      "isOralLanguage": {
+                        "type": "boolean",
+                        "x-nullable": true
+                      },
+                      "iso6393": {
+                        "type": "string",
+                        "x-nullable": true
+                      },
+                      "modifiedOn": {
+                        "x-nullable": true
+                      },
+                      "nationalName": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "ietfCode",
+                      "nationalName",
+                      "englishName",
+                      "direction",
+                      "iso6393",
+                      "isOralLanguage",
+                      "homeCountryAlpha2"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "ok",
+                "data"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Get language",
+        "operationId": "GetLanguage"
+      },
+      "post": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of languages",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/language"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with inserted language data",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Add one or more language",
+        "operationId": "CreateLanguage"
+      }
+    },
+    "/api/region": {
+      "delete": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of regions by their regionName corresponding to regions to delete",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "regionNames": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "regionNames"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmation message of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Delete one or more regions",
+        "operationId": "DeleteRegion"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All regions",
+            "schema": {
+              "properties": {
+                "data": {
+                  "items": {
+                    "properties": {
+                      "createdOn": {
+                        "x-nullable": true
+                      },
+                      "id": {
+                        "type": "number"
+                      },
+                      "modifiedOn": {
+                        "x-nullable": true
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "ok",
+                "data"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Get region",
+        "operationId": "GetRegion"
+      },
+      "post": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of regions",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/region"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Object with inserted region data",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Add one or more regions",
+        "operationId": "CreateRegion"
+      }
+    },
+    "/api/rendering": {
+      "delete": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of namespaces and content ids (e.g. namespace=wacs, contentId=user-repo to use to delete renderings",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "properties": {
+                "contentIds": {
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "namespace",
+                      "id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "contentIds"
+              ],
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "confirmation message of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Delete one or more renderings",
+        "operationId": "DeleteRendering"
+      },
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "All renderings",
+            "schema": {
+              "properties": {
+                "data": {
+                  "items": {
+                    "properties": {
+                      "contentId": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "x-nullable": true
+                      },
+                      "doesCoverAllContent": {
+                        "type": "boolean"
+                      },
+                      "fileSizeBytes": {
+                        "type": "number",
+                        "x-nullable": true
+                      },
+                      "fileType": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "number"
+                      },
+                      "modifiedOn": {
+                        "x-nullable": true
+                      },
+                      "url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "contentId",
+                      "fileType",
+                      "fileSizeBytes",
+                      "url",
+                      "doesCoverAllContent"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "ok",
+                "data"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Get renderings",
+        "operationId": "GetRendering"
+      },
+      "post": {
+        "consumes": [
+          "applications/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "A list of renders/links to add",
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/rendering"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Confirmation of successful operation",
+            "schema": {
+              "$ref": "#/definitions/okRes"
+            }
+          },
+          "400": {
+            "description": "Error with details of improper request",
+            "schema": {
+              "$ref": "#/definitions/apiError"
+            }
+          }
+        },
+        "description": "Add one or more renders/links of content",
+        "operationId": "CreateRendering"
+      }
+    }
+  },
+  "definitions": {
+    "apiError": {
+      "properties": {
+        "addlErrs": {
+          "items": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "name"
+            ],
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "err": {
+          "properties": {
+            "didErr": {
+              "type": "boolean"
+            },
+            "issues": {
+              "items": {
+                "x-nullable": true
+              },
+              "type": "array"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "message": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "message",
+        "err",
+        "addlErrs"
+      ],
+      "type": "object"
+    },
+    "content": {
+      "example": [
+        {
+          "createdOn": "2023-05-08T09:55:22.655Z",
+          "domain": "parascriptural",
+          "gitEntry": {
+            "repoName": "blah",
+            "repoUrl": "https://sleepy-punctuation.net",
+            "username": "Deanna.Lowe-Kozey"
+          },
+          "id": "uncertainty",
+          "languageId": "yxg",
+          "level": "medium",
+          "meta": {
+            "showOnBiel": false,
+            "status": "official"
+          },
+          "modifiedOn": "2024-06-22T20:41:56.095Z",
+          "name": "notes",
+          "namespace": "wacs",
+          "resourceType": "reg",
+          "type": "video"
+        }
+      ],
+      "items": {
+        "properties": {
+          "createdOn": {
+            "x-nullable": true
+          },
+          "domain": {
+            "enum": [
+              "scripture",
+              "gloss",
+              "parascriptural",
+              "peripheral"
+            ],
+            "type": "string",
+            "x-nullable": true
+          },
+          "gitEntry": {
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "repoName": {
+                "type": "string"
+              },
+              "repoUrl": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "username",
+              "repoName",
+              "repoUrl"
+            ],
+            "type": "object"
+          },
+          "id": {
+            "maxLength": 256,
+            "type": "string"
+          },
+          "languageId": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "level": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "meta": {
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "showOnBiel": {
+                "type": "boolean"
+              },
+              "status": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "showOnBiel",
+              "status"
+            ],
+            "type": "object"
+          },
+          "modifiedOn": {
+            "x-nullable": true
+          },
+          "name": {
+            "maxLength": 256,
+            "type": "string",
+            "x-nullable": true
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "resourceType": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "type": {
+            "enum": [
+              "text",
+              "audio",
+              "video",
+              "braille"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "namespace"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "country": {
+      "example": [
+        {
+          "alpha2": "JP",
+          "alpha3": "NLD",
+          "createdOn": "2024-01-13T08:32:26.215Z",
+          "modifiedOn": "2023-06-07T09:51:25.075Z",
+          "name": "Niue",
+          "population": 514840944,
+          "regionName": "Asia"
+        }
+      ],
+      "items": {
+        "properties": {
+          "alpha2": {
+            "type": "string"
+          },
+          "alpha3": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "createdOn": {
+            "x-nullable": true
+          },
+          "id": {
+            "type": "number"
+          },
+          "modifiedOn": {
+            "x-nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "population": {
+            "type": "number",
+            "x-nullable": true
+          },
+          "regionName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "alpha2",
+          "regionName"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "git": {
+      "example": [
+        {
+          "contentId": "wacs-user-repo",
+          "repoName": "nearly",
+          "repoUrl": "https://easy-borrower.com/",
+          "username": "Mason15"
+        }
+      ],
+      "items": {
+        "properties": {
+          "contentId": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "repoName": {
+            "type": "string"
+          },
+          "repoUrl": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "contentId",
+          "username",
+          "repoName",
+          "repoUrl"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "language": {
+      "example": [
+        {
+          "allCountryAlpha2": [
+            "CH",
+            "MR"
+          ],
+          "alternateNames": [
+            "putrid",
+            "till",
+            "garner",
+            "between",
+            "shabby",
+            "exemplary"
+          ],
+          "createdOn": "2024-06-28T10:47:01.256Z",
+          "direction": "rtl",
+          "englishName": "unusual",
+          "homeCountryAlpha2": "TM",
+          "id": "NIqApktCYA",
+          "ietfCode": "rdj",
+          "isOralLanguage": false,
+          "iso6393": "vjlilfileb",
+          "nationalName": "pace",
+          "waLangMeta": {
+            "showOnBiel": false
+          }
+        }
+      ],
+      "items": {
+        "properties": {
+          "allCountryAlpha2": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "alternateNames": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "createdOn": {
+            "x-nullable": true
+          },
+          "direction": {
+            "enum": [
+              "ltr",
+              "rtl"
+            ],
+            "type": "string"
+          },
+          "englishName": {
+            "type": "string"
+          },
+          "gatewayIetf": {
+            "type": "string"
+          },
+          "homeCountryAlpha2": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "ietfCode": {
+            "type": "string"
+          },
+          "isOralLanguage": {
+            "type": "boolean",
+            "x-nullable": true
+          },
+          "iso6393": {
+            "type": "string",
+            "x-nullable": true
+          },
+          "modifiedOn": {
+            "x-nullable": true
+          },
+          "nationalName": {
+            "type": "string"
+          },
+          "waLangMeta": {
+            "properties": {
+              "showOnBiel": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "showOnBiel"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "ietfCode",
+          "nationalName",
+          "englishName",
+          "direction",
+          "homeCountryAlpha2"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "okRes": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "ok": {
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "message",
+        "ok"
+      ],
+      "type": "object"
+    },
+    "region": {
+      "example": [
+        {
+          "createdOn": "2024-05-18T13:17:36.812Z",
+          "modifiedOn": "2023-02-26T03:56:27.374Z",
+          "name": "Austrailia"
+        }
+      ],
+      "items": {
+        "properties": {
+          "createdOn": {
+            "x-nullable": true
+          },
+          "id": {
+            "type": "number"
+          },
+          "modifiedOn": {
+            "x-nullable": true
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "rendering": {
+      "examples": [
+        [
+          {
+            "contentId": "user-repo",
+            "createdAt": "2024-02-18T19:12:32.709Z",
+            "doesCoverAllContent": false,
+            "fileSizeBytes": 7432674088058880,
+            "fileType": "zip",
+            "modifiedOn": "2022-10-12T11:52:57.543Z",
+            "namespace": "wacs",
+            "scripturalMeta": {
+              "bookName": "1 Jean",
+              "bookSlug": "1JN",
+              "chapter": 5
+            },
+            "url": "https://loose-fishery.name/"
+          }
+        ],
+        [
+          {
+            "contentId": "user-repo",
+            "createdAt": "2023-04-15T11:19:55.656Z",
+            "doesCoverAllContent": true,
+            "fileSizeBytes": 8216950331146240,
+            "fileType": "mp4",
+            "modifiedOn": "2024-03-10T17:59:08.727Z",
+            "namespace": "wacs",
+            "nonScripturalMeta": {
+              "additionalData": "A json field",
+              "name": "nonScripturalName"
+            },
+            "scripturalMeta": {
+              "bookName": "1 Jean",
+              "bookSlug": "1JN",
+              "chapter": 5
+            },
+            "url": "https://worn-devastation.info"
+          }
+        ]
+      ],
+      "items": {
+        "properties": {
+          "contentId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "x-nullable": true
+          },
+          "doesCoverAllContent": {
+            "type": "boolean"
+          },
+          "fileSizeBytes": {
+            "minimum": 0,
+            "type": "number",
+            "x-nullable": true
+          },
+          "fileType": {
+            "type": "string"
+          },
+          "id": {
+            "type": "number"
+          },
+          "modifiedOn": {
+            "x-nullable": true
+          },
+          "namespace": {
+            "type": "string"
+          },
+          "nonScripturalMeta": {
+            "properties": {
+              "additionalData": {
+                "x-nullable": true
+              },
+              "id": {
+                "type": "number"
+              },
+              "name": {
+                "maxLength": 256,
+                "type": "string",
+                "x-nullable": true
+              },
+              "renderingId": {
+                "type": "number"
+              }
+            },
+            "type": "object"
+          },
+          "scripturalMeta": {
+            "properties": {
+              "bookName": {
+                "type": "string"
+              },
+              "bookSlug": {
+                "type": "string"
+              },
+              "chapter": {
+                "type": "number"
+              },
+              "id": {
+                "type": "number"
+              },
+              "renderingId": {
+                "type": "number"
+              },
+              "sort": {
+                "type": "number",
+                "x-nullable": true
+              }
+            },
+            "required": [
+              "bookSlug",
+              "bookName",
+              "chapter"
+            ],
+            "type": "object"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "contentId",
+          "fileType",
+          "url",
+          "doesCoverAllContent",
+          "namespace"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "x-components": {
+    "parameters": {}
+  }
+}

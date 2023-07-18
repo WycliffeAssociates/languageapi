@@ -1,0 +1,21 @@
+table:
+  name: world_region
+  schema: public
+array_relationships:
+  - name: countries
+    using:
+      foreign_key_constraint_on:
+        column: world_region_id
+        table:
+          name: country
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - region
+        - created_on
+        - modified_on
+      filter: {}
+      allow_aggregations: true

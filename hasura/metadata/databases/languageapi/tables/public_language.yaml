@@ -1,0 +1,81 @@
+table:
+  name: language
+  schema: public
+object_relationships:
+  - name: country
+    using:
+      foreign_key_constraint_on: home_country_alpha2
+array_relationships:
+  - name: contents
+    using:
+      foreign_key_constraint_on:
+        column: language_id
+        table:
+          name: content
+          schema: public
+  - name: country_to_languages
+    using:
+      foreign_key_constraint_on:
+        column: language_ietf_code
+        table:
+          name: country_to_language
+          schema: public
+  - name: language_alternate_names
+    using:
+      foreign_key_constraint_on:
+        column: ietf_code
+        table:
+          name: language_alternate_name
+          schema: public
+  - name: languagesToLanguagesByGatewayLanguageToIetf
+    using:
+      foreign_key_constraint_on:
+        column: gateway_language_to_ietf
+        table:
+          name: languages_to_languages
+          schema: public
+  - name: languages_to_languages
+    using:
+      foreign_key_constraint_on:
+        column: gateway_language_ietf
+        table:
+          name: languages_to_languages
+          schema: public
+  - name: wa_language_meta
+    using:
+      foreign_key_constraint_on:
+        column: ietf_code
+        table:
+          name: wa_language_meta
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - is_oral_language
+        - home_country_alpha2
+        - id
+        - ietf_code
+        - iso6393
+        - english_name
+        - national_name
+        - created_on
+        - modified_on
+        - direction
+      filter: {}
+      allow_aggregations: true
+event_triggers:
+  - name: update_langnamesjson
+    definition:
+      delete:
+        columns: '*'
+      enable_manual: false
+      insert:
+        columns: '*'
+      update:
+        columns: '*'
+    retry_conf:
+      interval_sec: 10
+      num_retries: 0
+      timeout_sec: 60
+    webhook: https://lang-json-sync.wycliffe-associates-account.workers.dev/

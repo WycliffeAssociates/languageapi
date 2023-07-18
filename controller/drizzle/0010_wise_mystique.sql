@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "name_ietf_idx" ON "language_alternate_name" ("name","ietf_code");

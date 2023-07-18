@@ -1,0 +1,1 @@
+ALTER TABLE "rendering" RENAME COLUMN "doesCoverAllContent" TO "does_cover_all_content";

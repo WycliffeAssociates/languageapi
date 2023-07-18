@@ -1,0 +1,16 @@
+table:
+  name: nonscriptural_rendering_metadata
+  schema: public
+object_relationships:
+  - name: rendering
+    using:
+      foreign_key_constraint_on: rendering_id
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+        - id
+        - rendering_id
+        - additional_data
+      filter: {}

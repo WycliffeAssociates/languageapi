@@ -1,0 +1,36 @@
+table:
+  name: country
+  schema: public
+object_relationships:
+  - name: world_region
+    using:
+      foreign_key_constraint_on: world_region_id
+array_relationships:
+  - name: country_to_languages
+    using:
+      foreign_key_constraint_on:
+        column: country_alpha_2
+        table:
+          name: country_to_language
+          schema: public
+  - name: languages
+    using:
+      foreign_key_constraint_on:
+        column: home_country_alpha2
+        table:
+          name: language
+          schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - alpha_2
+        - alpha_3
+        - id
+        - population
+        - world_region_id
+        - name
+        - created_on
+        - modified_on
+      filter: {}
+      allow_aggregations: true

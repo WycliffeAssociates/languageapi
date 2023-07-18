@@ -1,0 +1,1 @@
+ALTER TABLE "language_alternate_name" ALTER COLUMN "ietf_code" SET NOT NULL;
