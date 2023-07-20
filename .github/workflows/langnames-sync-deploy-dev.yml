@@ -1,4 +1,4 @@
-name: Deploy Worker
+name: Dev Deploy langnames-sync CF worker
 on:
   push:
     branches:
