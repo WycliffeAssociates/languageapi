@@ -5,6 +5,7 @@ on:
     - dev
     paths:
     - langnames-sync
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -24,9 +25,9 @@ jobs:
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@2.0.0
         with:
-            apiToken: ${{ env.CF_API_TOKEN }}
-            accountId: ${{ env.CF_ACCOUNT_ID }}
-            command: |
-                     deploy langnames-sync/src/worker.ts \
-                     --name langnames-sync-dev \
-                     --var MY_BUCKET=langnames-dev-walink-org HASURA_ENDPOINT=https://api-biel-dev.walink.org/api/rest/langjson
+          apiToken: ${{ env.CF_API_TOKEN }}
+          accountId: ${{ env.CF_ACCOUNT_ID }}
+          command: |
+            deploy langnames-sync/src/worker.ts \
+            --name langnames-sync-dev \
+            --var MY_BUCKET=langnames-dev-walink-org HASURA_ENDPOINT=https://api-biel-dev.walink.org/api/rest/langjson
