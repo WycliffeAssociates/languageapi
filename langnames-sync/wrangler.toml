@@ -17,7 +17,7 @@ compatibility_date = "2023-07-10"
 # Bind an R2 Bucket. Use R2 to store arbitrarily large blobs of data, such as files.
 # Docs: https://developers.cloudflare.com/r2/api/workers/workers-api-usage/
 r2_buckets = [
-  {binding = "MY_BUCKET",bucket_name = "langnames-temp",preview_bucket_name =  'langnames-temp'}
+  {binding = "MY_BUCKET",bucket_name = "langnames-bibleineverylanguage-org",preview_bucket_name =  'langnames-bibleineverylanguage-org'}
 ]
 
 
@@ -51,3 +51,7 @@ r2_buckets = [
 # [[migrations]]
 # tag = "v1"
 # new_classes = ["MyDurableObject"]
+[env.langnames-sync-dev]
+r2_buckets = [
+  {binding = "MY_BUCKET",bucket_name = "langnames-dev-walink-org",preview_bucket_name =  'langnames-dev-walink-org'}
+]
