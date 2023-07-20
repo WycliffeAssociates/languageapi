@@ -28,6 +28,6 @@ jobs:
           apiToken: ${{ env.CF_API_TOKEN }}
           accountId: ${{ env.CF_ACCOUNT_ID }}
           command: |
-            deploy langnames-sync/src/worker.ts \
-            --name langnames-sync-prod \
+            deploy langnames-sync/src/worker.ts
+            --name langnames-sync-prod
             --var MY_BUCKET=langnames-bibleineverylanguage-org HASURA_ENDPOINT=https://api.bibleineverylanguage.org/api/rest/langjson
