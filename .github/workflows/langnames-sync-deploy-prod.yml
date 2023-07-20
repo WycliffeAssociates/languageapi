@@ -1,0 +1,32 @@
+name: Deploy Worker
+on:
+  push:
+    branches:
+    - prod
+    paths:
+    - langnames-sync
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure 1Password Service Account
+        uses: 1password/load-secrets-action@v1
+        with:
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          CF_ACCOUNT_ID: "op://DevOps/cloudflare-worker-deploy-token/CF_ACCOUNT_ID"
+          CF_API_TOKEN: "op://DevOps/cloudflare-worker-deploy-token/CF_API_TOKEN"
+          
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+            apiToken: ${{ env.CF_API_TOKEN }}
+            accountId: ${{ env.CF_ACCOUNT_ID }}
+            command: |
+                     deploy langnames-sync/src/worker.ts \
+                     --name langnames-sync-prod \
+                     --var MY_BUCKET=langnames-bibleineverylanguage-org HASURA_ENDPOINT=https://api.bibleineverylanguage.org/api/rest/langjson
