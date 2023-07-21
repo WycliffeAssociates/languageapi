@@ -52,6 +52,7 @@ r2_buckets = [
 # tag = "v1"
 # new_classes = ["MyDurableObject"]
 [env.langnames-sync-dev]
+name = "langnames-sync-dev"
 r2_buckets = [
   {binding = "MY_BUCKET",bucket_name = 'langnames-dev-walink-org',preview_bucket_name =  'langnames-dev-walink-org'}
 ]
