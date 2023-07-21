@@ -2,9 +2,9 @@ name: Dev Deploy langnames-sync CF worker
 on:
   push:
     branches:
-    - dev
+      - dev
     paths:
-    - langnames-sync
+      - langnames-sync
   workflow_dispatch:
 
 jobs:
@@ -21,10 +21,10 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           CF_ACCOUNT_ID: "op://DevOps/cloudflare-worker-deploy-token/CF_ACCOUNT_ID"
           CF_API_TOKEN: "op://DevOps/cloudflare-worker-deploy-token/CF_API_TOKEN"
-          
+
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ env.CF_API_TOKEN }}
           accountId: ${{ env.CF_ACCOUNT_ID }}
-          command: deploy langnames-sync/src/worker.ts --name langnames-sync-dev --var MY_BUCKET:langnames-dev-walink-org HASURA_ENDPOINT:https://api-biel-dev.walink.org/api/rest/langjson
+          command: deploy langnames-sync/src/worker.ts --name langnames-sync-dev --var HASURA_ENDPOINT:https://api-biel-dev.walink.org/api/rest/langjson
