@@ -1,9 +1,9 @@
-- comment: langjson
+- comment: langnames
   definition:
     query:
       collection_name: allowed-queries
-      query_name: langjson
+      query_name: langnames
   methods:
     - GET
-  name: langjson
-  url: langjson
+  name: langnames
+  url: langnames

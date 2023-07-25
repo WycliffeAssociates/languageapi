@@ -56,12 +56,19 @@ services:
     depends_on:
       db-migrate:
         condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 2s
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://docker:docker@postgres:5432/docker
       PG_DATABASE_URL: postgres://docker:docker@postgres:5432/docker
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      LANGNAMES_SYNC_WEBHOOK: "http://localhost:1234/prettypleasework"
   # langnames-generator:
   #   build:
   #     context: ./langnames-generator
