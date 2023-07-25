@@ -31,11 +31,11 @@ export default {
 		try {
 			const langNamesJson = await fetch(env.HASURA_ENDPOINT);
 			const data = (await langNamesJson.json()) as {
-				langjson: any[];
+				vw_langnames: any[];
 			};
-			const flattenend = data.langjson;
+			const flattenend = data.vw_langnames;
 			const stringified = JSON.stringify(flattenend);
-			await env.MY_BUCKET.put('local-langnames.json', stringified, {
+			await env.MY_BUCKET.put('langnames.json', stringified, {
 				httpMetadata: {
 					contentType: 'application/json',
 				},

@@ -19,16 +19,16 @@ services:
   #       condition: service_healthy
   #     db-migrate:
   #       condition: service_completed_successfully
-  # db-migrate:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   entrypoint: ["drizzle migrate fo shizzle"]
-  #   environment:
-  #     - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
+  db-migrate:
+    build:
+      context: ./controller
+      dockerfile: Dockerfile
+    entrypoint: ["npm" , "run" , "migrate"]
+    environment:
+      - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
+    depends_on:
+      postgres:
+        condition: service_healthy
   postgres:
     image: postgres:13
     environment:
@@ -48,20 +48,28 @@ services:
       retries: 5
       start_period: 2s
   hasura:
-    image: hasura/graphql-engine:v2.29.1
+    image: hasura/graphql-engine:v2.30.1.cli-migrations-v3
     volumes:
       - ./hasura/metadata:/hasura-metadata
     ports:
     - "8080:8080"
-    # depends_on:
-    #   azure-functions:
-    #     condition: service_started
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 2s
     environment:
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://docker:docker@postgres:5432/docker
       PG_DATABASE_URL: postgres://docker:docker@postgres:5432/docker
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      # LANGNAMES_SYNC_WEBHOOK must be set on the container app, this is a placeholder, change if needed for local dev
+      LANGNAMES_SYNC_WEBHOOK: "http://localhost:1234/prettypleasework"
   # langnames-generator:
   #   build:
   #     context: ./langnames-generator

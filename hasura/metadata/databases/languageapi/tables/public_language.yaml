@@ -64,18 +64,3 @@ select_permissions:
         - direction
       filter: {}
       allow_aggregations: true
-event_triggers:
-  - name: update_langnamesjson
-    definition:
-      delete:
-        columns: '*'
-      enable_manual: false
-      insert:
-        columns: '*'
-      update:
-        columns: '*'
-    retry_conf:
-      interval_sec: 10
-      num_retries: 0
-      timeout_sec: 60
-    webhook: https://lang-json-sync.wycliffe-associates-account.workers.dev/

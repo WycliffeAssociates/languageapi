@@ -1,1 +1,5 @@
-[]
+- name: langnames-sync
+  webhook: "{{LANGNAMES_SYNC_WEBHOOK}}"
+  schedule: 14 * * * *
+  include_in_metadata: true
+  payload: {}
