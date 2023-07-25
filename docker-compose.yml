@@ -68,6 +68,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      # LANGNAMES_SYNC_WEBHOOK must be set on the container app, this is a placeholder, change if needed for local dev
       LANGNAMES_SYNC_WEBHOOK: "http://localhost:1234/prettypleasework"
   # langnames-generator:
   #   build:
