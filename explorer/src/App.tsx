@@ -18,14 +18,6 @@ function App() {
             defaultQuery={defaultQuery}
             defaultVariables={defaultVariables}
             isCloud={false}
-            customToolbar={
-              <button
-                onClick={() => setEndpoint("")}
-                className="change-endpoint-button"
-              >
-                Change Endpoint
-              </button>
-            }
           />
         </div>
       </>
