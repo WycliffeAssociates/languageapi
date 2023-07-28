@@ -6,14 +6,13 @@ import {getPresets} from "./utils";
 function App() {
   const {defaultHeaders, defaultQuery, defaultUrl, defaultVariables} =
     getPresets();
-  const [endpoint, setEndpoint] = useState(defaultUrl);
 
-  if (endpoint.length) {
+  if (defaultUrl.length) {
     return (
       <>
         <div className="graphiql-holder">
           <HasuraGraphiQL
-            url={endpoint}
+            url={defaultUrl}
             defaultHeaders={defaultHeaders}
             defaultQuery={defaultQuery}
             defaultVariables={defaultVariables}
