@@ -1,4 +1,3 @@
-import {useState} from "react";
 // @ts-ignore - types don't exist
 import HasuraGraphiQL from "@hasura/public-graphiql";
 import {getPresets} from "./utils";
