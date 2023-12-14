@@ -46,8 +46,10 @@ jobs:
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
         run: |
+          pushd ./controller
           npm install
           npm run migrate
+          popd
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
