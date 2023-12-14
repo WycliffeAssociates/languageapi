@@ -14,7 +14,8 @@
     "getMock": "npx ts-node ./src/db/seed/getMocks.ts",
     "getOpenApi": "npx ts-node ./src/docs/openApi.ts",
     "visualize": "npx drizzle-kit studio",
-    "migrate": "npx ts-node ./src/migrate.ts"
+    "migrate": "npx ts-node ./src/migrate.ts",
+    "makeEmptyMigration": "drizzle-kit generate:pg --custom"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^5.2.0",
@@ -30,7 +31,7 @@
     "@anatine/zod-mock": "^3.12.1",
     "@faker-js/faker": "^8.0.2",
     "@types/node": "^18.x",
-    "drizzle-kit": "^0.19.3",
+    "drizzle-kit": "^0.19.4",
     "drizzle-orm": "^0.27.0",
     "pg": "^8.11.1",
     "rimraf": "^5.0.1",
