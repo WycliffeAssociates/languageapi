@@ -26,14 +26,29 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: 'Resolve Project Dependencies Using Npm'
+      - name: Load secret
+        uses: 1password/load-secrets-action@v1
+        with:
+          # Export loaded secrets as environment variables
+          export-env: true
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          DATABASE_URL: "op://AppDev Scripture Accessibility/languageapi-dev/connection string"
+      - name: "Build and Test Controller"
         shell: bash
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           npm install
           npm run build --if-present
           npm run test --if-present
+          popd
+      - name: "Migrate DB"
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+        run: |
+          pushd ./controller
+          npm install
+          npm run migrate
           popd
 
       - name: 'Run Azure Functions Action'
