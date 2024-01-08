@@ -12,14 +12,7 @@ import {
 } from "../../customTypes/types";
 import {getError} from "../../utils";
 import {PgTransaction} from "drizzle-orm/pg-core";
-import {gitRepo} from "../schema/schema";
-import {eq} from "drizzle-orm";
 
-// Write out at least create and update handlers for all tables.
-// Handlers should all just insert values[] ?
-// delete handlers? Auth for delete handlers?
-// These should not worry about FK logic.  That should be done in the endpoint route handlers themselves.
-// That said, look at your fks and determine what needs to be created first for anything that might be sent in the same payload.
 const db = getDb();
 /* //@===============  POLYMORHPIC CREATE   =============   */
 
@@ -36,10 +29,13 @@ export async function polymorphicInsert<T extends zodValidationKeys>({
   const dbTable = validations.insertSchemas[tableKey].table;
   try {
     const parsed = validator.parse(content);
+
     let query = handle.insert(dbTable).values(parsed);
     if (onConflictDoUpdateArgs) {
+      // @ts-ignore - chainging on here is fine. It just is getting one type from the assigment and then the type is changed when we add this optional clause here which makes it think that the type is mismatched. Don't want to use "any" to retain intellisense below
       query = query.onConflictDoUpdate(onConflictDoUpdateArgs);
     } else if (onConflictDoNothingArgs) {
+      // @ts-ignore
       query = onConflictDoNothingArgs.args
         ? query.onConflictDoNothing(onConflictDoNothingArgs.args)
         : query.onConflictDoNothing();

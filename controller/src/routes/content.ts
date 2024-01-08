@@ -26,7 +26,6 @@ import * as schema from "../db/schema/schema";
 import {eq, inArray} from "drizzle-orm";
 import {TableConfig} from "drizzle-orm/pg-core";
 import {getDb} from "../db/config";
-import {gitPost} from "./validation/index";
 
 // FILE LEVEL SCOPE
 const db = getDb();
@@ -91,7 +90,6 @@ async function handlePost<T extends TableConfig>({
     // Parse here cause countries come with additional ietf from port
     const validationSchema = validators.contentPost;
     const payloadParsed = validationSchema.parse(payload);
-    console.log({payloadParsed});
     const payloadsWithNamespacedId = payloadParsed.map((payload) => {
       const {namespace, ...contentPayload} = payload;
       return {
@@ -118,7 +116,7 @@ async function handlePost<T extends TableConfig>({
         if (gitEntry) {
           const entry: dbTableValidators.insertGitRepo = {
             ...gitEntry,
-            contentId: restContent.id,
+            contentId: restContent.id, //git route requires a namespace to match, but if it were passed as a batch to "content" then we can just tack it on here and skip the namespacing.
           };
           acc.gitPayload.push(entry);
         }
