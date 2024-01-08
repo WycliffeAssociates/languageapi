@@ -1,6 +1,5 @@
 import {relations} from "drizzle-orm";
 import * as db from "./schema";
-import type Config from "drizzle-kit";
 
 export const languageAlternateNameRelations = relations(
   db.languageAlternateName,
@@ -107,15 +106,3 @@ export const countryRelations = relations(db.country, ({one}) => ({
     references: [db.worldRegion.id],
   }),
 }));
-// export const provinceRelations = relations(db.province, ({one}) => ({
-//   country: one(db.country, {
-//     fields: [db.province.country_id],
-//     references: [db.country.id],
-//   }),
-// }));
-// export const countryRegionRelations = relations(db.countryRegion, ({one}) => ({
-//   country: one(db.country, {
-//     fields: [db.countryRegion.country_id],
-//     references: [db.country.id],
-//   }),
-// }));

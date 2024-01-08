@@ -145,8 +145,7 @@ async function handlePost<T extends TableConfig>({
         reduced.scripturalMetaPayloads.forEach((payload) => {
           const matching = renderingInserted.find((inserted) => {
             // map back from expected error above
-            // @ts-expect-error
-            return inserted.contentId == payload.renderingId;
+            return inserted.contentId == String(payload.renderingId);
           });
           if (matching) {
             // adjust to number id instead of string
@@ -155,8 +154,7 @@ async function handlePost<T extends TableConfig>({
         });
         reduced.nonScripturalMetaPayloads.forEach((payload) => {
           const matching = renderingInserted.find((inserted) => {
-            // @ts-expect-error
-            return inserted.contentId == payload.renderingId;
+            return inserted.contentId == String(payload.renderingId);
           });
           if (matching) {
             payload.renderingId = matching.id;

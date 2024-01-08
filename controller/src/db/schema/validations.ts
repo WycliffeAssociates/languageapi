@@ -1,9 +1,7 @@
 import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import * as schema from "./schema";
-import {InferModel} from "drizzle-orm";
+import {InferInsertModel, InferSelectModel} from "drizzle-orm";
 import {z} from "zod";
-import {handlerReturnError, jsonSchema} from "../../customTypes/types";
-import {language} from "./schema";
 
 // ZOD DOCS
 // https://zod.dev/
@@ -12,17 +10,14 @@ import {language} from "./schema";
 // ========= LANGUAGE TABLE
 export const insertLanguageSchema = createInsertSchema(schema.language);
 export const selectLanguageSchema = createSelectSchema(schema.language);
-export type languageType = InferModel<typeof schema.language>;
-export type insertLanguage = InferModel<typeof schema.language, "insert">;
+export type languageType = InferSelectModel<typeof schema.language>;
+export type insertLanguage = InferInsertModel<typeof schema.language>;
 
 // ========= waLangMetadata TABLE
 export const insertWaLangMetaSchema = createInsertSchema(schema.waLangMetadata);
 export const selectWaLangMetaSchema = createSelectSchema(schema.waLangMetadata);
-export type waLangMetaType = InferModel<typeof schema.waLangMetadata>;
-export type insertWaLangMeta = InferModel<
-  typeof schema.waLangMetadata,
-  "insert"
->;
+export type waLangMetaType = InferSelectModel<typeof schema.waLangMetadata>;
+export type insertWaLangMeta = InferInsertModel<typeof schema.waLangMetadata>;
 
 //  ========= LANGUAGE ALT
 export const insertLanguageAlternateNameSchema = createInsertSchema(
@@ -31,12 +26,11 @@ export const insertLanguageAlternateNameSchema = createInsertSchema(
 export const selectLanguageAlternateNameSchema = createSelectSchema(
   schema.languageAlternateName
 );
-export type languageAlternateNameType = InferModel<
+export type languageAlternateNameType = InferSelectModel<
   typeof schema.languageAlternateName
 >;
-export type insertLanguageAlternateName = InferModel<
-  typeof schema.languageAlternateName,
-  "insert"
+export type insertLanguageAlternateName = InferInsertModel<
+  typeof schema.languageAlternateName
 >;
 
 // ========= LANG TO LANG
@@ -46,12 +40,11 @@ export const insertLanguagesToLanguagesSchema = createInsertSchema(
 export const selectLanguagesToLanguagesSchema = createSelectSchema(
   schema.languagesToLanguages
 );
-export type languagesToLanguagesType = InferModel<
+export type languagesToLanguagesType = InferSelectModel<
   typeof schema.languagesToLanguages
 >;
-export type insertLanguagesToLanguages = InferModel<
-  typeof schema.languagesToLanguages,
-  "insert"
+export type insertLanguagesToLanguages = InferInsertModel<
+  typeof schema.languagesToLanguages
 >;
 
 // ========= waLangMetadata TABLE
@@ -61,16 +54,17 @@ export const insertWaContentMetaSchema = createInsertSchema(
 export const selectWaContentMetaSchema = createSelectSchema(
   schema.waContentMetadata
 );
-export type waContentMetaType = InferModel<typeof schema.waContentMetadata>;
-export type insertWaContentMeta = InferModel<
-  typeof schema.waContentMetadata,
-  "insert"
+export type waContentMetaType = InferSelectModel<
+  typeof schema.waContentMetadata
+>;
+export type insertWaContentMeta = InferInsertModel<
+  typeof schema.waContentMetadata
 >;
 
 //  =========content table:
 export const insertContentSchema = createInsertSchema(schema.content);
 export const selectContentSchema = createSelectSchema(schema.content);
-export type contentType = InferModel<typeof schema.content>;
+export type contentType = InferSelectModel<typeof schema.content>;
 export type insertContent = z.infer<typeof insertContentSchema>; //note the z.infer do to the extend.  Namespace doesn't make it into the db, but connectors are responsible for namespacing themselves id wise
 
 //  ========= connectedContentTable
@@ -80,25 +74,26 @@ export const insertConnectedContentSchema = createInsertSchema(
 export const selectConnectedContentSchema = createSelectSchema(
   schema.connectedContent
 );
-export type connectedContentType = InferModel<typeof schema.connectedContent>;
-export type insertConnectedContent = InferModel<
-  typeof schema.connectedContent,
-  "insert"
+export type connectedContentType = InferSelectModel<
+  typeof schema.connectedContent
+>;
+export type insertConnectedContent = InferInsertModel<
+  typeof schema.connectedContent
 >;
 
 //  ========= gitRepos
 export const insertGitRepoSchema = createInsertSchema(schema.gitRepo);
 export const selectGitRepoSchema = createSelectSchema(schema.gitRepo);
-export type gitRepoType = InferModel<typeof schema.gitRepo>;
-export type insertGitRepo = InferModel<typeof schema.gitRepo, "insert">;
+export type gitRepoType = InferSelectModel<typeof schema.gitRepo>;
+export type insertGitRepo = InferInsertModel<typeof schema.gitRepo>;
 
 // ========= renderings
 export const insertRenderingSchema = createInsertSchema(schema.rendering, {
   fileSizeBytes: (schema) => schema.fileSizeBytes.nonnegative(),
 });
 export const selectRenderingSchema = createSelectSchema(schema.rendering);
-export type renderingType = InferModel<typeof schema.rendering>;
-export type insertRendering = InferModel<typeof schema.rendering, "insert">;
+export type renderingType = InferSelectModel<typeof schema.rendering>;
+export type insertRendering = InferInsertModel<typeof schema.rendering>;
 
 //  ========= scripturalRenderingMetadata
 export const insertScripturalRenderingMetadataSchema = createInsertSchema(
@@ -110,12 +105,11 @@ export const insertScripturalRenderingMetadataSchema = createInsertSchema(
 export const selectScripturalRenderingMetadataSchema = createSelectSchema(
   schema.scripturalRenderingMetadata
 );
-export type scripturalRenderingMetadataType = InferModel<
+export type scripturalRenderingMetadataType = InferSelectModel<
   typeof schema.scripturalRenderingMetadata
 >;
-export type insertScripturalRenderingMetadata = InferModel<
-  typeof schema.scripturalRenderingMetadata,
-  "insert"
+export type insertScripturalRenderingMetadata = InferInsertModel<
+  typeof schema.scripturalRenderingMetadata
 >;
 
 export const insertNonScripturalRenderingMetadataSchema = createInsertSchema(
@@ -129,25 +123,24 @@ export const insertNonScripturalRenderingMetadataSchema = createInsertSchema(
 export const selectNonScripturalRenderingMetadataSchema = createSelectSchema(
   schema.nonScripturalRenderingMetadata
 );
-export type nonScripturalRenderingMetadataType = InferModel<
+export type nonScripturalRenderingMetadataType = InferSelectModel<
   typeof schema.nonScripturalRenderingMetadata
 >;
-export type insertNonScripturalRenderingMetadata = InferModel<
-  typeof schema.nonScripturalRenderingMetadata,
-  "insert"
+export type insertNonScripturalRenderingMetadata = InferInsertModel<
+  typeof schema.nonScripturalRenderingMetadata
 >;
 
 // worldRegion
 export const insertWorldRegionSchema = createInsertSchema(schema.worldRegion);
 export const selectWorldRegionSchema = createSelectSchema(schema.worldRegion);
-export type worldRegionType = InferModel<typeof schema.worldRegion>;
-export type insertWorldRegion = InferModel<typeof schema.worldRegion, "insert">;
+export type worldRegionType = InferSelectModel<typeof schema.worldRegion>;
+export type insertWorldRegion = InferInsertModel<typeof schema.worldRegion>;
 
 // country
 export const insertCountrySchema = createInsertSchema(schema.country);
 export const selectCountrySchema = createSelectSchema(schema.country);
-export type countryType = InferModel<typeof schema.country>;
-export type insertCountry = InferModel<typeof schema.country, "insert">;
+export type countryType = InferSelectModel<typeof schema.country>;
+export type insertCountry = InferInsertModel<typeof schema.country>;
 
 // countryToLanguage
 export const insertCountryToLanguageSchema = createInsertSchema(
@@ -156,10 +149,11 @@ export const insertCountryToLanguageSchema = createInsertSchema(
 export const selectCountryToLanguageSchema = createSelectSchema(
   schema.countryToLanguage
 );
-export type countryToLanguageType = InferModel<typeof schema.countryToLanguage>;
-export type insertCountryToLanguage = InferModel<
-  typeof schema.countryToLanguage,
-  "insert"
+export type countryToLanguageType = InferSelectModel<
+  typeof schema.countryToLanguage
+>;
+export type insertCountryToLanguage = InferInsertModel<
+  typeof schema.countryToLanguage
 >;
 
 // This is consume as a conveneient grouping of some tables to schemas. Primarily consumed by the polymorphic handlers

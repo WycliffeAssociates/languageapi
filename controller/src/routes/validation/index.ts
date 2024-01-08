@@ -1,11 +1,7 @@
 import {z} from "zod";
 import * as dbValidators from "../../db/schema/validations";
-import {gitRepo} from "../../db/schema/schema";
-import {
-  insertGitRepoSchema,
-  insertRenderingSchema,
-} from "../../db/schema/validations";
-// validations in DB folder as tied to just the model.  But api requests may take some additional data that isn't getting stored on the model, or is wrapping it in an array etc, so these are compositions of validation on top of those table level  validators.
+
+// validations in DB folder are only tied to the the schema model.  But api requests may take some additional data that isn't getting stored on the model or are for reshaping, or is wrapping it in an array etc, so these extends those validations as needed.
 
 /* //@===============  LANGUAGE=============   */
 export const langPost = z.array(
@@ -47,7 +43,11 @@ export const regionDelete = z.object({
 
 /* //@===============  Git   =============   */
 
-export const gitPost = z.array(dbValidators.insertGitRepoSchema);
+export const gitPost = z.array(
+  dbValidators.insertGitRepoSchema.extend({
+    namespace: z.string().trim().toLowerCase(),
+  })
+);
 export const gitDelete = z.object({
   userRepo: z.array(
     z.object({

@@ -5,7 +5,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch ESModule TypeScript File",
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/controller",
       "runtimeArgs": ["--loader", "ts-node/esm"],
       "program": "${file}"
     },
@@ -14,7 +14,8 @@
       "type": "node",
       "request": "attach",
       "port": 9229,
-      "preLaunchTask": "func: host start"
+      "preLaunchTask": "func: host start",
+      "restart": true
     }
   ]
 }

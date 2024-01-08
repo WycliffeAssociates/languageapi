@@ -1,11 +1,6 @@
-import {
-  HttpFunctionOptions,
-  HttpRequest,
-  HttpResponseInit,
-} from "@azure/functions";
+import {HttpFunctionOptions, HttpRequest} from "@azure/functions";
 import * as validations from "../db/schema/validations";
-import * as schema from "../db/schema/schema";
-import {InferModel, SQL} from "drizzle-orm";
+import {InferSelectModel, SQL} from "drizzle-orm";
 import {
   AnyPgColumn,
   IndexColumn,
@@ -14,8 +9,7 @@ import {
   PgUpdateSetSource,
   TableConfig,
 } from "drizzle-orm/pg-core";
-import {ZodError, z} from "zod";
-import {language} from "../db/schema/schema";
+import {z} from "zod";
 
 export type externalRouteType = {
   name: string;
@@ -24,7 +18,7 @@ export type externalRouteType = {
 export type zodValidationKeys = keyof typeof validations.insertSchemas;
 // export type zodValidationObj<T extends zodValidationKeys> = typeof validations.insertSchemas<T>
 
-export type ModelType<TZodKey extends zodValidationKeys> = InferModel<
+export type ModelType<TZodKey extends zodValidationKeys> = InferSelectModel<
   (typeof validations.insertSchemas)[TZodKey]["table"]
 >;
 

@@ -67,6 +67,7 @@
                   "items": {
                     "properties": {
                       "createdOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "domain": {
@@ -96,6 +97,7 @@
                         "x-nullable": true
                       },
                       "modifiedOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "name": {
@@ -125,6 +127,8 @@
                       "domain",
                       "resourceType",
                       "gitId",
+                      "createdOn",
+                      "modifiedOn",
                       "level"
                     ],
                     "type": "object"
@@ -252,12 +256,14 @@
                         "x-nullable": true
                       },
                       "createdOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "id": {
                         "type": "number"
                       },
                       "modifiedOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "name": {
@@ -275,6 +281,8 @@
                       "id",
                       "name",
                       "worldRegionId",
+                      "createdOn",
+                      "modifiedOn",
                       "alpha2",
                       "alpha3",
                       "population"
@@ -545,6 +553,7 @@
                   "items": {
                     "properties": {
                       "createdOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "direction": {
@@ -575,6 +584,7 @@
                         "x-nullable": true
                       },
                       "modifiedOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "nationalName": {
@@ -588,6 +598,8 @@
                       "englishName",
                       "direction",
                       "iso6393",
+                      "createdOn",
+                      "modifiedOn",
                       "isOralLanguage",
                       "homeCountryAlpha2"
                     ],
@@ -709,12 +721,14 @@
                   "items": {
                     "properties": {
                       "createdOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "id": {
                         "type": "number"
                       },
                       "modifiedOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "name": {
@@ -723,7 +737,9 @@
                     },
                     "required": [
                       "id",
-                      "name"
+                      "name",
+                      "createdOn",
+                      "modifiedOn"
                     ],
                     "type": "object"
                   },
@@ -858,6 +874,7 @@
                         "type": "string"
                       },
                       "createdAt": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "doesCoverAllContent": {
@@ -874,6 +891,7 @@
                         "type": "number"
                       },
                       "modifiedOn": {
+                        "type": "string",
                         "x-nullable": true
                       },
                       "url": {
@@ -886,7 +904,9 @@
                       "fileType",
                       "fileSizeBytes",
                       "url",
-                      "doesCoverAllContent"
+                      "doesCoverAllContent",
+                      "createdAt",
+                      "modifiedOn"
                     ],
                     "type": "object"
                   },
@@ -999,30 +1019,32 @@
     "content": {
       "example": [
         {
-          "createdOn": "2023-05-08T09:55:22.655Z",
+          "createdOn": "2024-01-27T14:02:57.034Z",
           "domain": "parascriptural",
           "gitEntry": {
-            "repoName": "blah",
-            "repoUrl": "https://sleepy-punctuation.net",
-            "username": "Deanna.Lowe-Kozey"
+            "namespace": "wacs",
+            "repoName": "mob",
+            "repoUrl": "https://neat-sturgeon.info",
+            "username": "Marley_Adams87"
           },
-          "id": "uncertainty",
-          "languageId": "yxg",
-          "level": "medium",
+          "id": "whopping",
+          "languageId": "txe",
+          "level": "high",
           "meta": {
-            "showOnBiel": false,
+            "showOnBiel": true,
             "status": "official"
           },
-          "modifiedOn": "2024-06-22T20:41:56.095Z",
-          "name": "notes",
+          "modifiedOn": "2024-07-12T03:38:29.383Z",
+          "name": "manual",
           "namespace": "wacs",
-          "resourceType": "reg",
-          "type": "video"
+          "resourceType": "ulb",
+          "type": "text"
         }
       ],
       "items": {
         "properties": {
           "createdOn": {
+            "type": "string",
             "x-nullable": true
           },
           "domain": {
@@ -1040,6 +1062,9 @@
               "id": {
                 "type": "number"
               },
+              "namespace": {
+                "type": "string"
+              },
               "repoName": {
                 "type": "string"
               },
@@ -1053,7 +1078,8 @@
             "required": [
               "username",
               "repoName",
-              "repoUrl"
+              "repoUrl",
+              "namespace"
             ],
             "type": "object"
           },
@@ -1088,6 +1114,7 @@
             "type": "object"
           },
           "modifiedOn": {
+            "type": "string",
             "x-nullable": true
           },
           "name": {
@@ -1124,12 +1151,12 @@
     "country": {
       "example": [
         {
-          "alpha2": "JP",
-          "alpha3": "NLD",
-          "createdOn": "2024-01-13T08:32:26.215Z",
-          "modifiedOn": "2023-06-07T09:51:25.075Z",
-          "name": "Niue",
-          "population": 514840944,
+          "alpha2": "MG",
+          "alpha3": "GAB",
+          "createdOn": "2024-02-09T19:15:31.295Z",
+          "modifiedOn": "2024-07-30T15:32:01.129Z",
+          "name": "Maldives",
+          "population": 1564380574,
           "regionName": "Asia"
         }
       ],
@@ -1143,12 +1170,14 @@
             "x-nullable": true
           },
           "createdOn": {
+            "type": "string",
             "x-nullable": true
           },
           "id": {
             "type": "number"
           },
           "modifiedOn": {
+            "type": "string",
             "x-nullable": true
           },
           "name": {
@@ -1175,9 +1204,10 @@
       "example": [
         {
           "contentId": "wacs-user-repo",
-          "repoName": "nearly",
-          "repoUrl": "https://easy-borrower.com/",
-          "username": "Mason15"
+          "namespace": "wacs",
+          "repoName": "startle",
+          "repoUrl": "https://unfortunate-belligerency.biz/",
+          "username": "Bailee50"
         }
       ],
       "items": {
@@ -1187,6 +1217,9 @@
           },
           "id": {
             "type": "number"
+          },
+          "namespace": {
+            "type": "string"
           },
           "repoName": {
             "type": "string"
@@ -1202,7 +1235,8 @@
           "contentId",
           "username",
           "repoName",
-          "repoUrl"
+          "repoUrl",
+          "namespace"
         ],
         "type": "object"
       },
@@ -1212,26 +1246,31 @@
       "example": [
         {
           "allCountryAlpha2": [
-            "CH",
-            "MR"
+            "KH",
+            "MF",
+            "KP",
+            "PF",
+            "ZW"
           ],
           "alternateNames": [
-            "putrid",
-            "till",
-            "garner",
-            "between",
-            "shabby",
-            "exemplary"
+            "pusher",
+            "psst",
+            "literature",
+            "keenly",
+            "scrap",
+            "commonly",
+            "student",
+            "skyjack"
           ],
-          "createdOn": "2024-06-28T10:47:01.256Z",
-          "direction": "rtl",
-          "englishName": "unusual",
-          "homeCountryAlpha2": "TM",
-          "id": "NIqApktCYA",
-          "ietfCode": "rdj",
-          "isOralLanguage": false,
-          "iso6393": "vjlilfileb",
-          "nationalName": "pace",
+          "createdOn": "2023-10-14T02:43:58.961Z",
+          "direction": "ltr",
+          "englishName": "pure",
+          "homeCountryAlpha2": "IE",
+          "id": "VUAiOoPYbM",
+          "ietfCode": "zjl",
+          "isOralLanguage": true,
+          "iso6393": "yclozphyx",
+          "nationalName": "phooey",
           "waLangMeta": {
             "showOnBiel": false
           }
@@ -1252,6 +1291,7 @@
             "type": "array"
           },
           "createdOn": {
+            "type": "string",
             "x-nullable": true
           },
           "direction": {
@@ -1285,6 +1325,7 @@
             "x-nullable": true
           },
           "modifiedOn": {
+            "type": "string",
             "x-nullable": true
           },
           "nationalName": {
@@ -1325,28 +1366,29 @@
         }
       },
       "required": [
-        "message",
-        "ok"
+        "message"
       ],
       "type": "object"
     },
     "region": {
       "example": [
         {
-          "createdOn": "2024-05-18T13:17:36.812Z",
-          "modifiedOn": "2023-02-26T03:56:27.374Z",
-          "name": "Austrailia"
+          "createdOn": "2024-07-08T05:56:32.237Z",
+          "modifiedOn": "2025-01-04T20:48:14.296Z",
+          "name": "South America"
         }
       ],
       "items": {
         "properties": {
           "createdOn": {
+            "type": "string",
             "x-nullable": true
           },
           "id": {
             "type": "number"
           },
           "modifiedOn": {
+            "type": "string",
             "x-nullable": true
           },
           "name": {
@@ -1365,28 +1407,28 @@
         [
           {
             "contentId": "user-repo",
-            "createdAt": "2024-02-18T19:12:32.709Z",
-            "doesCoverAllContent": false,
-            "fileSizeBytes": 7432674088058880,
-            "fileType": "zip",
-            "modifiedOn": "2022-10-12T11:52:57.543Z",
+            "createdAt": "2023-09-18T23:21:00.614Z",
+            "doesCoverAllContent": true,
+            "fileSizeBytes": 7028452003676160,
+            "fileType": "mp4",
+            "modifiedOn": "2023-09-19T04:18:30.874Z",
             "namespace": "wacs",
             "scripturalMeta": {
               "bookName": "1 Jean",
               "bookSlug": "1JN",
               "chapter": 5
             },
-            "url": "https://loose-fishery.name/"
+            "url": "https://triangular-dwell.org"
           }
         ],
         [
           {
             "contentId": "user-repo",
-            "createdAt": "2023-04-15T11:19:55.656Z",
+            "createdAt": "2024-06-17T14:45:27.471Z",
             "doesCoverAllContent": true,
-            "fileSizeBytes": 8216950331146240,
-            "fileType": "mp4",
-            "modifiedOn": "2024-03-10T17:59:08.727Z",
+            "fileSizeBytes": 2522719818088448,
+            "fileType": "zip",
+            "modifiedOn": "2023-07-19T21:43:39.521Z",
             "namespace": "wacs",
             "nonScripturalMeta": {
               "additionalData": "A json field",
@@ -1395,9 +1437,9 @@
             "scripturalMeta": {
               "bookName": "1 Jean",
               "bookSlug": "1JN",
-              "chapter": 5
+              "chapter": 2
             },
-            "url": "https://worn-devastation.info"
+            "url": "https://proper-salad.org/"
           }
         ]
       ],
@@ -1407,6 +1449,7 @@
             "type": "string"
           },
           "createdAt": {
+            "type": "string",
             "x-nullable": true
           },
           "doesCoverAllContent": {
@@ -1424,6 +1467,7 @@
             "type": "number"
           },
           "modifiedOn": {
+            "type": "string",
             "x-nullable": true
           },
           "namespace": {

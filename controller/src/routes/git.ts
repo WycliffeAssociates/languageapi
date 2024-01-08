@@ -12,6 +12,7 @@ import {
   polymorphicDelete,
   polymorphicInsert,
   polymorphicSelect,
+  polymorphicUpdate,
 } from "../db/handlers";
 import {
   handleApiMethodReturn,
@@ -22,7 +23,7 @@ import {
 import * as validators from "./validation";
 import * as dbTableValidators from "../db/schema/validations";
 import * as schema from "../db/schema/schema";
-import {inArray, sql} from "drizzle-orm";
+import {inArray, sql, ilike, eq} from "drizzle-orm";
 import {TableConfig} from "drizzle-orm/pg-core";
 import {getDb} from "../db/config";
 
@@ -54,7 +55,7 @@ async function handle(
   try {
     switch (request.method) {
       case "POST":
-        return handlePost({request, table});
+        return handlePostRequest({request, table});
       case "DELETE":
         return handleDel({request, table});
       case "GET":
@@ -77,23 +78,27 @@ async function handle(
     });
   }
 }
-async function handlePost<T extends TableConfig>({
-  request,
-}: apiRouteHandlerArgs<T>): Promise<HttpResponseInit> {
+export async function handlePost<T extends TableConfig>(
+  payload: unknown
+): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
   try {
-    // errors that throw are handled in parent
-    const payload = await request.json();
     // Parse here cause countries come with additional ietf from port
     const validationSchema = validators.gitPost;
     const payloadParsed = validationSchema.parse(payload);
 
+    const payloadsWithNamespacedContentId = payloadParsed.map((payload) => {
+      payload.contentId =
+        `${payload.namespace}-${payload.contentId}`.toLowerCase();
+      return payload;
+    });
+
     const transacted = await db.transaction(async (tx) => {
       const gitInserted = await polymorphicInsert({
         tableKey: tableName,
-        content: payloadParsed,
+        content: payloadsWithNamespacedContentId,
         transactionHandle: tx,
         onConflictDoUpdateArgs: {
           target: schema.gitRepo.contentId,
@@ -103,6 +108,25 @@ async function handlePost<T extends TableConfig>({
           ]),
         },
       });
+
+      if (Array.isArray(gitInserted)) {
+        for await (const gitRow of gitInserted) {
+          const updateWithGit = await polymorphicUpdate(
+            "content",
+            {
+              gitId: gitRow.id,
+            },
+            eq(schema.content.id, gitRow.contentId),
+            tx
+          );
+          if (dbTxDidErr(updateWithGit)) {
+            tx.rollback();
+            throw new Error(
+              "could not update content table with gitInformation"
+            );
+          }
+        }
+      }
 
       if (dbTxDidErr(gitInserted)) {
         addlErrs.push({
@@ -117,6 +141,7 @@ async function handlePost<T extends TableConfig>({
 
       return {gitInserted};
     });
+
     const returnVal = handleApiMethodReturn({
       result: transacted,
       method: thisMethod,
@@ -131,6 +156,14 @@ async function handlePost<T extends TableConfig>({
       addlErrs,
     });
   }
+}
+async function handlePostRequest<T extends TableConfig>({
+  request,
+}: apiRouteHandlerArgs<T>): Promise<HttpResponseInit> {
+  // went up one layer so the core logic just takes a payload.  This fxn specifically takes an http request and gets the json off it
+  const payload = await request.json();
+  const result = await handlePost(payload);
+  return result;
 }
 
 async function handleDel<T extends TableConfig>({
@@ -149,8 +182,6 @@ async function handleDel<T extends TableConfig>({
     // todo: if this resolves, use orm instead of raw. these are column names
     // https://github.com/drizzle-team/drizzle-orm/issues/534
     const whereSql = sql`(username, repo_name) IN ${values}`;
-    // const deleteOnField = [schema.gitRepo.username, schema.gitRepo.repoName];
-    // const deleteOn
     const result = await polymorphicDelete(tableName, whereSql);
     const returnVal = handleApiMethodReturn({
       result,
