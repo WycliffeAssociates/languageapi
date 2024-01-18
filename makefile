@@ -6,7 +6,7 @@ console:
 
 .PHONY: datadump
 datadump:
-	pg_dump -d $(op read "op://AppDev Scripture Accessibility/languageapi-dev/connection string") -n public --data-only > data_dump.sql
+	pg_dump $(op read "op://AppDev Scripture Accessibility/languageapi-dev/connection string") -n public > data_dump.sql
 
 .PHONY: localdataingest
 localdataingest:

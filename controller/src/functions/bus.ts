@@ -62,7 +62,7 @@ export async function wacsSbLangApi(
 
 // todo: I think I'm done here. Just clean up the docker cruft I have left behind, and change to a feature branch, adn pr tag dan and craig to have a look.  Just look through all your staged files first.  Double check on env vars with dan as well. (adjust them in docker). Leave some notes about the hybrd dev appraoch in teh readme (docker for hasura and postgres, run the func locally though).
 app.serviceBusTopic("waLangApi", {
-  connection: "BUSS_CONN",
+  connection: "BUS_CONN",
   topicName: "wacsevent",
   subscriptionName: "languageapi",
   handler: wacsSbLangApi,
