@@ -1,6 +1,5 @@
 import {
   integer,
-  pgEnum,
   pgTable,
   primaryKey,
   serial,
@@ -10,7 +9,6 @@ import {
   boolean,
   smallint,
   json,
-  index,
   uniqueIndex,
   bigint,
 } from "drizzle-orm/pg-core";
@@ -19,8 +17,8 @@ import {
   contentTypeEnum,
   contentDomainEnum,
 } from "./constants";
-// const langDirectionsEnum = pgEnum("direction", ["ltr", "rtl"]);
-// this fille only contains pgTable types. Relations and enums are separate.  This allows for getting all table names as a ts type by doing keyof typeof schmea (where import * as schema from this file) without having to exclude anything
+
+// this fille only contains pgTable types. Relations and enums are a separate file.  This allows for getting all table names as a ts type by doing keyof typeof schmea (where import * as schema from this file) without having to exclude anything
 
 //@=============== LANGUAGE  =============
 export const language = pgTable(
@@ -61,73 +59,7 @@ export const waLangMetadata = pgTable("wa_language_meta", {
     .notNull(),
   showOnBiel: boolean("show_on_biel").notNull(),
 });
-// JOIN ON COUNTRY ALPHA 2 AS UNIQUE INDEX.
 
-// add id from port id
-// oral lang (bool)
-// oral lang name bool
-// show on Biel (for langs) ( which means another pivot table for context / lang), Biel_opt_in
-
-// None were going to actually be stored in db.
-// biel trifecta:
-// language show on biel,
-// repo: biel_opt_in,
-// repo: statuscode == primary,
-//Maybe should just store this stuff in Hasura, not make it public, and make sure the anonymous select query isn't returning ones where showBiel is false... But then ROW does want to see them all as needed so?
-
-// Indonesian -> ok that exists -> not ok to show on biel
-// DangerousLang -> Ok that exists -> not ok cause we don't want people to know we are making scripture in this language.
-
-// Lang -> show on biel
-// repo -> biel opt in
-//  statuscode -> primary
-
-// biel query all langs where showOnBiel = true
-//A biel query all content join lang where lang show on Biel = true and content.biel_opt = true && content.statuscode = true
-//B biel query all content where lang code = "$ietf"
-
-// options: (no order)
-// 1. query pivot table + (context<==>contnet) ad hoc logic based on port data
-// You'd also have to set up same thing for language
-// 2. Just put it all in the api, expose it, and query it (security?)
-// 3. Put in db, don't expose the field to anonymous users via hasura, and write some middleware in hasura?
-// 4. wa-metadata-tables for lang and content
-
-// Country:
-// alpha2 = 2 letter code
-// alpha3 = 3 letter code
-// country ids = dynamics hex
-//
-
-// translation repo
-// ->
-
-/* 
-PORT MEETING
-*/
-/* 
-At what level is their change detection in PORT? countries? on languages?
-
-
-pass along langNamesJson key from original. 
-select max PK from languagen to increment new non-existtent port pk row.
-
-
-ID: ?
-serial id, ietf, port_id = unique, 
-primary key should never be semantic that has possibility to change
-
-
-add'l field in port: 
-home country
-alternative names
-
-
-
-
-country:
-name, code, region, port id, population?
-*/
 //@=============== LANG ALT  =============
 export const languageAlternateName = pgTable(
   "language_alternate_name",
@@ -264,20 +196,7 @@ export const gitRepo = pgTable(
     };
   }
 );
-//@=============== FILE TYPE LOOKUP  =============
-// IDEALLY A UNIQUE CONSTRAINT HERE and not unique index WHEN DRIZZLE SUPPORTS IT
-// export const fileType = pgTable(
-//   "file_type",
-//   {
-//     id: serial("id").primaryKey(),
-//     fileType: varchar("file_type").notNull(),
-//   },
-//   (table) => {
-//     return {
-//       typeIdx: uniqueIndex("type_idx").on(table.fileType),
-//     };
-//   }
-// );
+
 //@=============== RENDERING OR LINK TABLE  =============
 export const rendering = pgTable(
   "rendering",
@@ -389,13 +308,3 @@ export const countryToLanguage = pgTable(
     };
   }
 );
-
-// export const countryRegion = pgTable("country_region", {
-//   id: serial("id").primaryKey(),
-//   name: text("name").notNull(),
-//   country_id: serial("country_id")
-//     .references(() => country.id)
-//     .notNull(),
-// });
-
-// For inserting to

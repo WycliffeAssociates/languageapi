@@ -1,6 +1,6 @@
 # Gql controller
 
-*Code to manage several crud on db.*
+*Code to manage several crud ops on db.*
 
 ## Architecture at a glance: 
 src/db/schema
@@ -30,3 +30,6 @@ src/routes/validation
 
 src/migrate
 - migration script for ci or to run as needed
+
+## Running the project:
+- While the azure function can be run inside the container if you just docker compose up, current reccomendation is pnpm i the deps, and then run pnpm run watch in one terminal and pnpm run start in another.  Changes are compiled with watch, adn code in dist is update during dev, avoiding having to mount in src code as volume in docker for fast refresh.  Running it locally as an azure fxn does require the local.settings.json for the appropriate env vars since they aren't set through the docker container. 

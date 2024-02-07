@@ -11,32 +11,33 @@
     "test": "echo \"No tests yet...\"",
     "generate": "pnpm run build && drizzle-kit generate:pg",
     "preview": "pnpm run clean && pnpm run build && pnpm run start",
-    "getMock": "npx ts-node ./src/db/seed/getMocks.ts",
-    "getOpenApi": "npx ts-node ./src/docs/openApi.ts",
-    "visualize": "npx drizzle-kit studio",
-    "migrate": "npx ts-node ./src/migrate.ts"
+    "getMock": "pnpm exec ts-node ./src/db/seed/getMocks.ts",
+    "getOpenApi": "pnpm exec ts-node ./src/docs/openApi.ts",
+    "visualize": "pnpm drizzle-kit studio --verbose",
+    "migrate": "pnpm exec ts-node ./src/migrate.ts"
   },
   "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^5.2.0",
-    "@azure/functions": "^4.0.0-alpha.11",
+    "@asteasolutions/zod-to-openapi": "^6.3.1",
+    "@azure/functions": "^4.1.0",
     "api-spec-converter": "^2.12.0",
     "dotenv": "^16.3.1",
-    "drizzle-zod": "^0.4.4",
-    "postgres": "^3.3.5",
-    "yaml": "^2.3.1",
-    "zod": "^3.21.4"
+    "drizzle-zod": "^0.5.1",
+    "postgres": "^3.4.3",
+    "yaml": "^2.3.4",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@anatine/zod-mock": "^3.12.1",
-    "@faker-js/faker": "^8.0.2",
-    "@types/node": "^18.x",
-    "drizzle-kit": "^0.19.3",
-    "drizzle-orm": "^0.27.0",
-    "pg": "^8.11.1",
-    "rimraf": "^5.0.1",
-    "ts-node": "^10.9.1",
-    "type-fest": "^3.12.0",
-    "typescript": "^5.1.6"
+    "@anatine/zod-mock": "^3.13.3",
+    "@faker-js/faker": "^8.3.1",
+    "@types/node": "^20.10.6",
+    "drizzle-kit": "^0.20.9",
+    "drizzle-orm": "^0.29.3",
+    "pg": "^8.11.3",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "type-fest": "^4.9.0",
+    "typescript": "^5.3.3"
   },
-  "main": "dist/src/functions/*.js"
+  "main": "dist/src/functions/*.js",
+  "packageManager": "pnpm@8.14.0"
 }

@@ -101,6 +101,7 @@ export function getMockedGit() {
     username: faker.internet.userName(),
     repoName: fakerWord(),
     repoUrl: faker.internet.url(),
+    namespace: "wacs",
   };
   return mockedContent;
 }
@@ -155,6 +156,7 @@ export function getMockedContent() {
           username: faker.internet.userName(),
           repoName: fakerWord(),
           repoUrl: faker.internet.url(),
+          namespace: "wacs",
         };
       },
       {probability: 0.5}

@@ -169,6 +169,7 @@ export function handleApiMethodReturn({
             ok: true,
           };
     return {
+      status: 200,
       jsonBody: ret,
     };
   }
