@@ -34,21 +34,27 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           DATABASE_URL: "op://AppDev Scripture Accessibility/languageapi-prod/connection string"
+      - name: "Load PNPM"
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: "Build and Test Controller"
         shell: bash
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          echo "node-linker=hoisted" > .npmrc
+          pnpm install
+          pnpm run --if-present build 
+          pnpm run --if-present test 
           popd
       - name: "Migrate DB"
         env:
           DATABASE_URL: ${{ env.DATABASE_URL }}
         run: |
           pushd ./controller
-          npm install
-          npm run migrate
+          echo "node-linker=hoisted" > .npmrc
+          pnpm install
+          pnpm run migrate
           popd
 
       - name: "Run Azure Functions Action"
