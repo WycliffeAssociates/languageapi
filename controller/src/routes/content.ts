@@ -94,7 +94,7 @@ async function handlePost<T extends TableConfig>({
       const {namespace, ...contentPayload} = payload;
       return {
         ...contentPayload,
-        id: `${namespace.toLowerCase()}-${contentPayload.id}`,
+        id: `${namespace}-${contentPayload.id}`.toLowerCase(),
       };
     });
     type accType = {

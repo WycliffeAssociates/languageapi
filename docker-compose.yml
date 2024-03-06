@@ -2,23 +2,23 @@
 version: "3.8"
 
 services:
-  # controller:
-  #   build:
-  #     context: ./controller
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - AzureWebJobsStorage=<YOUR_STORAGE_CONNECTION_STRING>
-  #     - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
-  #     - WEBSITE_CONTENTAZUREFILECONNECTIONSTRING=<YOUR_STORAGE_CONNECTION_STRING>
-  #     - WEBSITE_CONTENTSHARE=<YOUR_STORAGE_CONTENT_SHARE_NAME>
-  #   platform: linux/amd64
-  #   ports:
-  #     - 8081:80
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     db-migrate:
-  #       condition: service_completed_successfully
+  controller:
+    build:
+      context: ./controller
+      dockerfile: Dockerfile
+    environment:
+      - AzureWebJobsStorage=<YOUR_STORAGE_CONNECTION_STRING>
+      - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
+      - WEBSITE_CONTENTAZUREFILECONNECTIONSTRING=<YOUR_STORAGE_CONNECTION_STRING>
+      - WEBSITE_CONTENTSHARE=<YOUR_STORAGE_CONTENT_SHARE_NAME>
+    platform: linux/amd64
+    ports:
+      - 8081:80
+    depends_on:
+      postgres:
+        condition: service_healthy
+      db-migrate:
+        condition: service_completed_successfully
   db-migrate:
     build:
       context: ./controller
@@ -26,7 +26,12 @@ services:
       # IF you want to run the functions in the container and migrate
     # entrypoint: ["sh", "-c", "pnpm run migrate && pnpm run start"]
     # IF you only want to migrate so hasura is up to date on migrations done locally
-    entrypoint: ["pnpm", "run", "migrate"]
+    entrypoint:
+      [
+        "/bin/sh",
+        "-c",
+        "psql postgres://docker:docker@postgres:5432/docker -f data_dump.sql && pnpm run migrate",
+      ]
     expose:
       - 7071
       - 3000
@@ -47,7 +52,7 @@ services:
       - POSTGRES_DB=docker
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./data_dump.sql:/docker-entrypoint-initdb.d/data_dump.sql
+      # - ./data_only.sql:/docker-entrypoint-initdb.d/data_dump.sql
     expose:
       - 5432
     ports:
