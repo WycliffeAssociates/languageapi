@@ -1,9 +1,21 @@
 {
+<<<<<<< HEAD
+<<<<<<< HEAD
   "id": "07f7edc6-676a-4914-9b7b-fb53f4a7064a",
+=======
+  "id": "2de8e394-451c-45b3-8c67-b223d60334e9",
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+  "id": "07f7edc6-676a-4914-9b7b-fb53f4a7064a",
+>>>>>>> 0d6d1a1 (lang api adjustments)
   "prevId": "47a4dec0-8084-44bc-85dd-3faed4a1b877",
   "version": "5",
   "dialect": "pg",
   "tables": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
     "connected_content": {
       "name": "connected_content",
       "schema": "",
@@ -352,6 +364,11 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
+=======
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
     "language": {
       "name": "language",
       "schema": "",
@@ -437,6 +454,8 @@
         "language_home_country_alpha2_country_alpha_2_fk": {
           "name": "language_home_country_alpha2_country_alpha_2_fk",
           "tableFrom": "language",
+<<<<<<< HEAD
+<<<<<<< HEAD
           "tableTo": "country",
           "columnsFrom": [
             "home_country_alpha2"
@@ -446,6 +465,72 @@
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
+=======
+=======
+          "tableTo": "country",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "home_country_alpha2"
+          ],
+          "columnsTo": [
+            "alpha_2"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "wa_language_meta": {
+      "name": "wa_language_meta",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ietf_code": {
+          "name": "ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_gateway": {
+          "name": "is_gateway",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_on_biel": {
+          "name": "show_on_biel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wa_language_meta_ietf_code_language_ietf_code_fk": {
+          "name": "wa_language_meta_ietf_code_language_ietf_code_fk",
+          "tableFrom": "wa_language_meta",
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "tableTo": "language",
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "no action",
+          "onUpdate": "no action"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "compositePrimaryKeys": {},
@@ -488,6 +573,8 @@
         "language_alternate_name_ietf_code_language_ietf_code_fk": {
           "name": "language_alternate_name_ietf_code_language_ietf_code_fk",
           "tableFrom": "language_alternate_name",
+<<<<<<< HEAD
+<<<<<<< HEAD
           "tableTo": "language",
           "columnsFrom": [
             "ietf_code"
@@ -497,6 +584,24 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+=======
+          "tableTo": "language",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "compositePrimaryKeys": {},
@@ -524,6 +629,8 @@
         "gateway_language_to_dependent_language_gateway_language_ietf_language_ietf_code_fk": {
           "name": "gateway_language_to_dependent_language_gateway_language_ietf_language_ietf_code_fk",
           "tableFrom": "gateway_language_to_dependent_language",
+<<<<<<< HEAD
+<<<<<<< HEAD
           "tableTo": "language",
           "columnsFrom": [
             "gateway_language_ietf"
@@ -533,10 +640,30 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+=======
+          "tableTo": "language",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "gateway_language_ietf"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         },
         "gateway_language_to_dependent_language_dependent_language_ietf_language_ietf_code_fk": {
           "name": "gateway_language_to_dependent_language_dependent_language_ietf_language_ietf_code_fk",
           "tableFrom": "gateway_language_to_dependent_language",
+<<<<<<< HEAD
+<<<<<<< HEAD
           "tableTo": "language",
           "columnsFrom": [
             "dependent_language_ietf"
@@ -546,6 +673,24 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+=======
+          "tableTo": "language",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "dependent_language_ietf"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "compositePrimaryKeys": {
@@ -559,6 +704,10 @@
       },
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
     "localization": {
       "name": "localization",
       "schema": "",
@@ -586,6 +735,11 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+<<<<<<< HEAD
+=======
+    "content": {
+      "name": "content",
+=======
         }
       },
       "indexes": {},
@@ -618,6 +772,7 @@
     },
     "nonscriptural_rendering_metadata": {
       "name": "nonscriptural_rendering_metadata",
+>>>>>>> 0d6d1a1 (lang api adjustments)
       "schema": "",
       "columns": {
         "id": {
@@ -626,6 +781,94 @@
           "primaryKey": true,
           "notNull": true
         },
+        "rendering_id": {
+          "name": "rendering_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "additional_data": {
+          "name": "additional_data",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+        "localization_ietf_code_language_ietf_code_fk": {
+          "name": "localization_ietf_code_language_ietf_code_fk",
+          "tableFrom": "localization",
+          "tableTo": "language",
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "localization_pkey": {
+          "name": "localization_pkey",
+          "columns": [
+            "ietf_code",
+            "key",
+            "category"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "nonscriptural_rendering_metadata": {
+      "name": "nonscriptural_rendering_metadata",
+=======
+        "content_language_id_language_ietf_code_fk": {
+          "name": "content_language_id_language_ietf_code_fk",
+          "tableFrom": "content",
+=======
+        "nonscriptural_meta_rendering_fk": {
+          "name": "nonscriptural_meta_rendering_fk",
+          "tableFrom": "nonscriptural_rendering_metadata",
+          "tableTo": "rendered_content",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "rendering_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+<<<<<<< HEAD
+    "wa_content_meta": {
+      "name": "wa_content_meta",
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+<<<<<<< HEAD
         "rendering_id": {
           "name": "rendering_id",
           "type": "serial",
@@ -659,13 +902,192 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_on_biel": {
+          "name": "show_on_biel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "content_idx": {
+          "name": "content_idx",
+          "columns": [
+            "content_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "wa_content_meta_content_id_content_id_fk": {
+          "name": "wa_content_meta_content_id_content_id_fk",
+          "tableFrom": "wa_content_meta",
+          "columnsFrom": [
+            "content_id"
+          ],
+          "tableTo": "content",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
     "rendered_content": {
       "name": "rendered_content",
+=======
+    "connected_content": {
+      "name": "connected_content",
+      "schema": "",
+      "columns": {
+        "content_id_1": {
+          "name": "content_id_1",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content_id_2": {
+          "name": "content_id_2",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "connected_content_content_id_1_content_id_fk": {
+          "name": "connected_content_content_id_1_content_id_fk",
+          "tableFrom": "connected_content",
+          "columnsFrom": [
+            "content_id_1"
+          ],
+          "tableTo": "content",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+        },
+        "connected_content_content_id_2_content_id_fk": {
+          "name": "connected_content_content_id_2_content_id_fk",
+          "tableFrom": "connected_content",
+          "columnsFrom": [
+            "content_id_2"
+          ],
+          "tableTo": "content",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "connected_content_pkey": {
+          "name": "connected_content_pkey",
+          "columns": [
+            "content_id_1",
+            "content_id_2"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "git_repo": {
+      "name": "git_repo",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repo_name": {
+          "name": "repo_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "repo_url": {
+          "name": "repo_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "username_reponame_idx": {
+          "name": "username_reponame_idx",
+          "columns": [
+            "username",
+            "repo_name"
+          ],
+          "isUnique": true
+        },
+        "content_id_idx": {
+          "name": "content_id_idx",
+          "columns": [
+            "content_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "git_repo_content_id_content_id_fk": {
+          "name": "git_repo_content_id_content_id_fk",
+          "tableFrom": "git_repo",
+          "columnsFrom": [
+            "content_id"
+          ],
+          "tableTo": "content",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "rendering": {
+      "name": "rendering",
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+    "rendered_content": {
+      "name": "rendered_content",
+>>>>>>> 0d6d1a1 (lang api adjustments)
       "schema": "",
       "columns": {
         "id": {
@@ -728,10 +1150,15 @@
         }
       },
       "foreignKeys": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
         "rendered_content_content_id_content_id_fk": {
           "name": "rendered_content_content_id_content_id_fk",
           "tableFrom": "rendered_content",
           "tableTo": "content",
+<<<<<<< HEAD
           "columnsFrom": [
             "content_id"
           ],
@@ -740,6 +1167,26 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+        "rendering_content_id_content_id_fk": {
+          "name": "rendering_content_id_content_id_fk",
+          "tableFrom": "rendering",
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "compositePrimaryKeys": {},
@@ -800,6 +1247,8 @@
       },
       "indexes": {},
       "foreignKeys": {
+<<<<<<< HEAD
+<<<<<<< HEAD
         "rendering_fk": {
           "name": "rendering_fk",
           "tableFrom": "scriptural_rendering_metadata",
@@ -812,13 +1261,46 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+        "scriptural_rendering_metadata_rendering_id_rendering_id_fk": {
+          "name": "scriptural_rendering_metadata_rendering_id_rendering_id_fk",
+=======
+        "rendering_fk": {
+          "name": "rendering_fk",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "tableFrom": "scriptural_rendering_metadata",
+          "tableTo": "rendered_content",
+          "columnsFrom": [
+            "rendering_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+<<<<<<< HEAD
+<<<<<<< HEAD
     "wa_content_metadata": {
       "name": "wa_content_metadata",
+=======
+    "nonscriptural_rendering_metadata": {
+      "name": "nonscriptural_rendering_metadata",
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+    "wa_content_metadata": {
+      "name": "wa_content_metadata",
+>>>>>>> 0d6d1a1 (lang api adjustments)
       "schema": "",
       "columns": {
         "id": {
@@ -827,6 +1309,8 @@
           "primaryKey": true,
           "notNull": true
         },
+<<<<<<< HEAD
+<<<<<<< HEAD
         "content_id": {
           "name": "content_id",
           "type": "varchar(256)",
@@ -900,14 +1384,103 @@
           "type": "boolean",
           "primaryKey": false,
           "notNull": true
+=======
+        "rendering_id": {
+          "name": "rendering_id",
+          "type": "serial",
+=======
+        "content_id": {
+          "name": "content_id",
+          "type": "varchar(256)",
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_on_biel": {
+          "name": "show_on_biel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+<<<<<<< HEAD
+          "notNull": false
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "content_idx": {
+          "name": "content_idx",
+          "columns": [
+            "content_id"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "wa_content_metadata_content_id_content_id_fk": {
+          "name": "wa_content_metadata_content_id_content_id_fk",
+          "tableFrom": "wa_content_metadata",
+          "tableTo": "content",
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "wa_language_metadata": {
+      "name": "wa_language_metadata",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "ietf_code": {
+          "name": "ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_gateway": {
+          "name": "is_gateway",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "show_on_biel": {
+          "name": "show_on_biel",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "indexes": {},
       "foreignKeys": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
         "metadata_language_fk": {
           "name": "metadata_language_fk",
           "tableFrom": "wa_language_metadata",
           "tableTo": "language",
+<<<<<<< HEAD
           "columnsFrom": [
             "ietf_code"
           ],
@@ -916,6 +1489,26 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
+=======
+        "nonscriptural_rendering_metadata_rendering_id_rendering_id_fk": {
+          "name": "nonscriptural_rendering_metadata_rendering_id_rendering_id_fk",
+          "tableFrom": "nonscriptural_rendering_metadata",
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
+<<<<<<< HEAD
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+>>>>>>> 0d6d1a1 (lang api adjustments)
         }
       },
       "compositePrimaryKeys": {},
@@ -962,6 +1555,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
+<<<<<<< HEAD
+<<<<<<< HEAD
     }
   },
   "enums": {
@@ -972,6 +1567,162 @@
         "gloss": "gloss",
         "parascriptural": "parascriptural",
         "peripheral": "peripheral"
+=======
+    },
+    "country": {
+      "name": "country",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "world_region_id": {
+          "name": "world_region_id",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_on": {
+          "name": "created_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "modified_on": {
+          "name": "modified_on",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "alpha_2": {
+          "name": "alpha_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "alpha_3": {
+          "name": "alpha_3",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "population": {
+          "name": "population",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "alpha_2_idx": {
+          "name": "alpha_2_idx",
+          "columns": [
+            "alpha_2"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "country_world_region_id_world_region_id_fk": {
+          "name": "country_world_region_id_world_region_id_fk",
+          "tableFrom": "country",
+          "columnsFrom": [
+            "world_region_id"
+          ],
+          "tableTo": "world_region",
+          "columnsTo": [
+            "id"
+          ],
+          "onUpdate": "no action",
+          "onDelete": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "country_to_language": {
+      "name": "country_to_language",
+      "schema": "",
+      "columns": {
+        "language_ietf_code": {
+          "name": "language_ietf_code",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "country_alpha_2": {
+          "name": "country_alpha_2",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "country_to_language_language_ietf_code_language_ietf_code_fk": {
+          "name": "country_to_language_language_ietf_code_language_ietf_code_fk",
+          "tableFrom": "country_to_language",
+          "columnsFrom": [
+            "language_ietf_code"
+          ],
+          "tableTo": "language",
+          "columnsTo": [
+            "ietf_code"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+        },
+        "country_to_language_country_alpha_2_country_alpha_2_fk": {
+          "name": "country_to_language_country_alpha_2_country_alpha_2_fk",
+          "tableFrom": "country_to_language",
+          "columnsFrom": [
+            "country_alpha_2"
+          ],
+          "tableTo": "country",
+          "columnsTo": [
+            "alpha_2"
+          ],
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {
+        "country_to_language_pkey": {
+          "name": "country_to_language_pkey",
+          "columns": [
+            "language_ietf_code",
+            "country_alpha_2"
+          ]
+        }
+      },
+      "uniqueConstraints": {}
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
+    }
+  },
+  "enums": {
+    "domain": {
+      "name": "domain",
+      "values": {
+<<<<<<< HEAD
+        "ltr": "ltr",
+        "rtl": "rtl"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+        "scripture": "scripture",
+        "gloss": "gloss",
+        "parascriptural": "parascriptural",
+        "peripheral": "peripheral"
+>>>>>>> 0d6d1a1 (lang api adjustments)
       }
     },
     "type_id": {
@@ -983,11 +1734,29 @@
         "braille": "braille"
       }
     },
+<<<<<<< HEAD
+<<<<<<< HEAD
     "direction": {
       "name": "direction",
       "values": {
         "ltr": "ltr",
         "rtl": "rtl"
+=======
+    "domain": {
+      "name": "domain",
+      "values": {
+        "scripture": "scripture",
+        "gloss": "gloss",
+        "parascriptural": "parascriptural",
+        "peripheral": "peripheral"
+>>>>>>> 9d38750 (add a view for getting source zips from wacs)
+=======
+    "direction": {
+      "name": "direction",
+      "values": {
+        "ltr": "ltr",
+        "rtl": "rtl"
+>>>>>>> 0d6d1a1 (lang api adjustments)
       }
     }
   },

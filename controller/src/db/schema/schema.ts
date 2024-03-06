@@ -50,6 +50,10 @@ export const language = pgTable(
   }
 );
 //@=============== WA LANG META  =============
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
 export const waLangMetadata = pgTable(
   "wa_language_metadata",
   {
@@ -71,6 +75,22 @@ export const waLangMetadata = pgTable(
     };
   }
 );
+<<<<<<< HEAD
+=======
+export const waLangMetadata = pgTable("wa_language_meta", {
+  id: serial("id").primaryKey(),
+  ietfCode: varchar("ietf_code")
+    .references(() => language.ietfCode, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .notNull(),
+  isGateway: boolean("is_gateway").notNull(),
+  showOnBiel: boolean("show_on_biel").notNull(),
+});
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
 
 //@=============== LANG ALT  =============
 export const languageAlternateName = pgTable(
@@ -125,6 +145,7 @@ export const languagesToLanguages = pgTable(
 export const content = pgTable(
   "content",
   {
+    // We could do $defaultFn, but I want to be explicit cause git and meta sometimes need to this value before they are inserted into the orm as a connecting id.
     id: varchar("id", {length: 256}).primaryKey().notNull(),
     languageId: varchar("language_id").references(() => language.ietfCode),
     name: varchar("name", {length: 256}).notNull(),
@@ -135,16 +156,16 @@ export const content = pgTable(
     createdOn: timestamp("created_on", {mode: "string"}),
     modifiedOn: timestamp("modified_on", {mode: "string"}),
     level: varchar("level"),
-  }
+  },
   // todo: add unique after fixing this data
-  // (table) => {
-  //     return {
-  //       urlIdx: uniqueIndex("name_nampespace_idx").on(
-  //         table.name,
-  //         table.nameSpace
-  //       ),
-  //     };
-  //   }
+  (table) => {
+    return {
+      urlIdx: uniqueIndex("name_nampespace_idx").on(
+        table.name,
+        table.namespace
+      ),
+    };
+  }
 );
 
 //@=============== WA content meta  =============
@@ -166,6 +187,10 @@ export const waContentMetadata = pgTable(
 );
 
 //@=============== DIRECTLY CONNECTED CONTENT  =============
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
 // export const connectedContent = pgTable(
 //   "connected_content",
 //   {
@@ -183,6 +208,28 @@ export const waContentMetadata = pgTable(
 //     }),
 //   })
 // );
+<<<<<<< HEAD
+=======
+export const connectedContent = pgTable(
+  "connected_content",
+  {
+    contentId1: varchar("content_id_1", {length: 256})
+      .references(() => content.id, {onDelete: "cascade", onUpdate: "cascade"})
+      .notNull(),
+    contentId2: varchar("content_id_2", {length: 256})
+      .references(() => content.id, {onDelete: "cascade", onUpdate: "cascade"})
+      .notNull(),
+  },
+  (table) => ({
+    primaryKey: primaryKey({
+      columns: [table.contentId1, table.contentId2],
+      name: "connected_content_pkey",
+    }),
+  })
+);
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
+=======
+>>>>>>> 0d6d1a1 (lang api adjustments)
 //@=============== GIT REPO  =============
 export const gitRepo = pgTable(
   "git_repo",
@@ -235,7 +282,20 @@ export const scripturalRenderingMetadata = pgTable(
   "scriptural_rendering_metadata",
   {
     id: serial("id").primaryKey(),
+<<<<<<< HEAD
+<<<<<<< HEAD
     renderingId: serial("rendering_id").notNull(),
+=======
+    renderingId: serial("rendering_id")
+      .references(() => rendering.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
+      .notNull(),
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
+=======
+    renderingId: serial("rendering_id").notNull(),
+>>>>>>> 0d6d1a1 (lang api adjustments)
     bookSlug: varchar("book_slug", {length: 64}), //zod stores these as exclusively uppercase
     bookName: varchar("book_name"),
     chapter: integer("chapter"),
@@ -335,6 +395,32 @@ export const countryToLanguage = pgTable(
         columns: [table.languageIetf, table.countryAlpha],
         name: "country_to_language_pkey",
       }),
+<<<<<<< HEAD
+    };
+  }
+);
+
+export const localization = pgTable(
+  "localization",
+  {
+    ietfCode: varchar("ietf_code")
+      .references(() => language.ietfCode, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
+      .notNull(),
+    key: varchar("key").notNull(),
+    category: varchar("category").notNull(),
+    value: text("value").notNull(),
+  },
+  (table) => {
+    return {
+      primaryKey: primaryKey({
+        columns: [table.ietfCode, table.key, table.category],
+        name: "localization_pkey",
+      }),
+=======
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     };
   }
 );

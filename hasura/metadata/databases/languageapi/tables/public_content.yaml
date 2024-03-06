@@ -36,3 +36,18 @@ array_relationships:
         table:
           name: wa_content_metadata
           schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - id
+        - language_id
+        - level
+        - name
+        - namespace
+        - resource_type
+        - created_on
+        - modified_on
+        - domain
+        - type
+      filter: {}

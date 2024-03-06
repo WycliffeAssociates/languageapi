@@ -9,6 +9,8 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
+        - is_whole_book
+        - is_whole_project
         - book_name
         - book_slug
         - chapter
