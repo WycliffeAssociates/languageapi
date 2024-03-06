@@ -7,7 +7,11 @@ console:
 # -n drizzle schema is for to get the same migrations that have been applied to the dev database applied. 
 .PHONY: datadump
 datadump:
+<<<<<<< HEAD
 	pg_dump $(op read "op://AppDev Scripture Accessibility/languageapi-dev/connection string") -n public -n drizzle > data_dump.sql
+=======
+	pg_dump $(op read "op://AppDev Scripture Accessibility/languageapi-dev/connection string") -n public -n drizzle --data-only > data_dump.sql
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 
 # Note, this will conflict if you're running postgres on own machine on default port too. 
 .PHONY: localdataingest

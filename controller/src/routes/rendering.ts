@@ -95,7 +95,14 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     const validationSchema = validators.renderingsPost;
     const payloadParsed = validationSchema.parse(payload);
     const payloadsWithNamespacedId = payloadParsed.map((payload) => {
+<<<<<<< HEAD
       if (payload.nonScripturalMeta) {
+=======
+      const {namespace, ...renderPayload} = payload;
+      // port making content ids that are like user-repo.  It should provide a contentId that matches (e.g. user-repo) and a namesapce (dcs).   We prefix it here and make that that its contentId so 'dcs-user-repo'. Another, non-git-system might just use 'ab-en_ulb' for its content id if en_ulb is all it needs as its content identifier. So this is just normalizing and consolidating the namespace plus provided contentId
+      const contentId = `${namespace}-${renderPayload.contentId}`.toLowerCase();
+      if (renderPayload.nonScripturalMeta) {
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
         // I'm intentionally adding string of wrong type here.  and below for expect error. These will not be inserted. I'm adding this property as a way to ensure that in the transaction, once the renderigns are inserted, I can pluck the ids off the inserts ids and map it back to the metadata via this common obj. property
         // @ts-expect-error
         payload.nonScripturalMeta.renderingId = payload.contentId;
@@ -104,7 +111,14 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
         // @ts-expect-error
         payload.scripturalMeta.renderingId = payload.contentId;
       }
+<<<<<<< HEAD
       return payload;
+=======
+      return {
+        ...renderPayload,
+        contentId: `${namespace}-${renderPayload.contentId}`.toLowerCase(),
+      };
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     });
 
     type accType = {
@@ -260,7 +274,13 @@ export async function handleDel(payload: unknown): Promise<HttpResponseInit> {
   try {
     const deleteSchema = validators.renderingDelete;
     const deletePayloadsParsed = deleteSchema.parse(payload);
+<<<<<<< HEAD
     const rowsToDeleteByContentId = deletePayloadsParsed.contentIds;
+=======
+    const rowsToDeleteByContentId = deletePayloadsParsed.contentIds.map((row) =>
+      `${row.namespace}-${row.id}`.toLowerCase()
+    );
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 
     // E.g. delete all rendergins (and cascade accross) where the guid of a project is passed
     const deleteOnField = schema.rendering.contentId;

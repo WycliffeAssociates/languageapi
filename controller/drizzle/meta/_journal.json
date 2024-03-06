@@ -148,6 +148,7 @@
       "when": 1709679629988,
       "tag": "0020_right_mojo",
       "breakpoints": true
+<<<<<<< HEAD
     },
     {
       "idx": 21,
@@ -176,6 +177,8 @@
       "when": 1712691755151,
       "tag": "0024_daffy_black_bolt",
       "breakpoints": true
+=======
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     }
   ]
 }

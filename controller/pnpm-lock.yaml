@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+<<<<<<< HEAD
   "@asteasolutions/zod-to-openapi":
     specifier: ^6.4.0
     version: 6.4.0(zod@3.22.4)
@@ -14,6 +15,14 @@ dependencies:
   "@paralleldrive/cuid2":
     specifier: ^2.2.2
     version: 2.2.2
+=======
+  '@asteasolutions/zod-to-openapi':
+    specifier: ^6.4.0
+    version: 6.4.0(zod@3.22.4)
+  '@azure/functions':
+    specifier: ^4.3.0
+    version: 4.3.0
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
   api-spec-converter:
     specifier: ^2.12.0
     version: 2.12.0
@@ -40,10 +49,17 @@ devDependencies:
   "@anatine/zod-mock":
     specifier: ^3.13.3
     version: 3.13.3(@faker-js/faker@8.4.1)(zod@3.22.4)
+<<<<<<< HEAD
   "@faker-js/faker":
     specifier: ^8.4.1
     version: 8.4.1
   "@types/node":
+=======
+  '@faker-js/faker':
+    specifier: ^8.4.1
+    version: 8.4.1
+  '@types/node':
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     specifier: ^20.11.24
     version: 20.11.24
   drizzle-kit:
@@ -66,25 +82,39 @@ devDependencies:
     version: 5.3.3
 
 packages:
+<<<<<<< HEAD
   /@anatine/zod-mock@3.13.3(@faker-js/faker@8.4.1)(zod@3.22.4):
     resolution:
       {
         integrity: sha512-AN+0YEFE7s6BpuALQHhEoVmJmD+0gPnf4Fehc6oE5NHbM3X2ZD5fW5M6vvot29NWUB6nxvj0gu+BPQ9cVnxALw==,
       }
+=======
+
+  /@anatine/zod-mock@3.13.3(@faker-js/faker@8.4.1)(zod@3.22.4):
+    resolution: {integrity: sha512-AN+0YEFE7s6BpuALQHhEoVmJmD+0gPnf4Fehc6oE5NHbM3X2ZD5fW5M6vvot29NWUB6nxvj0gu+BPQ9cVnxALw==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     peerDependencies:
       "@faker-js/faker": ^7.0.0 || ^8.0.0
       zod: ^3.21.4
     dependencies:
+<<<<<<< HEAD
       "@faker-js/faker": 8.4.1
+=======
+      '@faker-js/faker': 8.4.1
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
       randexp: 0.5.3
       zod: 3.22.4
     dev: true
 
   /@asteasolutions/zod-to-openapi@6.4.0(zod@3.22.4):
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-8cxfF7AHHx2PqnN4Cd8/O8CBu/nVYJP9DpnfVLW3BFb66VJDnqI/CczZnkqMc3SNh6J9GiX7JbJ5T4BSP4HZ2Q==,
       }
+=======
+    resolution: {integrity: sha512-8cxfF7AHHx2PqnN4Cd8/O8CBu/nVYJP9DpnfVLW3BFb66VJDnqI/CczZnkqMc3SNh6J9GiX7JbJ5T4BSP4HZ2Q==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     peerDependencies:
       zod: ^3.20.2
     dependencies:
@@ -93,11 +123,16 @@ packages:
     dev: false
 
   /@azure/functions@4.3.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-l7iAuSyyBCOgwkDZmV6UUagwkFoqMOVfq01oJ+rJlFhN7Mb8/kkUAZLffCPUxBy2Wwah741BhJGizwaCP9G2/A==,
       }
     engines: {node: ">=18.0"}
+=======
+    resolution: {integrity: sha512-l7iAuSyyBCOgwkDZmV6UUagwkFoqMOVfq01oJ+rJlFhN7Mb8/kkUAZLffCPUxBy2Wwah741BhJGizwaCP9G2/A==}
+    engines: {node: '>=18.0'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       cookie: 0.6.0
       long: 4.0.0
@@ -124,10 +159,14 @@ packages:
     dev: true
 
   /@drizzle-team/studio@0.0.39:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-c5Hkm7MmQC2n5qAsKShjQrHoqlfGslB8+qWzsGGZ+2dHMRTNG60UuzalF0h0rvBax5uzPXuGkYLGaQ+TUX3yMw==,
       }
+=======
+    resolution: {integrity: sha512-c5Hkm7MmQC2n5qAsKShjQrHoqlfGslB8+qWzsGGZ+2dHMRTNG60UuzalF0h0rvBax5uzPXuGkYLGaQ+TUX3yMw==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       superjson: 2.2.1
     dev: true
@@ -153,11 +192,16 @@ packages:
     dev: true
 
   /@esbuild/aix-ppc64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [ppc64]
     os: [aix]
     requiresBuild: true
@@ -177,11 +221,16 @@ packages:
     optional: true
 
   /@esbuild/android-arm64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-P0UVNGIienjZv3f5zq0DP3Nt2IE/3plFzuaS96vihvD0Hd6H/q4WXUGpCxD/E8YrSXfNyRPbpTq+T8ZQioSuPA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-P0UVNGIienjZv3f5zq0DP3Nt2IE/3plFzuaS96vihvD0Hd6H/q4WXUGpCxD/E8YrSXfNyRPbpTq+T8ZQioSuPA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm64]
     os: [android]
     requiresBuild: true
@@ -201,11 +250,16 @@ packages:
     optional: true
 
   /@esbuild/android-arm@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-qg/Lj1mu3CdQlDEEiWrlC4eaPZ1KztwGJ9B6J+/6G+/4ewxJg7gqj8eVYWvao1bXrqGiW2rsBZFSX3q2lcW05w==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-qg/Lj1mu3CdQlDEEiWrlC4eaPZ1KztwGJ9B6J+/6G+/4ewxJg7gqj8eVYWvao1bXrqGiW2rsBZFSX3q2lcW05w==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm]
     os: [android]
     requiresBuild: true
@@ -225,11 +279,16 @@ packages:
     optional: true
 
   /@esbuild/android-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-3k7ZoUW6Q6YqhdhIaq/WZ7HwBpnFBlW905Fa4s4qWJyiNOgT1dOqDiVAQFwBH7gBRZr17gLrlFCRzF6jFh7Kew==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-3k7ZoUW6Q6YqhdhIaq/WZ7HwBpnFBlW905Fa4s4qWJyiNOgT1dOqDiVAQFwBH7gBRZr17gLrlFCRzF6jFh7Kew==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [android]
     requiresBuild: true
@@ -249,11 +308,16 @@ packages:
     optional: true
 
   /@esbuild/darwin-arm64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-B6IeSgZgtEzGC42jsI+YYu9Z3HKRxp8ZT3cqhvliEHovq8HSX2YX8lNocDn79gCKJXOSaEot9MVYky7AKjCs8g==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-B6IeSgZgtEzGC42jsI+YYu9Z3HKRxp8ZT3cqhvliEHovq8HSX2YX8lNocDn79gCKJXOSaEot9MVYky7AKjCs8g==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
@@ -273,11 +337,16 @@ packages:
     optional: true
 
   /@esbuild/darwin-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-hKoVkKzFiToTgn+41qGhsUJXFlIjxI/jSYeZf3ugemDYZldIXIxhvwN6erJGlX4t5h417iFuheZ7l+YVn05N3A==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-hKoVkKzFiToTgn+41qGhsUJXFlIjxI/jSYeZf3ugemDYZldIXIxhvwN6erJGlX4t5h417iFuheZ7l+YVn05N3A==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
@@ -297,11 +366,16 @@ packages:
     optional: true
 
   /@esbuild/freebsd-arm64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-4aRvFIXmwAcDBw9AueDQ2YnGmz5L6obe5kmPT8Vd+/+x/JMVKCgdcRwH6APrbpNXsPz+K653Qg8HB/oXvXVukA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-4aRvFIXmwAcDBw9AueDQ2YnGmz5L6obe5kmPT8Vd+/+x/JMVKCgdcRwH6APrbpNXsPz+K653Qg8HB/oXvXVukA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
@@ -321,11 +395,16 @@ packages:
     optional: true
 
   /@esbuild/freebsd-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-EYoXZ4d8xtBoVN7CEwWY2IN4ho76xjYXqSXMNccFSx2lgqOG/1TBPW0yPx1bJZk94qu3tX0fycJeeQsKovA8gg==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-EYoXZ4d8xtBoVN7CEwWY2IN4ho76xjYXqSXMNccFSx2lgqOG/1TBPW0yPx1bJZk94qu3tX0fycJeeQsKovA8gg==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
@@ -345,11 +424,16 @@ packages:
     optional: true
 
   /@esbuild/linux-arm64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-EoTjyYyLuVPfdPLsGVVVC8a0p1BFFvtpQDB/YLEhaXyf/5bczaGeN15QkR+O4S5LeJ92Tqotve7i1jn35qwvdA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-EoTjyYyLuVPfdPLsGVVVC8a0p1BFFvtpQDB/YLEhaXyf/5bczaGeN15QkR+O4S5LeJ92Tqotve7i1jn35qwvdA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
@@ -369,11 +453,16 @@ packages:
     optional: true
 
   /@esbuild/linux-arm@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-J5jPms//KhSNv+LO1S1TX1UWp1ucM6N6XuL6ITdKWElCu8wXP72l9MM0zDTzzeikVyqFE6U8YAV9/tFyj0ti+w==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-J5jPms//KhSNv+LO1S1TX1UWp1ucM6N6XuL6ITdKWElCu8wXP72l9MM0zDTzzeikVyqFE6U8YAV9/tFyj0ti+w==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm]
     os: [linux]
     requiresBuild: true
@@ -393,11 +482,16 @@ packages:
     optional: true
 
   /@esbuild/linux-ia32@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-Thsa42rrP1+UIGaWz47uydHSBOgTUnwBwNq59khgIwktK6x60Hivfbux9iNR0eHCHzOLjLMLfUMLCypBkZXMHA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-Thsa42rrP1+UIGaWz47uydHSBOgTUnwBwNq59khgIwktK6x60Hivfbux9iNR0eHCHzOLjLMLfUMLCypBkZXMHA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
@@ -417,11 +511,16 @@ packages:
     optional: true
 
   /@esbuild/linux-loong64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-LiXdXA0s3IqRRjm6rV6XaWATScKAXjI4R4LoDlvO7+yQqFdlr1Bax62sRwkVvRIrwXxvtYEHHI4dm50jAXkuAA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-LiXdXA0s3IqRRjm6rV6XaWATScKAXjI4R4LoDlvO7+yQqFdlr1Bax62sRwkVvRIrwXxvtYEHHI4dm50jAXkuAA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
@@ -441,11 +540,16 @@ packages:
     optional: true
 
   /@esbuild/linux-mips64el@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-fEnAuj5VGTanfJ07ff0gOA6IPsvrVHLVb6Lyd1g2/ed67oU1eFzL0r9WL7ZzscD+/N6i3dWumGE1Un4f7Amf+w==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-fEnAuj5VGTanfJ07ff0gOA6IPsvrVHLVb6Lyd1g2/ed67oU1eFzL0r9WL7ZzscD+/N6i3dWumGE1Un4f7Amf+w==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
@@ -465,11 +569,16 @@ packages:
     optional: true
 
   /@esbuild/linux-ppc64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-nYJA2/QPimDQOh1rKWedNOe3Gfc8PabU7HT3iXWtNUbRzXS9+vgB0Fjaqr//XNbd82mCxHzik2qotuI89cfixg==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-nYJA2/QPimDQOh1rKWedNOe3Gfc8PabU7HT3iXWtNUbRzXS9+vgB0Fjaqr//XNbd82mCxHzik2qotuI89cfixg==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
@@ -489,11 +598,16 @@ packages:
     optional: true
 
   /@esbuild/linux-riscv64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-2MueBrlPQCw5dVJJpQdUYgeqIzDQgw3QtiAHUC4RBz9FXPrskyyU3VI1hw7C0BSKB9OduwSJ79FTCqtGMWqJHg==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-2MueBrlPQCw5dVJJpQdUYgeqIzDQgw3QtiAHUC4RBz9FXPrskyyU3VI1hw7C0BSKB9OduwSJ79FTCqtGMWqJHg==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
@@ -513,11 +627,16 @@ packages:
     optional: true
 
   /@esbuild/linux-s390x@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-+Pil1Nv3Umes4m3AZKqA2anfhJiVmNCYkPchwFJNEJN5QxmTs1uzyy4TvmDrCRNT2ApwSari7ZIgrPeUx4UZDg==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-+Pil1Nv3Umes4m3AZKqA2anfhJiVmNCYkPchwFJNEJN5QxmTs1uzyy4TvmDrCRNT2ApwSari7ZIgrPeUx4UZDg==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
@@ -537,11 +656,16 @@ packages:
     optional: true
 
   /@esbuild/linux-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-B71g1QpxfwBvNrfyJdVDexenDIt1CiDN1TIXLbhOw0KhJzE78KIFGX6OJ9MrtC0oOqMWf+0xop4qEU8JrJTwCg==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-B71g1QpxfwBvNrfyJdVDexenDIt1CiDN1TIXLbhOw0KhJzE78KIFGX6OJ9MrtC0oOqMWf+0xop4qEU8JrJTwCg==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [linux]
     requiresBuild: true
@@ -561,11 +685,16 @@ packages:
     optional: true
 
   /@esbuild/netbsd-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-3ltjQ7n1owJgFbuC61Oj++XhtzmymoCihNFgT84UAmJnxJfm4sYCiSLTXZtE00VWYpPMYc+ZQmB6xbSdVh0JWA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-3ltjQ7n1owJgFbuC61Oj++XhtzmymoCihNFgT84UAmJnxJfm4sYCiSLTXZtE00VWYpPMYc+ZQmB6xbSdVh0JWA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
@@ -585,11 +714,16 @@ packages:
     optional: true
 
   /@esbuild/openbsd-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-RbrfTB9SWsr0kWmb9srfF+L933uMDdu9BIzdA7os2t0TXhCRjrQyCeOt6wVxr79CKD4c+p+YhCj31HBkYcXebw==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-RbrfTB9SWsr0kWmb9srfF+L933uMDdu9BIzdA7os2t0TXhCRjrQyCeOt6wVxr79CKD4c+p+YhCj31HBkYcXebw==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
@@ -609,11 +743,16 @@ packages:
     optional: true
 
   /@esbuild/sunos-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-HKjJwRrW8uWtCQnQOz9qcU3mUZhTUQvi56Q8DPTLLB+DawoiQdjsYq+j+D3s9I8VFtDr+F9CjgXKKC4ss89IeA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-HKjJwRrW8uWtCQnQOz9qcU3mUZhTUQvi56Q8DPTLLB+DawoiQdjsYq+j+D3s9I8VFtDr+F9CjgXKKC4ss89IeA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
@@ -633,11 +772,16 @@ packages:
     optional: true
 
   /@esbuild/win32-arm64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-URgtR1dJnmGvX864pn1B2YUYNzjmXkuJOIqG2HdU62MVS4EHpU2946OZoTMnRUHklGtJdJZ33QfzdjGACXhn1A==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-URgtR1dJnmGvX864pn1B2YUYNzjmXkuJOIqG2HdU62MVS4EHpU2946OZoTMnRUHklGtJdJZ33QfzdjGACXhn1A==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
@@ -657,11 +801,16 @@ packages:
     optional: true
 
   /@esbuild/win32-ia32@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-+ZOE6pUkMOJfmxmBZElNOx72NKpIa/HFOMGzu8fqzQJ5kgf6aTGrcJaFsNiVMH4JKpMipyK+7k0n2UXN7a8YKQ==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-+ZOE6pUkMOJfmxmBZElNOx72NKpIa/HFOMGzu8fqzQJ5kgf6aTGrcJaFsNiVMH4JKpMipyK+7k0n2UXN7a8YKQ==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
@@ -681,11 +830,16 @@ packages:
     optional: true
 
   /@esbuild/win32-x64@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-T1QyPSDCyMXaO3pzBkF96E8xMkiRYbUEZADd29SyPGabqxMViNoii+NcK7eWJAEoU6RZyEm5lVSIjTmcdoB9HA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-T1QyPSDCyMXaO3pzBkF96E8xMkiRYbUEZADd29SyPGabqxMViNoii+NcK7eWJAEoU6RZyEm5lVSIjTmcdoB9HA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     cpu: [x64]
     os: [win32]
     requiresBuild: true
@@ -693,6 +847,7 @@ packages:
     optional: true
 
   /@faker-js/faker@8.4.1:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==,
@@ -706,6 +861,15 @@ packages:
         integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==,
       }
     engines: {node: ">=14"}
+=======
+    resolution: {integrity: sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
+    dev: true
+
+  /@fastify/busboy@2.1.1:
+    resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
+    engines: {node: '>=14'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
 
   /@isaacs/cliui@8.0.2:
@@ -724,11 +888,16 @@ packages:
     dev: true
 
   /@jridgewell/resolve-uri@3.1.2:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==,
       }
     engines: {node: ">=6.0.0"}
+=======
+    resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
+    engines: {node: '>=6.0.0'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: true
 
   /@jridgewell/sourcemap-codec@1.4.15:
@@ -744,8 +913,13 @@ packages:
         integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==,
       }
     dependencies:
+<<<<<<< HEAD
       "@jridgewell/resolve-uri": 3.1.2
       "@jridgewell/sourcemap-codec": 1.4.15
+=======
+      '@jridgewell/resolve-uri': 3.1.2
+      '@jridgewell/sourcemap-codec': 1.4.15
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: true
 
   /@noble/hashes@1.4.0:
@@ -810,15 +984,23 @@ packages:
       }
     requiresBuild: true
     dependencies:
+<<<<<<< HEAD
       "@types/node": 20.11.24
+=======
+      '@types/node': 20.11.24
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
     optional: true
 
   /@types/node@20.11.24:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==,
       }
+=======
+    resolution: {integrity: sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       undici-types: 5.26.5
 
@@ -829,7 +1011,11 @@ packages:
       }
     requiresBuild: true
     dependencies:
+<<<<<<< HEAD
       "@types/node": 20.11.24
+=======
+      '@types/node': 20.11.24
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
     optional: true
 
@@ -853,11 +1039,16 @@ packages:
     optional: true
 
   /acorn-walk@8.3.2:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==,
       }
     engines: {node: ">=0.4.0"}
+=======
+    resolution: {integrity: sha512-cjkyv4OtNCIeqhHrfS81QWXoCBPExR/J62oyEqepVw8WaQeSqpW2uhuLPh1m9eWhDuOo/jUXVTlifvesOWp/4A==}
+    engines: {node: '>=0.4.0'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: true
 
   /acorn@8.11.3:
@@ -1127,11 +1318,16 @@ packages:
     engines: {node: ">=4"}
 
   /call-bind@1.0.7:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-GHTSNSYICQ7scH7sZ+M2rFopRoLh8t2bLSW6BbgrtLsahOIB5iyAVJf9GjWK3cYTDaMj4XdBpM1cA6pIS0Kv2w==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       es-define-property: 1.0.0
       es-errors: 1.3.0
@@ -1191,11 +1387,16 @@ packages:
     optional: true
 
   /cli-color@2.0.4:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-zlnpg0jNcibNrO7GG9IeHH7maWFeCz+Ja1wx/7tZNU5ASSSSZ+/qZciM0/LHCYxSdqv5h2sdbQ/PXYdOuetXvA==,
       }
     engines: {node: ">=0.10"}
+=======
+    resolution: {integrity: sha512-zlnpg0jNcibNrO7GG9IeHH7maWFeCz+Ja1wx/7tZNU5ASSSSZ+/qZciM0/LHCYxSdqv5h2sdbQ/PXYdOuetXvA==}
+    engines: {node: '>=0.10'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       d: 1.0.2
       es5-ext: 0.10.64
@@ -1328,6 +1529,11 @@ packages:
     engines: {node: ">= 0.6"}
     dev: false
 
+  /cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
+    engines: {node: '>= 0.6'}
+    dev: false
+
   /cookiejar@2.1.4:
     resolution:
       {
@@ -1403,11 +1609,16 @@ packages:
     dev: true
 
   /d@1.0.2:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==,
       }
     engines: {node: ">=0.12"}
+=======
+    resolution: {integrity: sha512-MOqHvMWF9/9MX6nza0KgvFH4HpMU0EF5uUDXqX/BtxtU8NfB0QzRtJ8Oe/6SuS4kbhyzVJwjd97EA4PKrzJ8bw==}
+    engines: {node: '>=0.12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       es5-ext: 0.10.64
       type: 2.7.2
@@ -1480,11 +1691,16 @@ packages:
     dev: false
 
   /define-data-property@1.1.4:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       es-define-property: 1.0.0
       es-errors: 1.3.0
@@ -1527,11 +1743,16 @@ packages:
     dev: true
 
   /dotenv@16.4.5:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
 
   /drafter.js@2.6.7:
@@ -1563,6 +1784,7 @@ packages:
     dev: true
 
   /drizzle-kit@0.20.14:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-0fHv3YIEaUcSVPSGyaaBfOi9bmpajjhbJNdPsRMIUvYdLVxBu9eGjH8mRc3Qk7HVmEidFc/lhG1YyJhoXrn5yA==,
@@ -1571,6 +1793,13 @@ packages:
     dependencies:
       "@drizzle-team/studio": 0.0.39
       "@esbuild-kit/esm-loader": 2.6.5
+=======
+    resolution: {integrity: sha512-0fHv3YIEaUcSVPSGyaaBfOi9bmpajjhbJNdPsRMIUvYdLVxBu9eGjH8mRc3Qk7HVmEidFc/lhG1YyJhoXrn5yA==}
+    hasBin: true
+    dependencies:
+      '@drizzle-team/studio': 0.0.39
+      '@esbuild-kit/esm-loader': 2.6.5
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -1588,10 +1817,14 @@ packages:
     dev: true
 
   /drizzle-orm@0.29.4(pg@8.11.3)(postgres@3.4.3):
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-ZnSM8TAxFhzH7p1s3+w3pRE/eKaOeNkH9SKitm717pubDVVcV2I0BCDBPGKV+pe02+wMfw37ntlTcCyo2rA3IA==,
       }
+=======
+    resolution: {integrity: sha512-ZnSM8TAxFhzH7p1s3+w3pRE/eKaOeNkH9SKitm717pubDVVcV2I0BCDBPGKV+pe02+wMfw37ntlTcCyo2rA3IA==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     peerDependencies:
       "@aws-sdk/client-rds-data": ">=3"
       "@cloudflare/workers-types": ">=3"
@@ -1666,10 +1899,14 @@ packages:
     dev: false
 
   /drizzle-zod@0.5.1(drizzle-orm@0.29.4)(zod@3.22.4):
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==,
       }
+=======
+    resolution: {integrity: sha512-C/8bvzUH/zSnVfwdSibOgFjLhtDtbKYmkbPbUCq46QZyZCH6kODIMSOgZ8R7rVjoI+tCj3k06MRJMDqsIeoS4A==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     peerDependencies:
       drizzle-orm: ">=0.23.13"
       zod: "*"
@@ -1774,16 +2011,22 @@ packages:
     optional: true
 
   /es-define-property@1.0.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-jxayLKShrEqqzJ0eumQbVhTYQM27CfT1T35+gCgDFoL82JLsXqTJ76zv6A0YLOgEnLUMvLzsDsGIrl8NFpT2gQ==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-jxayLKShrEqqzJ0eumQbVhTYQM27CfT1T35+gCgDFoL82JLsXqTJ76zv6A0YLOgEnLUMvLzsDsGIrl8NFpT2gQ==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       get-intrinsic: 1.2.4
     dev: false
 
   /es-errors@1.3.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==,
@@ -1797,6 +2040,15 @@ packages:
         integrity: sha512-p2snDhiLaXe6dahss1LddxqEm+SkuDvV8dnIQG0MWjyHpcMNfXKPE+/Cc0y+PhxJX3A4xGNeFCj5oc0BUh6deg==,
       }
     engines: {node: ">=0.10"}
+=======
+    resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
+    engines: {node: '>= 0.4'}
+    dev: false
+
+  /es5-ext@0.10.64:
+    resolution: {integrity: sha512-p2snDhiLaXe6dahss1LddxqEm+SkuDvV8dnIQG0MWjyHpcMNfXKPE+/Cc0y+PhxJX3A4xGNeFCj5oc0BUh6deg==}
+    engines: {node: '>=0.10'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     requiresBuild: true
     dependencies:
       es6-iterator: 2.0.3
@@ -1835,11 +2087,16 @@ packages:
     optional: true
 
   /es6-symbol@3.1.4:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-U9bFFjX8tFiATgtkJ1zg25+KviIXpgRvRHS8sau3GfhVzThRQrOeksPeT0BWW2MNZs1OEWJ1DPXOQMn0KKRkvg==,
       }
     engines: {node: ">=0.12"}
+=======
+    resolution: {integrity: sha512-U9bFFjX8tFiATgtkJ1zg25+KviIXpgRvRHS8sau3GfhVzThRQrOeksPeT0BWW2MNZs1OEWJ1DPXOQMn0KKRkvg==}
+    engines: {node: '>=0.12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       d: 1.0.2
       ext: 1.7.0
@@ -1858,10 +2115,14 @@ packages:
     dev: true
 
   /esbuild-register@3.5.0(esbuild@0.19.12):
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-+4G/XmakeBAsvJuDugJvtyF1x+XJT4FMocynNpxrvEBViirpfUn2PgNpCHedfWhF4WokNsO/OvMKrmJOIJsI5A==,
       }
+=======
+    resolution: {integrity: sha512-+4G/XmakeBAsvJuDugJvtyF1x+XJT4FMocynNpxrvEBViirpfUn2PgNpCHedfWhF4WokNsO/OvMKrmJOIJsI5A==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     peerDependencies:
       esbuild: ">=0.12 <1"
     dependencies:
@@ -1905,6 +2166,7 @@ packages:
     dev: true
 
   /esbuild@0.19.12:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-aARqgq8roFBj054KvQr5f1sFu0D65G+miZRCuJyJ0G13Zwx7vRar5Zhn2tkQNzIXcBrNVsv/8stehpj+GAjgbg==,
@@ -1936,6 +2198,36 @@ packages:
       "@esbuild/win32-arm64": 0.19.12
       "@esbuild/win32-ia32": 0.19.12
       "@esbuild/win32-x64": 0.19.12
+=======
+    resolution: {integrity: sha512-aARqgq8roFBj054KvQr5f1sFu0D65G+miZRCuJyJ0G13Zwx7vRar5Zhn2tkQNzIXcBrNVsv/8stehpj+GAjgbg==}
+    engines: {node: '>=12'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@esbuild/aix-ppc64': 0.19.12
+      '@esbuild/android-arm': 0.19.12
+      '@esbuild/android-arm64': 0.19.12
+      '@esbuild/android-x64': 0.19.12
+      '@esbuild/darwin-arm64': 0.19.12
+      '@esbuild/darwin-x64': 0.19.12
+      '@esbuild/freebsd-arm64': 0.19.12
+      '@esbuild/freebsd-x64': 0.19.12
+      '@esbuild/linux-arm': 0.19.12
+      '@esbuild/linux-arm64': 0.19.12
+      '@esbuild/linux-ia32': 0.19.12
+      '@esbuild/linux-loong64': 0.19.12
+      '@esbuild/linux-mips64el': 0.19.12
+      '@esbuild/linux-ppc64': 0.19.12
+      '@esbuild/linux-riscv64': 0.19.12
+      '@esbuild/linux-s390x': 0.19.12
+      '@esbuild/linux-x64': 0.19.12
+      '@esbuild/netbsd-x64': 0.19.12
+      '@esbuild/openbsd-x64': 0.19.12
+      '@esbuild/sunos-x64': 0.19.12
+      '@esbuild/win32-arm64': 0.19.12
+      '@esbuild/win32-ia32': 0.19.12
+      '@esbuild/win32-x64': 0.19.12
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: true
 
   /escodegen@0.0.21:
@@ -1989,11 +2281,16 @@ packages:
     optional: true
 
   /esniff@2.0.1:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-kTUIGKQ/mDPFoJ0oVfcmyJn4iBDRptjNVIzwIFR7tqWXdVI9xfA2RMwY/gbSpJG3lkdWNEjLap/NqVHZiJsdfg==,
       }
     engines: {node: ">=0.10"}
+=======
+    resolution: {integrity: sha512-kTUIGKQ/mDPFoJ0oVfcmyJn4iBDRptjNVIzwIFR7tqWXdVI9xfA2RMwY/gbSpJG3lkdWNEjLap/NqVHZiJsdfg==}
+    engines: {node: '>=0.10'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       d: 1.0.2
       es5-ext: 0.10.64
@@ -2281,11 +2578,16 @@ packages:
     optional: true
 
   /get-intrinsic@1.2.4:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-5uYhsJH8VJBTv7oslg4BznJYhDoRI6waYCxMmCdnTrcCrHA/fCFKoTFz2JKKE0HdDFUF7/oQuhzumXJK7paBRQ==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       es-errors: 1.3.0
       function-bind: 1.1.2
@@ -2448,20 +2750,29 @@ packages:
     dev: false
 
   /has-property-descriptors@1.0.2:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg==,
       }
+=======
+    resolution: {integrity: sha512-55JNKuIW+vq4Ke1BjOTjM2YctQIvCT7GFzHwmfZPGo5wnrgkid0YQtnAleFSqumZm4az3n2BS+erby5ipJdgrg==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       es-define-property: 1.0.0
     dev: false
 
   /has-proto@1.0.3:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-SJ1amZAJUiZS+PhsVLf5tGydlaVB8EdFpaSO4gmiUKUOxk8qzn5AIy4ZeJUmh22znIdk/uMAUT2pl3FxzVUH+Q==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-SJ1amZAJUiZS+PhsVLf5tGydlaVB8EdFpaSO4gmiUKUOxk8qzn5AIy4ZeJUmh22znIdk/uMAUT2pl3FxzVUH+Q==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
 
   /has-symbols@1.0.3:
@@ -2473,11 +2784,16 @@ packages:
     dev: false
 
   /hasown@2.0.1:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       function-bind: 1.1.2
     dev: false
@@ -2847,10 +3163,14 @@ packages:
     optional: true
 
   /json-schema-faker@0.5.6:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-u/cFC26/GDxh2vPiAC8B8xVvpXAW+QYtG2mijEbKrimCk8IHtiwQBjCE8TwvowdhALWq9IcdIWZ+/8ocXvdL3Q==,
       }
+=======
+    resolution: {integrity: sha512-u/cFC26/GDxh2vPiAC8B8xVvpXAW+QYtG2mijEbKrimCk8IHtiwQBjCE8TwvowdhALWq9IcdIWZ+/8ocXvdL3Q==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     hasBin: true
     dependencies:
       json-schema-ref-parser: 6.1.0
@@ -3093,10 +3413,14 @@ packages:
     optional: true
 
   /lru-cache@10.2.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==,
       }
+=======
+    resolution: {integrity: sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     engines: {node: 14 || >=16.14}
     dev: true
 
@@ -3420,10 +3744,14 @@ packages:
     dev: false
 
   /openapi3-ts@4.2.2:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-+9g4actZKeb3czfi9gVQ4Br2Ju3KwhCAQJBNaKgye5KggqcBLIhFHH+nIkcm0BUX00TrAJl6dH4JWgM4G4JWrw==,
       }
+=======
+    resolution: {integrity: sha512-+9g4actZKeb3czfi9gVQ4Br2Ju3KwhCAQJBNaKgye5KggqcBLIhFHH+nIkcm0BUX00TrAJl6dH4JWgM4G4JWrw==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       yaml: 2.4.0
     dev: false
@@ -3739,11 +4067,16 @@ packages:
       xtend: 4.0.2
 
   /postgres@3.4.3:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-iHJn4+M9vbTdHSdDzNkC0crHq+1CUdFhx+YqCE+SqWxPjm+Zu63jq7yZborOBF64c8pc58O5uMudyL1FQcHacA==,
       }
     engines: {node: ">=12"}
+=======
+    resolution: {integrity: sha512-iHJn4+M9vbTdHSdDzNkC0crHq+1CUdFhx+YqCE+SqWxPjm+Zu63jq7yZborOBF64c8pc58O5uMudyL1FQcHacA==}
+    engines: {node: '>=12'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
 
   /prelude-ls@1.1.2:
@@ -4070,11 +4403,16 @@ packages:
     optional: true
 
   /semver@7.6.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==,
       }
     engines: {node: ">=10"}
+=======
+    resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}
+    engines: {node: '>=10'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
@@ -4089,11 +4427,16 @@ packages:
     optional: true
 
   /set-function-length@1.2.1:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-j4t6ccc+VsKwYHso+kElc5neZpjtq9EnRICFZtWyBsLojhmeF/ZBd/elqm22WJh/BziDe/SBiOeAt0m2mfLD0g==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-j4t6ccc+VsKwYHso+kElc5neZpjtq9EnRICFZtWyBsLojhmeF/ZBd/elqm22WJh/BziDe/SBiOeAt0m2mfLD0g==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       define-data-property: 1.1.4
       es-errors: 1.3.0
@@ -4212,11 +4555,16 @@ packages:
     optional: true
 
   /side-channel@1.0.6:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==,
       }
     engines: {node: ">= 0.4"}
+=======
+    resolution: {integrity: sha512-fDW/EZ6Q9RiO8eFG8Hj+7u/oW+XrPTIChwCOM2+th2A6OblDtYYIpve9m+KvI9Z4C9qSEXlaGR6bTEYHReuglA==}
+    engines: {node: '>= 0.4'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
@@ -4294,10 +4642,14 @@ packages:
     optional: true
 
   /spdx-exceptions@2.5.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-PiU42r+xO4UbUS1buo3LPJkjlO7430Xn5SVAhdpzzsPHsjbYVflnnFdATgabnLude+Cqu25p6N+g2lw/PFsa4w==,
       }
+=======
+    resolution: {integrity: sha512-PiU42r+xO4UbUS1buo3LPJkjlO7430Xn5SVAhdpzzsPHsjbYVflnnFdATgabnLude+Cqu25p6N+g2lw/PFsa4w==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     requiresBuild: true
     dev: false
     optional: true
@@ -4315,10 +4667,14 @@ packages:
     optional: true
 
   /spdx-license-ids@3.0.17:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-sh8PWc/ftMqAAdFiBu6Fy6JUOYjqDJBJvIhpfDMyHrr0Rbp5liZqd4TjtQ/RgfLjKFZb+LMx5hpml5qOWy0qvg==,
       }
+=======
+    resolution: {integrity: sha512-sh8PWc/ftMqAAdFiBu6Fy6JUOYjqDJBJvIhpfDMyHrr0Rbp5liZqd4TjtQ/RgfLjKFZb+LMx5hpml5qOWy0qvg==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     requiresBuild: true
     dev: false
     optional: true
@@ -4389,10 +4745,14 @@ packages:
     optional: true
 
   /stream-shift@1.0.3:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==,
       }
+=======
+    resolution: {integrity: sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     requiresBuild: true
     dev: false
     optional: true
@@ -4684,10 +5044,14 @@ packages:
     dev: false
 
   /ts-node@10.9.2(@types/node@20.11.24)(typescript@5.3.3):
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==,
       }
+=======
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     hasBin: true
     peerDependencies:
       "@swc/core": ">=1.2.50"
@@ -4700,12 +5064,21 @@ packages:
       "@swc/wasm":
         optional: true
     dependencies:
+<<<<<<< HEAD
       "@cspotcode/source-map-support": 0.8.1
       "@tsconfig/node10": 1.0.9
       "@tsconfig/node12": 1.0.11
       "@tsconfig/node14": 1.0.3
       "@tsconfig/node16": 1.0.4
       "@types/node": 20.11.24
+=======
+      '@cspotcode/source-map-support': 0.8.1
+      '@tsconfig/node10': 1.0.9
+      '@tsconfig/node12': 1.0.11
+      '@tsconfig/node14': 1.0.3
+      '@tsconfig/node16': 1.0.4
+      '@types/node': 20.11.24
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
@@ -4746,11 +5119,16 @@ packages:
     optional: true
 
   /type-fest@4.10.3:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-JLXyjizi072smKGGcZiAJDCNweT8J+AuRxmPZ1aG7TERg4ijx9REl8CNhbr36RV4qXqL1gO1FF9HL8OkVmmrsA==,
       }
     engines: {node: ">=16"}
+=======
+    resolution: {integrity: sha512-JLXyjizi072smKGGcZiAJDCNweT8J+AuRxmPZ1aG7TERg4ijx9REl8CNhbr36RV4qXqL1gO1FF9HL8OkVmmrsA==}
+    engines: {node: '>=16'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: true
 
   /type-of-is@3.5.1:
@@ -4813,6 +5191,7 @@ packages:
       }
 
   /undici@5.28.3:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-3ItfzbrhDlINjaP0duwnNsKpDQk3acHI3gVJ1z4fmwMK31k5G9OVIAMLSIaP6w4FaGkaAkN6zaQO9LUvZ1t7VA==,
@@ -4820,6 +5199,12 @@ packages:
     engines: {node: ">=14.0"}
     dependencies:
       "@fastify/busboy": 2.1.1
+=======
+    resolution: {integrity: sha512-3ItfzbrhDlINjaP0duwnNsKpDQk3acHI3gVJ1z4fmwMK31k5G9OVIAMLSIaP6w4FaGkaAkN6zaQO9LUvZ1t7VA==}
+    engines: {node: '>=14.0'}
+    dependencies:
+      '@fastify/busboy': 2.1.1
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     dev: false
 
   /uri-js@4.4.1:
@@ -5045,11 +5430,16 @@ packages:
       }
 
   /yaml@2.4.0:
+<<<<<<< HEAD
     resolution:
       {
         integrity: sha512-j9iR8g+/t0lArF4V6NE/QCfT+CO7iLqrXAHZbJdo+LfjqP1vR8Fg5bSiaq6Q2lOD1AUEVrEVIgABvBFYojJVYQ==,
       }
     engines: {node: ">= 14"}
+=======
+    resolution: {integrity: sha512-j9iR8g+/t0lArF4V6NE/QCfT+CO7iLqrXAHZbJdo+LfjqP1vR8Fg5bSiaq6Q2lOD1AUEVrEVIgABvBFYojJVYQ==}
+    engines: {node: '>= 14'}
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     hasBin: true
     dev: false
 

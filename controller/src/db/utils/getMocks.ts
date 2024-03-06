@@ -188,7 +188,11 @@ export function getMockedRendering(
   type: "scripture" | "nonscripture" = "scripture"
 ) {
   type apiKeys = z.infer<typeof apiValidators.renderingsPost.element>;
+<<<<<<< HEAD
   const randomUUid = createId();
+=======
+  const randomUUid = crypto.randomUUID();
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 
   const mockedRender: apiKeys = {
     tempId: randomUUid,

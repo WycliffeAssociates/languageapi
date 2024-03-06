@@ -3,6 +3,10 @@ data_dump.sql
 proj_notes.md
 mise.toml
 .tool-versions
+<<<<<<< HEAD
 launch.json
 .DS_Store
 fixup.ts
+=======
+launch.json
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)

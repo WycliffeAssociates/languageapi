@@ -50,6 +50,7 @@ export const language = pgTable(
   }
 );
 //@=============== WA LANG META  =============
+<<<<<<< HEAD
 export const waLangMetadata = pgTable(
   "wa_language_metadata",
   {
@@ -71,6 +72,19 @@ export const waLangMetadata = pgTable(
     };
   }
 );
+=======
+export const waLangMetadata = pgTable("wa_language_meta", {
+  id: serial("id").primaryKey(),
+  ietfCode: varchar("ietf_code")
+    .references(() => language.ietfCode, {
+      onDelete: "cascade",
+      onUpdate: "cascade",
+    })
+    .notNull(),
+  isGateway: boolean("is_gateway").notNull(),
+  showOnBiel: boolean("show_on_biel").notNull(),
+});
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 
 //@=============== LANG ALT  =============
 export const languageAlternateName = pgTable(
@@ -117,6 +131,7 @@ export const languagesToLanguages = pgTable(
         columns: [table.gatewayLanguageId, table.gatewayLanguageToId],
         name: "gateway_dependent_pkey",
       }),
+<<<<<<< HEAD
     };
   }
 );
@@ -142,6 +157,8 @@ export const content = pgTable(
         table.name,
         table.namespace
       ),
+=======
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     };
   }
 );
@@ -165,6 +182,7 @@ export const waContentMetadata = pgTable(
 );
 
 //@=============== DIRECTLY CONNECTED CONTENT  =============
+<<<<<<< HEAD
 // export const connectedContent = pgTable(
 //   "connected_content",
 //   {
@@ -182,6 +200,25 @@ export const waContentMetadata = pgTable(
 //     }),
 //   })
 // );
+=======
+export const connectedContent = pgTable(
+  "connected_content",
+  {
+    contentId1: varchar("content_id_1", {length: 256})
+      .references(() => content.id, {onDelete: "cascade", onUpdate: "cascade"})
+      .notNull(),
+    contentId2: varchar("content_id_2", {length: 256})
+      .references(() => content.id, {onDelete: "cascade", onUpdate: "cascade"})
+      .notNull(),
+  },
+  (table) => ({
+    primaryKey: primaryKey({
+      columns: [table.contentId1, table.contentId2],
+      name: "connected_content_pkey",
+    }),
+  })
+);
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 //@=============== GIT REPO  =============
 export const gitRepo = pgTable(
   "git_repo",
@@ -234,7 +271,16 @@ export const scripturalRenderingMetadata = pgTable(
   "scriptural_rendering_metadata",
   {
     id: serial("id").primaryKey(),
+<<<<<<< HEAD
     renderingId: serial("rendering_id").notNull(),
+=======
+    renderingId: serial("rendering_id")
+      .references(() => rendering.id, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
+      .notNull(),
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     bookSlug: varchar("book_slug", {length: 64}), //zod stores these as exclusively uppercase
     bookName: varchar("book_name"),
     chapter: integer("chapter"),
@@ -334,6 +380,7 @@ export const countryToLanguage = pgTable(
         columns: [table.languageIetf, table.countryAlpha],
         name: "country_to_language_pkey",
       }),
+<<<<<<< HEAD
     };
   }
 );
@@ -357,6 +404,8 @@ export const localization = pgTable(
         columns: [table.ietfCode, table.key, table.category],
         name: "localization_pkey",
       }),
+=======
+>>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     };
   }
 );
