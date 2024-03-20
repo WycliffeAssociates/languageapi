@@ -2,7 +2,6 @@
 version: "3.8"
 
 services:
-<<<<<<< HEAD
   # controller:
   #   build:
   #     context: ./controller
@@ -35,25 +34,6 @@ services:
       postgres:
         condition: service_healthy
 
-=======
-  controller:
-    build:
-      context: ./controller
-      dockerfile: Dockerfile
-    environment:
-      - AzureWebJobsStorage=<YOUR_STORAGE_CONNECTION_STRING>
-      - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
-      - WEBSITE_CONTENTAZUREFILECONNECTIONSTRING=<YOUR_STORAGE_CONNECTION_STRING>
-      - WEBSITE_CONTENTSHARE=<YOUR_STORAGE_CONTENT_SHARE_NAME>
-    platform: linux/amd64
-    ports:
-      - 8081:80
-    depends_on:
-      postgres:
-        condition: service_healthy
-      db-migrate:
-        condition: service_completed_successfully
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
   db-migrate:
     build:
       context: ./controller
@@ -61,16 +41,7 @@ services:
       # IF you want to run the functions in the container and migrate
     # entrypoint: ["sh", "-c", "pnpm run migrate && pnpm run start"]
     # IF you only want to migrate so hasura is up to date on migrations done locally
-<<<<<<< HEAD
     entrypoint: pnpm run migrate
-=======
-    entrypoint:
-      [
-        "/bin/sh",
-        "-c",
-        "psql postgres://docker:docker@postgres:5432/docker -f data_dump.sql && pnpm run migrate",
-      ]
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     expose:
       - 7071
       - 3000
