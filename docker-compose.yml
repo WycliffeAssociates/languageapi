@@ -7,10 +7,9 @@ services:
       context: ./controller
       dockerfile: Dockerfile
     environment:
-      - AzureWebJobsStorage=<YOUR_STORAGE_CONNECTION_STRING>
+      - AzureWebJobsStorage=''
       - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
-      - WEBSITE_CONTENTAZUREFILECONNECTIONSTRING=<YOUR_STORAGE_CONNECTION_STRING>
-      - WEBSITE_CONTENTSHARE=<YOUR_STORAGE_CONTENT_SHARE_NAME>
+      - BUS_CONN=${BUS_CONN}
     platform: linux/amd64
     ports:
       - 8081:80
@@ -35,6 +34,8 @@ services:
     expose:
       - 7071
       - 3000
+    volumes:
+      - ./data_dump.sql:/home/site/wwwroot/data_dump.sql
     ports:
       - 7071:7071
       - 3000:3000
