@@ -13,6 +13,12 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
 WORKDIR /home/site/wwwroot
 COPY . .
 
+
+RUN apt-get update && \
+    apt-get install -y postgresql-client && \
+    rm -rf /var/lib/apt/lists/*
+
+
 ARG DATABASE_URL
 # I have no clue why, but when I included azure core tools as part of the controller dependencies using the core tools node package, the func command reliably broke, but not when installed globally
 # Enable `pnpm add --global` on Alpine Linux by setting

@@ -8,9 +8,10 @@ export const langPost = z.array(
   dbValidators.insertLanguageSchema.extend({
     allCountryAlpha2: z.array(z.string()).optional(),
     alternateNames: z.array(z.string()).optional(),
-    waLangMeta: z
-      .object({
-        showOnBiel: z.boolean(),
+    waLangMeta: dbValidators.insertWaLangMetaSchema
+      .omit({
+        id: true,
+        ietfCode: true,
       })
       .optional(),
     gatewayIetf: z.string().trim().optional(),
@@ -82,14 +83,22 @@ export const contentDelete = z.object({
 });
 
 /* //@===========  Renderings   ===========   */
-const contentRenderingWithMeta = dbValidators.insertRenderingSchema.extend({
-  fileType: z.string().trim().toLowerCase(),
-  namespace: z.string().trim().toLowerCase(),
-  scripturalMeta:
-    dbValidators.insertScripturalRenderingMetadataSchema.optional(),
-  nonScripturalMeta:
-    dbValidators.insertNonScripturalRenderingMetadataSchema.optional(),
-});
+export const contentRenderingWithMeta =
+  dbValidators.insertRenderingSchema.extend({
+    tempId: z.string(),
+    fileType: z.string().trim().toLowerCase(),
+    namespace: z.string().trim().toLowerCase(),
+    scripturalMeta: dbValidators.insertScripturalRenderingMetadataSchema
+      .extend({
+        tempId: z.string(),
+      })
+      .optional(),
+    nonScripturalMeta: dbValidators.insertNonScripturalRenderingMetadataSchema
+      .extend({
+        tempId: z.string(),
+      })
+      .optional(),
+  });
 export const renderingsPost = z.array(contentRenderingWithMeta);
 export type typeOfContentRenderingWithMeta = z.infer<
   typeof contentRenderingWithMeta

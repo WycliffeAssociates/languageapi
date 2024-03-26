@@ -294,6 +294,7 @@ function parseLangPayload(langPost: z.infer<typeof validators.langPost>) {
       if (waLangMeta) {
         acc.waLangMeta.push({
           ietfCode: langPayload.ietfCode,
+          isGateway: waLangMeta.isGateway,
           showOnBiel: waLangMeta.showOnBiel,
         });
       }
