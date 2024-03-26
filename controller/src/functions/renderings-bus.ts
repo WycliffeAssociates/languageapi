@@ -5,15 +5,11 @@ import {
   handlePost as handleRenderingPost,
   handleDel,
 } from "../routes/rendering";
-<<<<<<< HEAD
 import {handlePost as handleContentPost} from "../routes/content";
 import * as validators from "../routes/validation";
 import * as schema from "../db/schema/schema";
 import {and, eq} from "drizzle-orm";
 import {createId} from "@paralleldrive/cuid2";
-=======
-import * as validators from "../routes/validation";
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 
 const db = startDb();
 
@@ -27,11 +23,8 @@ const renderedFileSchema = z.object({
   Slug: z.string().nullable(),
 });
 
-<<<<<<< HEAD
 const titlesSchema = z.record(z.string().nullable());
-=======
-const titlesSchema = z.record(z.string());
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
+const titlesSchema = z.record(z.string().nullable());
 
 const renderingsSchema = z.object({
   Successful: z.boolean(),
@@ -52,7 +45,6 @@ export async function wacsSbRenderingsApi(
   message: unknown,
   context: InvocationContext
 ) {
-<<<<<<< HEAD
   const namespace = "wacs";
   let contentCuid: string | null = null; //we need the guid of a content row to insert or upsert on the renderings Table.
 
@@ -113,36 +105,16 @@ export async function wacsSbRenderingsApi(
     // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
     const deletePayload: z.infer<typeof validators.renderingDelete> = {
       contentIds: [contentCuid],
-=======
-  // If zod or the db action below throws here, the message will end up in the dead letter queue.
-  try {
-    const parsed = renderingsSchema.parse(message);
-    context.log(
-      `received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`
-    );
-
-    // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
-    const deletePayload: z.infer<typeof validators.renderingDelete> = {
-      contentIds: [{namespace: "wacs", id: `${parsed.User}/${parsed.Repo}`}],
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
     };
 
     const dbPayload: z.infer<typeof validators.renderingsPost> =
       parsed.RenderedFiles.map((payload) => {
-<<<<<<< HEAD
         // Used to tie together metadata to rendering
         const randomUUid = createId();
         let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
           tempId: randomUUid,
           namespace,
           contentId: contentCuid!,
-=======
-        const randomUUid = crypto.randomUUID();
-        let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
-          tempId: randomUUid,
-          namespace: "wacs",
-          contentId: `${parsed.User}/${parsed.Repo}`,
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
           fileType: payload.FileType,
           url: payload.Path,
           fileSizeBytes: payload.Size || 0,
@@ -180,15 +152,9 @@ export async function wacsSbRenderingsApi(
         return baseLoad;
       });
     // todo: becuase these are rendered over and over, we want to delete everything from the renderings and renderings meta tables for the given content id, and new meta (since blobs are replaced and not versioned out). Then we can post to the renderings and meta tables
-<<<<<<< HEAD
     await db.transaction(async (tx) => {
       // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
       context.log(`Clearing prev renderings for ${parsed.User}/${parsed.Repo}`);
-=======
-
-    await db.transaction(async (tx) => {
-      // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
       const delResult = await handleDel(deletePayload);
       if (delResult.status != 200) {
         tx.rollback();
@@ -197,15 +163,12 @@ export async function wacsSbRenderingsApi(
         }
       } else {
         // Insert new renderings and meta
-<<<<<<< HEAD
         context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
-=======
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
+        context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
         const postResult = await handleRenderingPost(dbPayload);
         if (postResult.status != 200) {
           tx.rollback();
           if (postResult.jsonBody) {
-<<<<<<< HEAD
             if (postResult.jsonBody.additionalErrors) {
               const errMessage = JSON.stringify(
                 `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n 
@@ -218,15 +181,12 @@ export async function wacsSbRenderingsApi(
                 postResult.jsonBody.message || "failed to delete"
               );
             }
-=======
-            throw new Error(postResult.jsonBody.message || "failed to delete");
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
           }
         }
       }
     });
   } catch (error) {
-<<<<<<< HEAD
+    context.error(`Error processing ${JSON.stringify(message)}`);
     context.error(`Error processing ${JSON.stringify(message)}`);
     context.error(error);
     if (error instanceof z.ZodError) {
@@ -258,12 +218,6 @@ export async function checkContentExists({
 
   return {exists: doesExist.length > 0, id: dbId};
 }
-=======
-    context.error(error);
-  }
-}
-
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 console.log("booting up the renderings bus listener");
 app.serviceBusTopic("waLangApiRenderings", {
   connection: "BUS_CONN",
