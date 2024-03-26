@@ -1,0 +1,1 @@
+ALTER TABLE "scriptural_rendering_metadata" ALTER COLUMN "book_slug" DROP NOT NULL;

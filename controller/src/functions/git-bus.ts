@@ -2,7 +2,9 @@ import {app, InvocationContext} from "@azure/functions";
 import {getDb as startDb} from "../db/config";
 import {z} from "zod";
 import {handlePost as handleGitPost} from "../routes/git";
+import {handlePost as handleContentPost} from "../routes/content";
 import * as validators from "../routes/validation";
+import {checkContentExists} from "../functions/renderings-bus";
 startDb();
 
 const latestCommitSchema = z.object({
@@ -35,8 +37,32 @@ export async function wacsSbLangApi(
     context.log(message);
     const parsed = eventSchema.parse(message);
     context.log(
-      `received a message for ${parsed.Repo} of event type ${parsed.EventType}`
+      `GIT BUS RECEIVED: received a message for ${parsed.Repo} of event type ${parsed.EventType}`
     );
+    const thatContentRowExists = await checkContentExists(
+      `wac-${parsed.User}/${parsed.Repo}`.toLowerCase()
+    );
+    if (!thatContentRowExists) {
+      context.log(
+        `wac-${parsed.User}/${parsed.Repo} is not already in api. Creating new row in table`
+      );
+      const newContentRow: z.infer<typeof validators.contentPost> = [
+        {
+          namespace: "wacs",
+          id: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
+          type: "text",
+        },
+      ];
+      const newRowRes = await handleContentPost(newContentRow);
+      if (newRowRes.status !== 200) {
+        context.log(
+          `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+        );
+        throw new Error(
+          `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+        );
+      }
+    }
 
     // api built with bulk ops in mind, so arrays are passed, even for single op, versus having insertSingle vs insertMany type routes
     const shapedForDb: z.infer<typeof validators.gitPost> = [

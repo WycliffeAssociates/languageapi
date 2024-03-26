@@ -57,6 +57,7 @@ export const waLangMetadata = pgTable("wa_language_meta", {
       onUpdate: "cascade",
     })
     .notNull(),
+  isGateway: boolean("is_gateway").notNull(),
   showOnBiel: boolean("show_on_biel").notNull(),
 });
 
@@ -84,7 +85,7 @@ export const languageAlternateName = pgTable(
 );
 //@=============== LANG TO LANG PIVOT   =============
 export const languagesToLanguages = pgTable(
-  "languages_to_languages",
+  "gateway_language_to_dependent_language",
   {
     gatewayLanguageId: varchar("gateway_language_ietf")
       .references(() => language.ietfCode, {
@@ -92,7 +93,7 @@ export const languagesToLanguages = pgTable(
         onUpdate: "cascade",
       })
       .notNull(),
-    gatewayLanguageToId: varchar("gateway_language_to_ietf")
+    gatewayLanguageToId: varchar("dependent_language_ietf")
       .references(() => language.ietfCode, {
         onDelete: "cascade",
         onUpdate: "cascade",
@@ -101,10 +102,10 @@ export const languagesToLanguages = pgTable(
   },
   (table) => {
     return {
-      primaryKey: primaryKey(
-        table.gatewayLanguageId,
-        table.gatewayLanguageToId
-      ),
+      primaryKey: primaryKey({
+        columns: [table.gatewayLanguageId, table.gatewayLanguageToId],
+        name: "gateway_dependent_pkey",
+      }),
     };
   }
 );
@@ -168,7 +169,10 @@ export const connectedContent = pgTable(
       .notNull(),
   },
   (table) => ({
-    primaryKey: primaryKey(table.contentId1, table.contentId2),
+    primaryKey: primaryKey({
+      columns: [table.contentId1, table.contentId2],
+      name: "connected_content_pkey",
+    }),
   })
 );
 //@=============== GIT REPO  =============
@@ -208,7 +212,7 @@ export const rendering = pgTable(
     fileType: varchar("file_type").notNull(),
     fileSizeBytes: bigint("file_size_bytes", {mode: "number"}),
     url: text("url").notNull(),
-    doesCoverAllContent: boolean("does_cover_all_content").notNull(),
+    hash: varchar("hash"),
     createdAt: timestamp("created_at", {mode: "string"}),
     modifiedOn: timestamp("modified_on", {mode: "string"}).defaultNow(),
   },
@@ -229,9 +233,11 @@ export const scripturalRenderingMetadata = pgTable(
         onUpdate: "cascade",
       })
       .notNull(),
-    bookSlug: varchar("book_slug", {length: 64}).notNull(), //zod stores these as exclusively uppercase
-    bookName: varchar("book_name").notNull(),
-    chapter: integer("chapter").notNull(), //-1 = all chapters.
+    bookSlug: varchar("book_slug", {length: 64}), //zod stores these as exclusively uppercase
+    bookName: varchar("book_name"),
+    chapter: integer("chapter"),
+    isWholeBook: boolean("is_whole_book").notNull(),
+    isWholeProject: boolean("is_whole_project").notNull(),
     sort: smallint("sort"),
   }
 );
@@ -304,7 +310,10 @@ export const countryToLanguage = pgTable(
   },
   (table) => {
     return {
-      primaryKey: primaryKey(table.languageIetf, table.countryAlpha),
+      primaryKey: primaryKey({
+        columns: [table.languageIetf, table.countryAlpha],
+        name: "country_to_language_pkey",
+      }),
     };
   }
 );

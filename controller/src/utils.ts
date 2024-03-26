@@ -214,7 +214,7 @@ export function onConflictSetAllFieldsToSqlExcluded<
         table[key].name &&
         !omitConflictUpdateKeys.includes(table[key]?.name as UTableCols)
       ) {
-        // NOTE: WITHOUT SQL RAW, the string interpolations will be escaped and won't be interpreted properly.  In postgres world, excluded refers to the tow that wasn't inserted due to conflicts
+        // NOTE: WITHOUT SQL RAW, the string interpolations will be escaped and won't be interpreted properly.  In postgres world, excluded refers to the row that wasn't inserted due to conflicts
         const sqlval = sql.raw(`excluded.${table[key]?.name}`);
         setVal[key] = sqlval;
       }

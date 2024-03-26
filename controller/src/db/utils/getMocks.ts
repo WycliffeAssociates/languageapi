@@ -64,6 +64,7 @@ export function getMockedLang() {
     }),
     isOralLanguage: faker.datatype.boolean(),
     waLangMeta: {
+      isGateway: faker.datatype.boolean(),
       showOnBiel: faker.datatype.boolean(),
     },
   };
@@ -190,11 +191,12 @@ export function getMockedRendering(
   type: "scripture" | "nonscripture" = "scripture"
 ) {
   type apiKeys = z.infer<typeof apiValidators.renderingsPost.element>;
+  const randomUUid = crypto.randomUUID();
 
   const mockedRender: apiKeys = {
+    tempId: randomUUid,
     contentId: "user-repo",
     namespace: "wacs",
-    doesCoverAllContent: faker.datatype.boolean(),
     fileType: faker.helpers.arrayElement([
       "html",
       "pdf",
@@ -204,6 +206,9 @@ export function getMockedRendering(
       "mp4",
     ]),
     scripturalMeta: {
+      tempId: randomUUid,
+      isWholeBook: faker.datatype.boolean(),
+      isWholeProject: faker.datatype.boolean(),
       bookName: "1 Jean",
       bookSlug: "1JN",
       chapter: faker.number.int({max: 5}),
@@ -216,12 +221,16 @@ export function getMockedRendering(
   };
   if (type == "scripture") {
     mockedRender.scripturalMeta = {
+      tempId: randomUUid,
+      isWholeBook: faker.datatype.boolean(),
+      isWholeProject: faker.datatype.boolean(),
       bookName: "1 Jean",
       bookSlug: "1JN",
       chapter: faker.number.int({max: 5}),
     };
   } else {
     mockedRender.nonScripturalMeta = {
+      tempId: randomUUid,
       name: "nonScripturalName",
       additionalData: "A json field",
     };
