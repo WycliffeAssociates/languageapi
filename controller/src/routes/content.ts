@@ -55,7 +55,7 @@ async function handle(
   try {
     switch (request.method) {
       case "POST":
-        return handlePost({request, table});
+        return handlePostRequest({request, table});
       case "DELETE":
         return handleDel({request, table});
       case "GET":
@@ -79,14 +79,19 @@ async function handle(
   }
 }
 
-async function handlePost<T extends TableConfig>({
+async function handlePostRequest<T extends TableConfig>({
   request,
 }: apiRouteHandlerArgs<T>): Promise<HttpResponseInit> {
+  const payload = await request.json();
+  const result = await handlePost(payload);
+  return result;
+}
+
+export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
   try {
-    const payload = await request.json();
     // Parse here cause countries come with additional ietf from port
     const validationSchema = validators.contentPost;
     const payloadParsed = validationSchema.parse(payload);
@@ -234,6 +239,7 @@ async function handlePost<T extends TableConfig>({
     });
   }
 }
+
 async function handleDel<T extends TableConfig>({
   request,
   table,
