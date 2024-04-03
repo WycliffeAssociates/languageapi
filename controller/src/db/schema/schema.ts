@@ -317,3 +317,25 @@ export const countryToLanguage = pgTable(
     };
   }
 );
+
+export const localization = pgTable(
+  "localization",
+  {
+    ietfCode: varchar("ietf_code")
+      .references(() => language.ietfCode, {
+        onDelete: "cascade",
+        onUpdate: "cascade",
+      })
+      .notNull(),
+    key: varchar("key").notNull(),
+    value: text("value").notNull(),
+  },
+  (table) => {
+    return {
+      primaryKey: primaryKey({
+        columns: [table.ietfCode, table.key],
+        name: "localization_pkey",
+      }),
+    };
+  }
+);

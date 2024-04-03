@@ -2,6 +2,7 @@ import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import * as schema from "./schema";
 import {InferInsertModel, InferSelectModel} from "drizzle-orm";
 import {z} from "zod";
+import {localization} from "./schema";
 
 // ZOD DOCS
 // https://zod.dev/
@@ -156,6 +157,14 @@ export type insertCountryToLanguage = InferInsertModel<
   typeof schema.countryToLanguage
 >;
 
+// LOCALIZATION TABLE
+
+export const insertLocalizationSchema = createInsertSchema(schema.localization);
+export type localizationType = InferSelectModel<typeof schema.localization>;
+export type insertLocalizationType = InferInsertModel<
+  typeof schema.localization
+>;
+
 // This is consume as a conveneient grouping of some tables to schemas. Primarily consumed by the polymorphic handlers
 export const insertSchemas = {
   language: {
@@ -227,6 +236,11 @@ export const insertSchemas = {
     schema: insertCountryToLanguageSchema,
     update: insertCountryToLanguageSchema.partial(),
     table: schema.countryToLanguage,
+  },
+  localization: {
+    schema: insertLocalizationSchema,
+    update: insertLocalizationSchema.partial(),
+    table: schema.localization,
   },
 };
 
