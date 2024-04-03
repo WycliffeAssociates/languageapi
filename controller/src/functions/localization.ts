@@ -17,11 +17,15 @@ export async function populateLocalization(
   myTimer: Timer,
   context: InvocationContext
 ): Promise<void> {
+<<<<<<< HEAD
   context.log(
     `Timer function processed request. at ${new Date()}.  Next is ${
       myTimer.scheduleStatus?.next
     }`
   );
+=======
+  context.log("Timer function processed request.");
+>>>>>>> afea3a4 (add a localization table and cron trigger)
   const bookNamesResult = await populateScripturalBookNames();
   context.log(
     Array.isArray(bookNamesResult)
@@ -37,11 +41,18 @@ export async function populateLocalization(
 }
 
 async function populationResourceTypes() {
+<<<<<<< HEAD
   const category = "resource_type";
   const payload = localizations.reduce(
     (acc: insertLocalizationType[], curr) => {
       const rows = Object.entries(curr.dict).map(([key, value]) => {
         return {ietfCode: curr.ietf, key, value, category};
+=======
+  const payload = localizations.reduce(
+    (acc: insertLocalizationType[], curr) => {
+      const rows = Object.entries(curr.dict).map(([key, value]) => {
+        return {ietfCode: curr.ietf, key, value};
+>>>>>>> afea3a4 (add a localization table and cron trigger)
       });
       acc.push(...rows);
       return acc;
@@ -53,9 +64,15 @@ async function populationResourceTypes() {
     tableKey: "localization",
     content: payload,
     onConflictDoUpdateArgs: {
+<<<<<<< HEAD
       target: [table.ietfCode, table.key, table.category],
       // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. For localization though, it just updates the value.
       set: onConflictSetAllFieldsToSqlExcluded(table, ["value"]),
+=======
+      target: [table.ietfCode, table.key],
+      // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. For localization though, it just updates the value.
+      set: onConflictSetAllFieldsToSqlExcluded(table, ["ietfCode", "key"]),
+>>>>>>> afea3a4 (add a localization table and cron trigger)
     },
   });
   return res;
@@ -99,7 +116,11 @@ async function populateScripturalBookNames() {
     )
     .leftJoin(content, eq(content.id, rendering.contentId))
     .leftJoin(language, eq(language.ietfCode, content.languageId))
+<<<<<<< HEAD
     .leftJoin(gitRepo, eq(content.id, gitRepo.contentId))
+=======
+    .leftJoin(gitRepo, eq(content.gitId, gitRepo.id))
+>>>>>>> afea3a4 (add a localization table and cron trigger)
     .where(
       and(
         ilike(gitRepo.username, "%wa-catalog%"),
@@ -108,6 +129,7 @@ async function populateScripturalBookNames() {
       )
     )
     .as("sq");
+<<<<<<< HEAD
   // for debuggin
   // const finalSql = db
   //   .select({
@@ -120,6 +142,8 @@ async function populateScripturalBookNames() {
   //   .where(eq(subquery.rn, 1))
   //   .orderBy(subquery.ietf_code, subquery.book_slug)
   //   .toSQL();
+=======
+>>>>>>> afea3a4 (add a localization table and cron trigger)
   const result = await db
     .select({
       book_name: subquery.book_name,
@@ -144,29 +168,44 @@ async function populateScripturalBookNames() {
       })
     )
     .parse(result);
+<<<<<<< HEAD
   const category = "bible_book";
+=======
+>>>>>>> afea3a4 (add a localization table and cron trigger)
   const payload: insertLocalizationType[] = parsed.map((row) => {
     return {
       ietfCode: row.ietf_code,
       key: row.book_slug.toLowerCase(),
       value: row.book_name,
+<<<<<<< HEAD
       category,
+=======
+>>>>>>> afea3a4 (add a localization table and cron trigger)
     };
   });
   const inserted = await polymorphicInsert({
     tableKey: "localization",
     content: payload,
     onConflictDoUpdateArgs: {
+<<<<<<< HEAD
       target: [table.ietfCode, table.key, table.category],
       // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. For localization though, it just updates the value.
       set: onConflictSetAllFieldsToSqlExcluded(table, ["value"]),
+=======
+      target: [table.ietfCode, table.key],
+      set: onConflictSetAllFieldsToSqlExcluded(table, ["ietfCode", "key"]),
+>>>>>>> afea3a4 (add a localization table and cron trigger)
     },
   });
   return inserted;
 }
 
 app.timer("manageLocalizationTable", {
+<<<<<<< HEAD
   schedule: "*/30 * * * * *",
+=======
+  schedule: "0 0 0 * * *",
+>>>>>>> afea3a4 (add a localization table and cron trigger)
   handler: populateLocalization,
   useMonitor: false,
 });

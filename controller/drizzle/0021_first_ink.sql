@@ -1,5 +1,3 @@
-Custom SQL migration file, put you code below! 
-
 CREATE OR REPLACE VIEW source_zips AS
 SELECT c.*, CONCAT(g.repo_url, '/archive/master.zip') AS zip_url, COUNT(DISTINCT srm.book_slug) AS unique_book_slugs_count, 
 m.show_on_biel, m.status AS meta_status, l.national_name, l.english_name

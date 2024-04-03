@@ -176,6 +176,13 @@
       "when": 1712691755151,
       "tag": "0024_daffy_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "5",
+      "when": 1712163855137,
+      "tag": "0022_stiff_raider",
+      "breakpoints": true
     }
   ]
 }
