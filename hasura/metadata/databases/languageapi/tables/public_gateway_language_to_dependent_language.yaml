@@ -2,12 +2,12 @@ table:
   name: gateway_language_to_dependent_language
   schema: public
 object_relationships:
-  - name: gateway_language
-    using:
-      foreign_key_constraint_on: gateway_language_ietf
   - name: dependent_language
     using:
       foreign_key_constraint_on: dependent_language_ietf
+  - name: gateway_language
+    using:
+      foreign_key_constraint_on: gateway_language_ietf
 select_permissions:
   - role: anonymous
     permission:

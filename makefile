@@ -25,3 +25,10 @@ build:
 .PHONY: clean
 clean:
 	docker compose down -v
+
+.PHONY: hasura-meta
+hasura-meta:
+	pushd hasura && rm -rf metadata && hasura metadata export && popd
+# .PHONY: hasura-migrate
+# hasura-migrate:
+# 	hasura migrate apply

@@ -33,10 +33,11 @@ export async function populateLocalization(
 }
 
 async function populationResourceTypes() {
+  const category = "resource_type";
   const payload = localizations.reduce(
     (acc: insertLocalizationType[], curr) => {
       const rows = Object.entries(curr.dict).map(([key, value]) => {
-        return {ietfCode: curr.ietf, key, value};
+        return {ietfCode: curr.ietf, key, value, category};
       });
       acc.push(...rows);
       return acc;
@@ -94,7 +95,7 @@ async function populateScripturalBookNames() {
     )
     .leftJoin(content, eq(content.id, rendering.contentId))
     .leftJoin(language, eq(language.ietfCode, content.languageId))
-    .leftJoin(gitRepo, eq(content.gitId, gitRepo.id))
+    .leftJoin(gitRepo, eq(content.id, gitRepo.contentId))
     .where(
       and(
         ilike(gitRepo.username, "%wa-catalog%"),
@@ -127,11 +128,13 @@ async function populateScripturalBookNames() {
       })
     )
     .parse(result);
+  const category = "bible_book";
   const payload: insertLocalizationType[] = parsed.map((row) => {
     return {
       ietfCode: row.ietf_code,
       key: row.book_slug.toLowerCase(),
       value: row.book_name,
+      category,
     };
   });
   const inserted = await polymorphicInsert({

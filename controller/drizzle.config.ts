@@ -3,15 +3,11 @@ import {config as dotenv} from "dotenv";
 dotenv();
 
 // https://orm.drizzle.team/kit-docs/config-reference#schema
-// schema is coming from dist bc there are esm imports in these files, and natively run generate doesn't handle esm imports, so we build to resolve es modules, and point it at these 3 files.
-// const conn = process.env?.DATABASE_URL
-//   ? process.env?.DATABASE_URL
-//   : "testValue";
 const configInfo: Config = {
   schema: [
-    "./dist/src/db/schema/schema.js",
-    "./dist/src/db/schema/constants.js",
-    "./dist/src/db/schema/relations.js",
+    "./src/db/schema/schema.ts",
+    "./src/db/schema/constants.ts",
+    "./src/db/schema/relations.ts",
   ],
   out: "./drizzle",
   driver: "pg",

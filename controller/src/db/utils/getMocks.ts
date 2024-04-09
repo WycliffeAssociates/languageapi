@@ -102,7 +102,6 @@ export function getMockedGit() {
     username: faker.internet.userName(),
     repoName: fakerWord(),
     repoUrl: faker.internet.url(),
-    namespace: "wacs",
   };
   return mockedContent;
 }
@@ -122,9 +121,6 @@ export function getMockedContent() {
     ]),
     createdOn: faker.date.anytime().toISOString(),
     modifiedOn: faker.date.anytime().toISOString(),
-    // gitId: faker.helpers.maybe(() => faker.number.int({max: 1000, min: 1}), {
-    //   probability: 0.5,
-    // }),
     languageId: faker.string.alpha({casing: "lower", length: 3}),
     level: faker.helpers.arrayElement(["low", "medium", "high"]),
     name: faker.helpers.arrayElement([

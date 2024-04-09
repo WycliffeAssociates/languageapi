@@ -44,11 +44,7 @@ export const regionDelete = z.object({
 
 /* //@===============  Git   =============   */
 
-export const gitPost = z.array(
-  dbValidators.insertGitRepoSchema.extend({
-    namespace: z.string().trim().toLowerCase(),
-  })
-);
+export const gitPost = z.array(dbValidators.insertGitRepoSchema);
 export const gitDelete = z.object({
   userRepo: z.array(
     z.object({
@@ -61,23 +57,20 @@ export const gitDelete = z.object({
 /* //@===============  CONTENT   =============   */
 
 export const contentPost = z.array(
-  dbValidators.insertContentSchema
-    .omit({
-      gitId: true, //derived from gitEntry if present
-    })
-    .extend({
-      namespace: z.string().trim().toLowerCase(),
-      meta: dbValidators.insertWaContentMetaSchema
-        .omit({contentId: true})
-        .optional(),
-      resourceType: z.nullable(z.string().trim().toLowerCase()).optional(),
-      gitEntry: gitPost.element
-        .omit({
-          contentId: true, //will grab from insert
-        })
-        .optional(),
-    })
+  dbValidators.insertContentSchema.extend({
+    namespace: z.string().trim().toLowerCase(),
+    meta: dbValidators.insertWaContentMetaSchema
+      .omit({contentId: true})
+      .optional(),
+    resourceType: z.nullable(z.string().trim().toLowerCase()).optional(),
+    gitEntry: dbValidators.insertGitRepoSchema
+      .omit({
+        contentId: true, //will grab from insert
+      })
+      .optional(),
+  })
 );
+
 export const contentDelete = z.object({
   ids: z.array(z.string()),
 });

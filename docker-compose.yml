@@ -2,22 +2,38 @@
 version: "3.8"
 
 services:
-  controller:
+  # controller:
+  #   build:
+  #     context: ./controller
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - AzureWebJobsStorage=''
+  #     - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
+  #     - BUS_CONN=${BUS_CONN}
+  #   platform: linux/amd64
+  #   ports:
+  #     - 8081:80
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     db-migrate:
+  #       condition: service_completed_successfully
+  db-seed:
     build:
       context: ./controller
-      dockerfile: Dockerfile
-    environment:
-      - AzureWebJobsStorage=''
-      - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
-      - BUS_CONN=${BUS_CONN}
-    platform: linux/amd64
-    ports:
-      - 8081:80
+      # dockerfile: Dockerfile
+    entrypoint:
+      [
+        "sh",
+        "-c",
+        "psql postgres://docker:docker@postgres:5432/docker -f data_dump.sql",
+      ]
+    expose:
+      - 7071
     depends_on:
       postgres:
         condition: service_healthy
-      db-migrate:
-        condition: service_completed_successfully
+
   db-migrate:
     build:
       context: ./controller
@@ -25,17 +41,12 @@ services:
       # IF you want to run the functions in the container and migrate
     # entrypoint: ["sh", "-c", "pnpm run migrate && pnpm run start"]
     # IF you only want to migrate so hasura is up to date on migrations done locally
-    entrypoint:
-      [
-        "/bin/sh",
-        "-c",
-        "psql postgres://docker:docker@postgres:5432/docker -f data_dump.sql && pnpm run migrate",
-      ]
+    entrypoint: pnpm run migrate
     expose:
       - 7071
       - 3000
-    volumes:
-      - ./data_dump.sql:/home/site/wwwroot/data_dump.sql
+    # volumes:
+    #   - ./data_dump.sql:/home/site/wwwroot/data_dump.sql
     ports:
       - 7071:7071
       - 3000:3000
@@ -44,6 +55,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      db-seed:
+        condition: service_completed_successfully
 
   postgres:
     image: postgres:13

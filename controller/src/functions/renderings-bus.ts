@@ -8,7 +8,8 @@ import {
 import {handlePost as handleContentPost} from "../routes/content";
 import * as validators from "../routes/validation";
 import * as schema from "../db/schema/schema";
-import {eq} from "drizzle-orm";
+import {and, eq} from "drizzle-orm";
+import {createId} from "@paralleldrive/cuid2";
 
 const db = startDb();
 
@@ -43,6 +44,9 @@ export async function wacsSbRenderingsApi(
   message: unknown,
   context: InvocationContext
 ) {
+  const namespace = "wacs";
+  let contentCuid: string | null = null; //we need the guid of a content row to insert or upsert on the git Table.
+
   // If zod or the db action below throws here, the message will end up in the dead letter queue.
   try {
     const successStatus = z.object({Successful: z.boolean()}).parse(message);
@@ -57,26 +61,33 @@ export async function wacsSbRenderingsApi(
       return;
     }
     const parsed = renderingsSchema.parse(message);
-    const namespace = "wacs";
     const id = `${parsed.User}/${parsed.Repo}`.toLowerCase();
     context.log(
       `RENDERINGS BUS RECEIVED: received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`
     );
 
-    const doesExist = await checkContentExists(`${namespace}-${id}`);
-    if (!doesExist) {
+    const {exists, id: currentExistingId} = await checkContentExists({
+      name: id,
+      namespace,
+    });
+    if (!exists) {
       context.log(
         `${namespace}-${id} is not already in api. Creating new row in table`
       );
+      const cuid = createId();
+      const newContentPayload = {
+        id: cuid,
+        name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
+        namespace: namespace,
+        type: "text",
+      } as const;
       const newContentRow: z.infer<typeof validators.contentPost> = [
-        {
-          namespace: "wacs",
-          id: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
-          type: "text",
-        },
+        newContentPayload,
       ];
       const newRowRes = await handleContentPost(newContentRow);
       if (newRowRes.status !== 200) {
+        contentCuid = cuid;
+
         context.log(
           `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
         );
@@ -85,10 +96,34 @@ export async function wacsSbRenderingsApi(
         );
       }
     }
+    contentCuid = id ? id : contentCuid;
+    if (!contentCuid) {
+      let matchingRow = await db
+        .select()
+        .from(schema.content)
+        .where(
+          and(
+            eq(
+              schema.content.name,
+              `${parsed.User}/${parsed.Repo}`.toLowerCase()
+            ),
+            eq(schema.content.namespace, namespace)
+          )
+        );
+      if (!matchingRow[0]) {
+        throw new Error(
+          `Could not find content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+        );
+      }
+      contentCuid = matchingRow[0].id;
+    }
+    if (!contentCuid) {
+      throw new Error(`Failed to find contentCuid for ${id}`);
+    }
 
     // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
     const deletePayload: z.infer<typeof validators.renderingDelete> = {
-      contentIds: [{namespace, id}],
+      contentIds: [{namespace, id: contentCuid}],
     };
 
     const dbPayload: z.infer<typeof validators.renderingsPost> =
@@ -96,8 +131,8 @@ export async function wacsSbRenderingsApi(
         const randomUUid = crypto.randomUUID();
         let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
           tempId: randomUUid,
-          namespace: "wacs",
-          contentId: `${parsed.User}/${parsed.Repo}`,
+          namespace,
+          contentId: contentCuid!,
           fileType: payload.FileType,
           url: payload.Path,
           fileSizeBytes: payload.Size || 0,
@@ -167,12 +202,26 @@ export async function wacsSbRenderingsApi(
   }
 }
 
-export async function checkContentExists(id: string) {
+export async function checkContentExists({
+  name,
+  namespace,
+}: {
+  name: string;
+  namespace: string;
+}) {
   const doesExist = await db
     .select({id: schema.content.id})
     .from(schema.content)
-    .where(eq(schema.content.id, id));
-  return doesExist.length > 0;
+    .where(
+      and(
+        eq(schema.content.namespace, namespace),
+        eq(schema.content.name, name)
+      )
+    );
+
+  let dbId = doesExist[0]?.id ?? null;
+
+  return {exists: doesExist.length > 0, id: dbId};
 }
 console.log("booting up the renderings bus listener");
 app.serviceBusTopic("waLangApiRenderings", {
