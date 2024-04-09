@@ -1,6 +1,6 @@
 {
-  "id": "9af501de-7e09-4192-a319-8a583f5ef4ed",
-  "prevId": "4b888b15-8c04-4681-87f6-dc1e4ebe7d94",
+  "id": "e51ae2f9-5f6d-4b78-94f2-654266d5b14b",
+  "prevId": "9af501de-7e09-4192-a319-8a583f5ef4ed",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -70,8 +70,8 @@
         }
       },
       "indexes": {
-        "name_nampespace_idx": {
-          "name": "name_nampespace_idx",
+        "name_namespace_idx": {
+          "name": "name_namespace_idx",
           "columns": [
             "name",
             "namespace"

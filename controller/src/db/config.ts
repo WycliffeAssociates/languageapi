@@ -10,6 +10,7 @@ export function getDb() {
   const queryClient = postgres(`${process.env.DATABASE_URL!}`);
   db = drizzle(queryClient, {
     schema,
+    // logger: true,
   });
   return db;
 }

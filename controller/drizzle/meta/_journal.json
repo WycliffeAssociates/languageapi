@@ -169,6 +169,13 @@
       "when": 1712610496279,
       "tag": "0023_soft_red_shift",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "5",
+      "when": 1712691755151,
+      "tag": "0024_daffy_black_bolt",
+      "breakpoints": true
     }
   ]
 }

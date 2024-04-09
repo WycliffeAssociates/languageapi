@@ -96,7 +96,7 @@ export async function wacsSbRenderingsApi(
         );
       }
     }
-    contentCuid = currentExistingId ? currentExistingId : contentCuid;
+    contentCuid = id ? id : contentCuid;
     if (!contentCuid) {
       let matchingRow = await db
         .select()
@@ -169,12 +169,10 @@ export async function wacsSbRenderingsApi(
         }
         return baseLoad;
       });
-
+    // todo: becuase these are rendered over and over, we want to delete everything from the renderings and renderings meta tables for the given content id, and new meta (since blobs are replaced and not versioned out). Then we can post to the renderings and meta tables
     await db.transaction(async (tx) => {
       // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
-      context.log(
-        `Clearing prev renderings for namespace:${namespace} and name: ${parsed.User}/${parsed.Repo}`
-      );
+      context.log(`Clearing prev renderings for ${parsed.User}/${parsed.Repo}`);
       const delResult = await handleDel(deletePayload);
       if (delResult.status != 200) {
         tx.rollback();

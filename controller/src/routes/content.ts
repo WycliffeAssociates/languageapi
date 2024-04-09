@@ -159,14 +159,15 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
         transactionHandle: tx,
         onConflictDoUpdateArgs: {
           // need to see that if we try to update the same name/namespace that it is indeed an upsert so the cuids don't change.
-          target: [schema.content.namespace, schema.content.name],
+          target: [schema.content.name, schema.content.namespace],
           set: onConflictSetAllFieldsToSqlExcluded(schema.content),
         },
       });
 
       if (dbTxDidErr(contentInserted)) {
-        tx.rollback();
-        throw new Error("could not update content rows");
+        addlErrs.push(contentInserted);
+        return tx.rollback();
+        // const err = {}
       }
 
       let metaInserted = null;

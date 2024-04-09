@@ -135,16 +135,15 @@ export const content = pgTable(
     createdOn: timestamp("created_on", {mode: "string"}),
     modifiedOn: timestamp("modified_on", {mode: "string"}),
     level: varchar("level"),
+  },
+  (table) => {
+    return {
+      nameNamespaceIdx: uniqueIndex("name_namespace_idx").on(
+        table.name,
+        table.namespace
+      ),
+    };
   }
-  // todo: add unique after fixing this data
-  // (table) => {
-  //     return {
-  //       urlIdx: uniqueIndex("name_nampespace_idx").on(
-  //         table.name,
-  //         table.nameSpace
-  //       ),
-  //     };
-  //   }
 );
 
 //@=============== WA content meta  =============
