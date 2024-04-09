@@ -1,60 +1,38 @@
 table:
-  schema: public
   name: content
+  schema: public
 object_relationships:
-  - name: language
-    using:
-      foreign_key_constraint_on: language_id
   - name: git_repo
     using:
       manual_configuration:
-        remote_table:
-          schema: public
-          name: git_repo
         column_mapping:
           id: content_id
-
+        insertion_order: null
+        remote_table:
+          name: git_repo
+          schema: public
+  - name: language
+    using:
+      foreign_key_constraint_on: language_id
 array_relationships:
-  - name: connectedContentsByContentId2
-    using:
-      foreign_key_constraint_on:
-        column: content_id_2
-        table:
-          name: connected_content
-          schema: public
-  - name: connected_contents
-    using:
-      foreign_key_constraint_on:
-        column: content_id_1
-        table:
-          name: connected_content
-          schema: public
-  - name: renderings
+  - name: git_repos
     using:
       foreign_key_constraint_on:
         column: content_id
         table:
-          name: rendering
+          name: git_repo
           schema: public
-  - name: wa_content_meta
+  - name: rendered_contents
     using:
       foreign_key_constraint_on:
         column: content_id
         table:
-          name: wa_content_meta
+          name: rendered_content
           schema: public
-select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-        - id
-        - language_id
-        - level
-        - name
-        - git_id
-        - resource_type
-        - created_on
-        - modified_on
-        - domain
-        - type
-      filter: {}
+  - name: wa_content_metadata
+    using:
+      foreign_key_constraint_on:
+        column: content_id
+        table:
+          name: wa_content_metadata
+          schema: public

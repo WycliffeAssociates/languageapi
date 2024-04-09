@@ -2,6 +2,7 @@ import {createInsertSchema, createSelectSchema} from "drizzle-zod";
 import * as schema from "./schema";
 import {InferInsertModel, InferSelectModel} from "drizzle-orm";
 import {z} from "zod";
+import {localization} from "./schema";
 
 // ZOD DOCS
 // https://zod.dev/
@@ -66,20 +67,6 @@ export const insertContentSchema = createInsertSchema(schema.content);
 export const selectContentSchema = createSelectSchema(schema.content);
 export type contentType = InferSelectModel<typeof schema.content>;
 export type insertContent = z.infer<typeof insertContentSchema>; //note the z.infer do to the extend.  Namespace doesn't make it into the db, but connectors are responsible for namespacing themselves id wise
-
-//  ========= connectedContentTable
-export const insertConnectedContentSchema = createInsertSchema(
-  schema.connectedContent
-);
-export const selectConnectedContentSchema = createSelectSchema(
-  schema.connectedContent
-);
-export type connectedContentType = InferSelectModel<
-  typeof schema.connectedContent
->;
-export type insertConnectedContent = InferInsertModel<
-  typeof schema.connectedContent
->;
 
 //  ========= gitRepos
 export const insertGitRepoSchema = createInsertSchema(schema.gitRepo);
@@ -156,6 +143,14 @@ export type insertCountryToLanguage = InferInsertModel<
   typeof schema.countryToLanguage
 >;
 
+// LOCALIZATION TABLE
+
+export const insertLocalizationSchema = createInsertSchema(schema.localization);
+export type localizationType = InferSelectModel<typeof schema.localization>;
+export type insertLocalizationType = InferInsertModel<
+  typeof schema.localization
+>;
+
 // This is consume as a conveneient grouping of some tables to schemas. Primarily consumed by the polymorphic handlers
 export const insertSchemas = {
   language: {
@@ -188,11 +183,7 @@ export const insertSchemas = {
     update: insertWaContentMetaSchema.partial(),
     table: schema.waContentMetadata,
   },
-  connectedContent: {
-    schema: insertConnectedContentSchema,
-    update: insertConnectedContentSchema.partial(),
-    table: schema.connectedContent,
-  },
+
   gitRepo: {
     schema: insertGitRepoSchema,
     update: insertGitRepoSchema.partial(),
@@ -227,6 +218,11 @@ export const insertSchemas = {
     schema: insertCountryToLanguageSchema,
     update: insertCountryToLanguageSchema.partial(),
     table: schema.countryToLanguage,
+  },
+  localization: {
+    schema: insertLocalizationSchema,
+    update: insertLocalizationSchema.partial(),
+    table: schema.localization,
   },
 };
 

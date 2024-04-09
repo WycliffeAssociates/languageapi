@@ -8,9 +8,10 @@ export const langPost = z.array(
   dbValidators.insertLanguageSchema.extend({
     allCountryAlpha2: z.array(z.string()).optional(),
     alternateNames: z.array(z.string()).optional(),
-    waLangMeta: z
-      .object({
-        showOnBiel: z.boolean(),
+    waLangMeta: dbValidators.insertWaLangMetaSchema
+      .omit({
+        id: true,
+        ietfCode: true,
       })
       .optional(),
     gatewayIetf: z.string().trim().optional(),
@@ -43,11 +44,7 @@ export const regionDelete = z.object({
 
 /* //@===============  Git   =============   */
 
-export const gitPost = z.array(
-  dbValidators.insertGitRepoSchema.extend({
-    namespace: z.string().trim().toLowerCase(),
-  })
-);
+export const gitPost = z.array(dbValidators.insertGitRepoSchema);
 export const gitDelete = z.object({
   userRepo: z.array(
     z.object({
@@ -60,36 +57,41 @@ export const gitDelete = z.object({
 /* //@===============  CONTENT   =============   */
 
 export const contentPost = z.array(
-  dbValidators.insertContentSchema
-    .omit({
-      gitId: true, //derived from gitEntry if present
-    })
-    .extend({
-      namespace: z.string().trim().toLowerCase(),
-      meta: dbValidators.insertWaContentMetaSchema
-        .omit({contentId: true})
-        .optional(),
-      resourceType: z.nullable(z.string().trim().toLowerCase()).optional(),
-      gitEntry: gitPost.element
-        .omit({
-          contentId: true, //will grab from insert
-        })
-        .optional(),
-    })
+  dbValidators.insertContentSchema.extend({
+    namespace: z.string().trim().toLowerCase(),
+    meta: dbValidators.insertWaContentMetaSchema
+      .omit({contentId: true})
+      .optional(),
+    resourceType: z.nullable(z.string().trim().toLowerCase()).optional(),
+    gitEntry: dbValidators.insertGitRepoSchema
+      .omit({
+        contentId: true, //will grab from insert
+      })
+      .optional(),
+  })
 );
+
 export const contentDelete = z.object({
   ids: z.array(z.string()),
 });
 
 /* //@===========  Renderings   ===========   */
-const contentRenderingWithMeta = dbValidators.insertRenderingSchema.extend({
-  fileType: z.string().trim().toLowerCase(),
-  namespace: z.string().trim().toLowerCase(),
-  scripturalMeta:
-    dbValidators.insertScripturalRenderingMetadataSchema.optional(),
-  nonScripturalMeta:
-    dbValidators.insertNonScripturalRenderingMetadataSchema.optional(),
-});
+export const contentRenderingWithMeta =
+  dbValidators.insertRenderingSchema.extend({
+    tempId: z.string(),
+    fileType: z.string().trim().toLowerCase(),
+    namespace: z.string().trim().toLowerCase(),
+    scripturalMeta: dbValidators.insertScripturalRenderingMetadataSchema
+      .extend({
+        tempId: z.string(),
+      })
+      .optional(),
+    nonScripturalMeta: dbValidators.insertNonScripturalRenderingMetadataSchema
+      .extend({
+        tempId: z.string(),
+      })
+      .optional(),
+  });
 export const renderingsPost = z.array(contentRenderingWithMeta);
 export type typeOfContentRenderingWithMeta = z.infer<
   typeof contentRenderingWithMeta

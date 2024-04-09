@@ -86,21 +86,17 @@ export async function handlePost<T extends TableConfig>(
   let status = 200;
   try {
     // Parse here cause countries come with additional ietf from port
+    // Is
     const validationSchema = validators.gitPost;
     const payloadParsed = validationSchema.parse(payload);
-
-    const payloadsWithNamespacedContentId = payloadParsed.map((payload) => {
-      payload.contentId =
-        `${payload.namespace}-${payload.contentId}`.toLowerCase();
-      return payload;
-    });
 
     const transacted = await db.transaction(async (tx) => {
       const gitInserted = await polymorphicInsert({
         tableKey: tableName,
-        content: payloadsWithNamespacedContentId,
+        content: payloadParsed,
         transactionHandle: tx,
         onConflictDoUpdateArgs: {
+          // this is teh content cuid
           target: schema.gitRepo.contentId,
           set: onConflictSetAllFieldsToSqlExcluded(schema.gitRepo, [
             "id",
@@ -108,25 +104,6 @@ export async function handlePost<T extends TableConfig>(
           ]),
         },
       });
-
-      if (Array.isArray(gitInserted)) {
-        for await (const gitRow of gitInserted) {
-          const updateWithGit = await polymorphicUpdate(
-            "content",
-            {
-              gitId: gitRow.id,
-            },
-            eq(schema.content.id, gitRow.contentId),
-            tx
-          );
-          if (dbTxDidErr(updateWithGit)) {
-            tx.rollback();
-            throw new Error(
-              "could not update content table with gitInformation"
-            );
-          }
-        }
-      }
 
       if (dbTxDidErr(gitInserted)) {
         addlErrs.push({

@@ -1,0 +1,7 @@
+table:
+  name: wa_content_metadata
+  schema: public
+object_relationships:
+  - name: content
+    using:
+      foreign_key_constraint_on: content_id

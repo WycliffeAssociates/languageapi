@@ -1,0 +1,3 @@
+table:
+  name: langjson
+  schema: public

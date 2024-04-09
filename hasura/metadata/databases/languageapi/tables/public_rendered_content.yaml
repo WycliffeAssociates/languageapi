@@ -1,5 +1,5 @@
 table:
-  name: rendering
+  name: rendered_content
   schema: public
 object_relationships:
   - name: content
@@ -20,16 +20,3 @@ array_relationships:
         table:
           name: scriptural_rendering_metadata
           schema: public
-select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-        - file_size_bytes
-        - does_cover_all_content
-        - content_id
-        - file_type
-        - id
-        - url
-        - created_at
-        - modified_on
-      filter: {}

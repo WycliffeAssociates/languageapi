@@ -80,10 +80,6 @@
                         "type": "string",
                         "x-nullable": true
                       },
-                      "gitId": {
-                        "type": "number",
-                        "x-nullable": true
-                      },
                       "id": {
                         "maxLength": 256,
                         "type": "string"
@@ -102,8 +98,11 @@
                       },
                       "name": {
                         "maxLength": 256,
-                        "type": "string",
-                        "x-nullable": true
+                        "type": "string"
+                      },
+                      "namespace": {
+                        "maxLength": 256,
+                        "type": "string"
                       },
                       "resourceType": {
                         "type": "string",
@@ -123,10 +122,10 @@
                       "id",
                       "languageId",
                       "name",
+                      "namespace",
                       "type",
                       "domain",
                       "resourceType",
-                      "gitId",
                       "createdOn",
                       "modifiedOn",
                       "level"
@@ -877,15 +876,16 @@
                         "type": "string",
                         "x-nullable": true
                       },
-                      "doesCoverAllContent": {
-                        "type": "boolean"
-                      },
                       "fileSizeBytes": {
                         "type": "number",
                         "x-nullable": true
                       },
                       "fileType": {
                         "type": "string"
+                      },
+                      "hash": {
+                        "type": "string",
+                        "x-nullable": true
                       },
                       "id": {
                         "type": "number"
@@ -904,7 +904,7 @@
                       "fileType",
                       "fileSizeBytes",
                       "url",
-                      "doesCoverAllContent",
+                      "hash",
                       "createdAt",
                       "modifiedOn"
                     ],
@@ -1019,26 +1019,20 @@
     "content": {
       "example": [
         {
-          "createdOn": "2024-01-27T14:02:57.034Z",
-          "domain": "parascriptural",
-          "gitEntry": {
-            "namespace": "wacs",
-            "repoName": "mob",
-            "repoUrl": "https://neat-sturgeon.info",
-            "username": "Marley_Adams87"
-          },
-          "id": "whopping",
-          "languageId": "txe",
-          "level": "high",
+          "createdOn": "2024-11-09T03:27:56.218Z",
+          "domain": "peripheral",
+          "id": "at",
+          "languageId": "usj",
+          "level": "low",
           "meta": {
-            "showOnBiel": true,
-            "status": "official"
+            "showOnBiel": false,
+            "status": "approved"
           },
-          "modifiedOn": "2024-07-12T03:38:29.383Z",
+          "modifiedOn": "2023-10-16T23:49:54.490Z",
           "name": "manual",
           "namespace": "wacs",
-          "resourceType": "ulb",
-          "type": "text"
+          "resourceType": "tw",
+          "type": "video"
         }
       ],
       "items": {
@@ -1062,9 +1056,6 @@
               "id": {
                 "type": "number"
               },
-              "namespace": {
-                "type": "string"
-              },
               "repoName": {
                 "type": "string"
               },
@@ -1078,8 +1069,7 @@
             "required": [
               "username",
               "repoName",
-              "repoUrl",
-              "namespace"
+              "repoUrl"
             ],
             "type": "object"
           },
@@ -1119,8 +1109,7 @@
           },
           "name": {
             "maxLength": 256,
-            "type": "string",
-            "x-nullable": true
+            "type": "string"
           },
           "namespace": {
             "type": "string"
@@ -1141,8 +1130,9 @@
         },
         "required": [
           "id",
-          "type",
-          "namespace"
+          "name",
+          "namespace",
+          "type"
         ],
         "type": "object"
       },
@@ -1151,12 +1141,12 @@
     "country": {
       "example": [
         {
-          "alpha2": "MG",
-          "alpha3": "GAB",
-          "createdOn": "2024-02-09T19:15:31.295Z",
-          "modifiedOn": "2024-07-30T15:32:01.129Z",
-          "name": "Maldives",
-          "population": 1564380574,
+          "alpha2": "YT",
+          "alpha3": "MUS",
+          "createdOn": "2023-12-26T11:47:28.601Z",
+          "modifiedOn": "2023-07-08T00:17:47.610Z",
+          "name": "Estonia",
+          "population": 997752143,
           "regionName": "Asia"
         }
       ],
@@ -1204,10 +1194,9 @@
       "example": [
         {
           "contentId": "wacs-user-repo",
-          "namespace": "wacs",
-          "repoName": "startle",
-          "repoUrl": "https://unfortunate-belligerency.biz/",
-          "username": "Bailee50"
+          "repoName": "park",
+          "repoUrl": "https://agreeable-turnip.net/",
+          "username": "Jerad26"
         }
       ],
       "items": {
@@ -1217,9 +1206,6 @@
           },
           "id": {
             "type": "number"
-          },
-          "namespace": {
-            "type": "string"
           },
           "repoName": {
             "type": "string"
@@ -1235,8 +1221,7 @@
           "contentId",
           "username",
           "repoName",
-          "repoUrl",
-          "namespace"
+          "repoUrl"
         ],
         "type": "object"
       },
@@ -1246,32 +1231,35 @@
       "example": [
         {
           "allCountryAlpha2": [
-            "KH",
-            "MF",
-            "KP",
-            "PF",
-            "ZW"
+            "LU",
+            "UA",
+            "GP",
+            "BA",
+            "GL",
+            "PR"
           ],
           "alternateNames": [
-            "pusher",
-            "psst",
-            "literature",
-            "keenly",
-            "scrap",
-            "commonly",
-            "student",
-            "skyjack"
+            "goddess",
+            "oh",
+            "inequality",
+            "gee",
+            "unless",
+            "punctually",
+            "salaam",
+            "above",
+            "acculturate"
           ],
-          "createdOn": "2023-10-14T02:43:58.961Z",
-          "direction": "ltr",
-          "englishName": "pure",
-          "homeCountryAlpha2": "IE",
-          "id": "VUAiOoPYbM",
-          "ietfCode": "zjl",
-          "isOralLanguage": true,
-          "iso6393": "yclozphyx",
-          "nationalName": "phooey",
+          "createdOn": "2023-09-04T08:26:47.328Z",
+          "direction": "rtl",
+          "englishName": "of",
+          "homeCountryAlpha2": "GR",
+          "id": "SvhWbTelgj",
+          "ietfCode": "ecw",
+          "isOralLanguage": false,
+          "iso6393": "kkbbs",
+          "nationalName": "dog",
           "waLangMeta": {
+            "isGateway": true,
             "showOnBiel": false
           }
         }
@@ -1333,11 +1321,15 @@
           },
           "waLangMeta": {
             "properties": {
+              "isGateway": {
+                "type": "boolean"
+              },
               "showOnBiel": {
                 "type": "boolean"
               }
             },
             "required": [
+              "isGateway",
               "showOnBiel"
             ],
             "type": "object"
@@ -1373,8 +1365,8 @@
     "region": {
       "example": [
         {
-          "createdOn": "2024-07-08T05:56:32.237Z",
-          "modifiedOn": "2025-01-04T20:48:14.296Z",
+          "createdOn": "2024-09-27T18:00:15.236Z",
+          "modifiedOn": "2023-06-16T16:03:21.220Z",
           "name": "South America"
         }
       ],
@@ -1407,39 +1399,46 @@
         [
           {
             "contentId": "user-repo",
-            "createdAt": "2023-09-18T23:21:00.614Z",
-            "doesCoverAllContent": true,
-            "fileSizeBytes": 7028452003676160,
-            "fileType": "mp4",
-            "modifiedOn": "2023-09-19T04:18:30.874Z",
+            "createdAt": "2023-07-28T00:22:44.648Z",
+            "fileSizeBytes": 2304861171351552,
+            "fileType": "html",
+            "modifiedOn": "2024-11-07T14:41:10.181Z",
             "namespace": "wacs",
             "scripturalMeta": {
               "bookName": "1 Jean",
               "bookSlug": "1JN",
-              "chapter": 5
+              "chapter": 5,
+              "isWholeBook": true,
+              "isWholeProject": true,
+              "tempId": "24b8d58b-38ab-4467-88da-db9dfe364aca"
             },
-            "url": "https://triangular-dwell.org"
+            "tempId": "24b8d58b-38ab-4467-88da-db9dfe364aca",
+            "url": "https://joint-attacker.biz/"
           }
         ],
         [
           {
             "contentId": "user-repo",
-            "createdAt": "2024-06-17T14:45:27.471Z",
-            "doesCoverAllContent": true,
-            "fileSizeBytes": 2522719818088448,
-            "fileType": "zip",
-            "modifiedOn": "2023-07-19T21:43:39.521Z",
+            "createdAt": "2023-11-15T20:53:05.372Z",
+            "fileSizeBytes": 4224131643998208,
+            "fileType": "web",
+            "modifiedOn": "2024-04-30T04:06:28.326Z",
             "namespace": "wacs",
             "nonScripturalMeta": {
               "additionalData": "A json field",
-              "name": "nonScripturalName"
+              "name": "nonScripturalName",
+              "tempId": "1b8efbd3-66eb-4941-a23c-bb0443d27a71"
             },
             "scripturalMeta": {
               "bookName": "1 Jean",
               "bookSlug": "1JN",
-              "chapter": 2
+              "chapter": 0,
+              "isWholeBook": true,
+              "isWholeProject": false,
+              "tempId": "1b8efbd3-66eb-4941-a23c-bb0443d27a71"
             },
-            "url": "https://proper-salad.org/"
+            "tempId": "1b8efbd3-66eb-4941-a23c-bb0443d27a71",
+            "url": "https://metallic-artichoke.net/"
           }
         ]
       ],
@@ -1452,9 +1451,6 @@
             "type": "string",
             "x-nullable": true
           },
-          "doesCoverAllContent": {
-            "type": "boolean"
-          },
           "fileSizeBytes": {
             "minimum": 0,
             "type": "number",
@@ -1462,6 +1458,10 @@
           },
           "fileType": {
             "type": "string"
+          },
+          "hash": {
+            "type": "string",
+            "x-nullable": true
           },
           "id": {
             "type": "number"
@@ -1488,23 +1488,38 @@
               },
               "renderingId": {
                 "type": "number"
+              },
+              "tempId": {
+                "type": "string"
               }
             },
+            "required": [
+              "tempId"
+            ],
             "type": "object"
           },
           "scripturalMeta": {
             "properties": {
               "bookName": {
-                "type": "string"
+                "type": "string",
+                "x-nullable": true
               },
               "bookSlug": {
-                "type": "string"
+                "type": "string",
+                "x-nullable": true
               },
               "chapter": {
-                "type": "number"
+                "type": "number",
+                "x-nullable": true
               },
               "id": {
                 "type": "number"
+              },
+              "isWholeBook": {
+                "type": "boolean"
+              },
+              "isWholeProject": {
+                "type": "boolean"
               },
               "renderingId": {
                 "type": "number"
@@ -1512,14 +1527,20 @@
               "sort": {
                 "type": "number",
                 "x-nullable": true
+              },
+              "tempId": {
+                "type": "string"
               }
             },
             "required": [
-              "bookSlug",
-              "bookName",
-              "chapter"
+              "isWholeBook",
+              "isWholeProject",
+              "tempId"
             ],
             "type": "object"
+          },
+          "tempId": {
+            "type": "string"
           },
           "url": {
             "type": "string"
@@ -1529,7 +1550,7 @@
           "contentId",
           "fileType",
           "url",
-          "doesCoverAllContent",
+          "tempId",
           "namespace"
         ],
         "type": "object"
