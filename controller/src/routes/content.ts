@@ -96,6 +96,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     // Parse here cause countries come with additional ietf from port
     const validationSchema = validators.contentPost;
     const payloadParsed = validationSchema.parse(payload);
+    // add guids.  If an id is passed, we are overwriting it.
     const payloadsWithGuids = payloadParsed.map((payload) => {
       return {
         ...payload,

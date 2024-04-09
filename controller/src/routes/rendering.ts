@@ -266,10 +266,9 @@ export async function handleDel(payload: unknown): Promise<HttpResponseInit> {
   try {
     const deleteSchema = validators.renderingDelete;
     const deletePayloadsParsed = deleteSchema.parse(payload);
-    const rowsToDeleteByContentId = deletePayloadsParsed.contentIds.map((row) =>
-      `${row.namespace}-${row.id}`.toLowerCase()
-    );
+    const rowsToDeleteByContentId = deletePayloadsParsed.contentIds;
 
+    // E.g. delete all rendergins (and cascade accross) where the guid of a project is passed
     const deleteOnField = schema.rendering.contentId;
     // const deleteOn
     const result = await polymorphicDelete(

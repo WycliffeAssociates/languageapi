@@ -125,6 +125,7 @@ export const languagesToLanguages = pgTable(
 export const content = pgTable(
   "content",
   {
+    // We could do $defaultFn, but I want to be explicit cause git and meta sometimes need to this value before they are inserted into the orm as a connecting id.
     id: varchar("id", {length: 256}).primaryKey().notNull(),
     languageId: varchar("language_id").references(() => language.ietfCode),
     name: varchar("name", {length: 256}).notNull(),
@@ -135,16 +136,16 @@ export const content = pgTable(
     createdOn: timestamp("created_on", {mode: "string"}),
     modifiedOn: timestamp("modified_on", {mode: "string"}),
     level: varchar("level"),
-  }
+  },
   // todo: add unique after fixing this data
-  // (table) => {
-  //     return {
-  //       urlIdx: uniqueIndex("name_nampespace_idx").on(
-  //         table.name,
-  //         table.nameSpace
-  //       ),
-  //     };
-  //   }
+  (table) => {
+    return {
+      urlIdx: uniqueIndex("name_nampespace_idx").on(
+        table.name,
+        table.namespace
+      ),
+    };
+  }
 );
 
 //@=============== WA content meta  =============

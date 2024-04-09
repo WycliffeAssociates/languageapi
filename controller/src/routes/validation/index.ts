@@ -58,6 +58,7 @@ export const gitDelete = z.object({
 
 export const contentPost = z.array(
   dbValidators.insertContentSchema.extend({
+    id: z.string().optional(),
     namespace: z.string().trim().toLowerCase(),
     meta: dbValidators.insertWaContentMetaSchema
       .omit({contentId: true})
@@ -97,10 +98,5 @@ export type typeOfContentRenderingWithMeta = z.infer<
   typeof contentRenderingWithMeta
 >;
 export const renderingDelete = z.object({
-  contentIds: z.array(
-    z.object({
-      namespace: z.string().trim().toLowerCase(),
-      id: z.string(),
-    })
-  ),
+  contentIds: z.array(z.string()),
 });
