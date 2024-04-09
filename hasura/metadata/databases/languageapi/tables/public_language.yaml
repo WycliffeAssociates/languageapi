@@ -5,6 +5,13 @@ object_relationships:
   - name: country
     using:
       foreign_key_constraint_on: home_country_alpha2
+  - name: wa_language_meta
+    using:
+      foreign_key_constraint_on:
+        column: ietf_code
+        table:
+          name: wa_language_meta
+          schema: public
 array_relationships:
   - name: contents
     using:
@@ -21,7 +28,6 @@ array_relationships:
           name: country_to_language
           schema: public
   - name: dependent_languages
-<<<<<<< HEAD
     using:
       foreign_key_constraint_on:
         column: gateway_language_ietf
@@ -36,45 +42,10 @@ array_relationships:
           name: gateway_language_to_dependent_language
           schema: public
   - name: language_alternate_names
-=======
->>>>>>> 0d6d1a1 (lang api adjustments)
-    using:
-      foreign_key_constraint_on:
-        column: gateway_language_ietf
-        table:
-          name: gateway_language_to_dependent_language
-          schema: public
-<<<<<<< HEAD
-  - name: localizations
     using:
       foreign_key_constraint_on:
         column: ietf_code
         table:
-          name: localization
-          schema: public
-  - name: wa_language_metadata
-    using:
-      foreign_key_constraint_on:
-        column: ietf_code
-        table:
-          name: wa_language_metadata
-=======
-  - name: gateway_languages
-    using:
-      foreign_key_constraint_on:
-        column: dependent_language_ietf
-        table:
-          name: gateway_language_to_dependent_language
-          schema: public
-  - name: language_alternate_names
-    using:
-      foreign_key_constraint_on:
-        column: ietf_code
-        table:
-<<<<<<< HEAD
-          name: gateway_language_to_dependent_language
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
-=======
           name: language_alternate_name
           schema: public
   - name: localizations
@@ -90,7 +61,6 @@ array_relationships:
         column: ietf_code
         table:
           name: wa_language_metadata
->>>>>>> 0d6d1a1 (lang api adjustments)
           schema: public
 select_permissions:
   - role: anonymous
