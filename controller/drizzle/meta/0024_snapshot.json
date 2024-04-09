@@ -1,6 +1,6 @@
 {
-  "id": "e6f90db0-199b-4232-b5e3-f82b725d7c8c",
-  "prevId": "07f7edc6-676a-4914-9b7b-fb53f4a7064a",
+  "id": "9af501de-7e09-4192-a319-8a583f5ef4ed",
+  "prevId": "4b888b15-8c04-4681-87f6-dc1e4ebe7d94",
   "version": "5",
   "dialect": "pg",
   "tables": {
@@ -24,13 +24,13 @@
           "name": "name",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "namespace": {
           "name": "namespace",
           "type": "varchar(256)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "type": {
           "name": "type",
@@ -69,14 +69,27 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "name_nampespace_idx": {
+          "name": "name_nampespace_idx",
+          "columns": [
+            "name",
+            "namespace"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {
         "content_language_id_language_ietf_code_fk": {
           "name": "content_language_id_language_ietf_code_fk",
           "tableFrom": "content",
           "tableTo": "language",
-          "columnsFrom": ["language_id"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "language_id"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -140,7 +153,9 @@
       "indexes": {
         "alpha_2_idx": {
           "name": "alpha_2_idx",
-          "columns": ["alpha_2"],
+          "columns": [
+            "alpha_2"
+          ],
           "isUnique": true
         }
       },
@@ -149,8 +164,12 @@
           "name": "country_world_region_id_world_region_id_fk",
           "tableFrom": "country",
           "tableTo": "world_region",
-          "columnsFrom": ["world_region_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "world_region_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -181,8 +200,12 @@
           "name": "country_to_language_language_ietf_code_language_ietf_code_fk",
           "tableFrom": "country_to_language",
           "tableTo": "language",
-          "columnsFrom": ["language_ietf_code"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "language_ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -190,8 +213,12 @@
           "name": "country_to_language_country_alpha_2_country_alpha_2_fk",
           "tableFrom": "country_to_language",
           "tableTo": "country",
-          "columnsFrom": ["country_alpha_2"],
-          "columnsTo": ["alpha_2"],
+          "columnsFrom": [
+            "country_alpha_2"
+          ],
+          "columnsTo": [
+            "alpha_2"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -199,7 +226,10 @@
       "compositePrimaryKeys": {
         "country_to_language_pkey": {
           "name": "country_to_language_pkey",
-          "columns": ["language_ietf_code", "country_alpha_2"]
+          "columns": [
+            "language_ietf_code",
+            "country_alpha_2"
+          ]
         }
       },
       "uniqueConstraints": {}
@@ -242,12 +272,17 @@
       "indexes": {
         "username_reponame_idx": {
           "name": "username_reponame_idx",
-          "columns": ["username", "repo_name"],
+          "columns": [
+            "username",
+            "repo_name"
+          ],
           "isUnique": true
         },
         "content_id_idx": {
           "name": "content_id_idx",
-          "columns": ["content_id"],
+          "columns": [
+            "content_id"
+          ],
           "isUnique": true
         }
       },
@@ -256,8 +291,12 @@
           "name": "git_repo_content_id_content_id_fk",
           "tableFrom": "git_repo",
           "tableTo": "content",
-          "columnsFrom": ["content_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -333,12 +372,16 @@
       "indexes": {
         "ietf_idx": {
           "name": "ietf_idx",
-          "columns": ["ietf_code"],
+          "columns": [
+            "ietf_code"
+          ],
           "isUnique": true
         },
         "id_idx": {
           "name": "id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": true
         }
       },
@@ -347,8 +390,12 @@
           "name": "language_home_country_alpha2_country_alpha_2_fk",
           "tableFrom": "language",
           "tableTo": "country",
-          "columnsFrom": ["home_country_alpha2"],
-          "columnsTo": ["alpha_2"],
+          "columnsFrom": [
+            "home_country_alpha2"
+          ],
+          "columnsTo": [
+            "alpha_2"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -382,7 +429,10 @@
       "indexes": {
         "name_ietf_idx": {
           "name": "name_ietf_idx",
-          "columns": ["name", "ietf_code"],
+          "columns": [
+            "name",
+            "ietf_code"
+          ],
           "isUnique": true
         }
       },
@@ -391,8 +441,12 @@
           "name": "language_alternate_name_ietf_code_language_ietf_code_fk",
           "tableFrom": "language_alternate_name",
           "tableTo": "language",
-          "columnsFrom": ["ietf_code"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -423,8 +477,12 @@
           "name": "gateway_language_to_dependent_language_gateway_language_ietf_language_ietf_code_fk",
           "tableFrom": "gateway_language_to_dependent_language",
           "tableTo": "language",
-          "columnsFrom": ["gateway_language_ietf"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "gateway_language_ietf"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         },
@@ -432,8 +490,12 @@
           "name": "gateway_language_to_dependent_language_dependent_language_ietf_language_ietf_code_fk",
           "tableFrom": "gateway_language_to_dependent_language",
           "tableTo": "language",
-          "columnsFrom": ["dependent_language_ietf"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "dependent_language_ietf"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -441,7 +503,10 @@
       "compositePrimaryKeys": {
         "gateway_dependent_pkey": {
           "name": "gateway_dependent_pkey",
-          "columns": ["gateway_language_ietf", "dependent_language_ietf"]
+          "columns": [
+            "gateway_language_ietf",
+            "dependent_language_ietf"
+          ]
         }
       },
       "uniqueConstraints": {}
@@ -481,8 +546,12 @@
           "name": "localization_ietf_code_language_ietf_code_fk",
           "tableFrom": "localization",
           "tableTo": "language",
-          "columnsFrom": ["ietf_code"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -490,7 +559,11 @@
       "compositePrimaryKeys": {
         "localization_pkey": {
           "name": "localization_pkey",
-          "columns": ["ietf_code", "key", "category"]
+          "columns": [
+            "ietf_code",
+            "key",
+            "category"
+          ]
         }
       },
       "uniqueConstraints": {}
@@ -530,8 +603,12 @@
           "name": "nonscriptural_meta_rendering_fk",
           "tableFrom": "nonscriptural_rendering_metadata",
           "tableTo": "rendered_content",
-          "columnsFrom": ["rendering_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "rendering_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -596,7 +673,9 @@
       "indexes": {
         "rendering_unique_idx": {
           "name": "rendering_unique_idx",
-          "columns": ["url"],
+          "columns": [
+            "url"
+          ],
           "isUnique": true
         }
       },
@@ -605,8 +684,12 @@
           "name": "rendered_content_content_id_content_id_fk",
           "tableFrom": "rendered_content",
           "tableTo": "content",
-          "columnsFrom": ["content_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -673,8 +756,12 @@
           "name": "rendering_fk",
           "tableFrom": "scriptural_rendering_metadata",
           "tableTo": "rendered_content",
-          "columnsFrom": ["rendering_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "rendering_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -714,7 +801,9 @@
       "indexes": {
         "content_idx": {
           "name": "content_idx",
-          "columns": ["content_id"],
+          "columns": [
+            "content_id"
+          ],
           "isUnique": true
         }
       },
@@ -723,8 +812,12 @@
           "name": "wa_content_metadata_content_id_content_id_fk",
           "tableFrom": "wa_content_metadata",
           "tableTo": "content",
-          "columnsFrom": ["content_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "content_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -767,8 +860,12 @@
           "name": "metadata_language_fk",
           "tableFrom": "wa_language_metadata",
           "tableTo": "language",
-          "columnsFrom": ["ietf_code"],
-          "columnsTo": ["ietf_code"],
+          "columnsFrom": [
+            "ietf_code"
+          ],
+          "columnsTo": [
+            "ietf_code"
+          ],
           "onDelete": "cascade",
           "onUpdate": "cascade"
         }
@@ -808,7 +905,9 @@
       "indexes": {
         "region_name_idx": {
           "name": "region_name_idx",
-          "columns": ["region"],
+          "columns": [
+            "region"
+          ],
           "isUnique": true
         }
       },

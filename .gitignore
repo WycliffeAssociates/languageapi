@@ -5,3 +5,4 @@ mise.toml
 .tool-versions
 launch.json
 .DS_Store
+fixup.ts

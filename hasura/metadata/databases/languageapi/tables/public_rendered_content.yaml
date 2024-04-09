@@ -5,7 +5,6 @@ object_relationships:
   - name: content
     using:
       foreign_key_constraint_on: content_id
-array_relationships:
   - name: nonscriptural_rendering_metadata
     using:
       foreign_key_constraint_on:
@@ -20,3 +19,15 @@ array_relationships:
         table:
           name: scriptural_rendering_metadata
           schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - file_size_bytes
+        - content_id
+        - file_type
+        - id
+        - url
+        - created_at
+        - modified_on
+      filter: {}

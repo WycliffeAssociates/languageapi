@@ -5,3 +5,12 @@ object_relationships:
   - name: language
     using:
       foreign_key_constraint_on: ietf_code
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - is_gateway
+        - show_on_biel
+        - ietf_code
+        - id
+      filter: {}
