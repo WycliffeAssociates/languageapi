@@ -45,7 +45,7 @@ export async function wacsSbRenderingsApi(
   context: InvocationContext
 ) {
   const namespace = "wacs";
-  let contentCuid: string | null = null; //we need the guid of a content row to insert or upsert on the git Table.
+  let contentCuid: string | null = null; //we need the guid of a content row to insert or upsert on the renderings Table.
 
   // If zod or the db action below throws here, the message will end up in the dead letter queue.
   try {
@@ -70,11 +70,13 @@ export async function wacsSbRenderingsApi(
       name: id,
       namespace,
     });
+    if (currentExistingId) contentCuid = currentExistingId;
     if (!exists) {
       context.log(
         `${namespace}-${id} is not already in api. Creating new row in table`
       );
       const cuid = createId();
+      contentCuid = cuid;
       const newContentPayload = {
         id: cuid,
         name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
@@ -86,8 +88,6 @@ export async function wacsSbRenderingsApi(
       ];
       const newRowRes = await handleContentPost(newContentRow);
       if (newRowRes.status !== 200) {
-        contentCuid = cuid;
-
         context.log(
           `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
         );
@@ -96,27 +96,7 @@ export async function wacsSbRenderingsApi(
         );
       }
     }
-    contentCuid = id ? id : contentCuid;
-    if (!contentCuid) {
-      let matchingRow = await db
-        .select()
-        .from(schema.content)
-        .where(
-          and(
-            eq(
-              schema.content.name,
-              `${parsed.User}/${parsed.Repo}`.toLowerCase()
-            ),
-            eq(schema.content.namespace, namespace)
-          )
-        );
-      if (!matchingRow[0]) {
-        throw new Error(
-          `Could not find content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
-        );
-      }
-      contentCuid = matchingRow[0].id;
-    }
+
     if (!contentCuid) {
       throw new Error(`Failed to find contentCuid for ${id}`);
     }
@@ -186,7 +166,18 @@ export async function wacsSbRenderingsApi(
         if (postResult.status != 200) {
           tx.rollback();
           if (postResult.jsonBody) {
-            throw new Error(postResult.jsonBody.message || "failed to delete");
+            if (postResult.jsonBody.additionalErrors) {
+              const errMessage = JSON.stringify(
+                `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n 
+                LAST ERR: 
+                ${postResult.jsonBody.message}`
+              );
+              throw new Error(errMessage);
+            } else {
+              throw new Error(
+                postResult.jsonBody.message || "failed to delete"
+              );
+            }
           }
         }
       }

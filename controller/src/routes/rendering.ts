@@ -95,22 +95,16 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     const validationSchema = validators.renderingsPost;
     const payloadParsed = validationSchema.parse(payload);
     const payloadsWithNamespacedId = payloadParsed.map((payload) => {
-      const {namespace, ...renderPayload} = payload;
-      // port making content ids that are like user-repo.  It should provide a contentId that matches (e.g. user-repo) and a namesapce (dcs).   We prefix it here and make that that its contentId so 'dcs-user-repo'. Another, non-git-system might just use 'ab-en_ulb' for its content id if en_ulb is all it needs as its content identifier. So this is just normalizing and consolidating the namespace plus provided contentId
-      const contentId = `${namespace}-${renderPayload.contentId}`.toLowerCase();
-      if (renderPayload.nonScripturalMeta) {
+      if (payload.nonScripturalMeta) {
         // I'm intentionally adding string of wrong type here.  and below for expect error. These will not be inserted. I'm adding this property as a way to ensure that in the transaction, once the renderigns are inserted, I can pluck the ids off the inserts ids and map it back to the metadata via this common obj. property
         // @ts-expect-error
-        renderPayload.nonScripturalMeta.renderingId = contentId;
+        payload.nonScripturalMeta.renderingId = payload.contentId;
       }
-      if (renderPayload.scripturalMeta) {
+      if (payload.scripturalMeta) {
         // @ts-expect-error
-        renderPayload.scripturalMeta.renderingId = contentId;
+        payload.scripturalMeta.renderingId = payload.contentId;
       }
-      return {
-        ...renderPayload,
-        contentId: `${namespace}-${renderPayload.contentId}`.toLowerCase(),
-      };
+      return payload;
     });
 
     type accType = {

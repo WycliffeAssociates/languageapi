@@ -111,6 +111,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
         dbTableValidators.insertGitRepo & temporaryNameSpaceMapper
       >;
     };
+    // Thhis namesapce/name is a unique constraint on the content table, so we can stick those on the meta and git tables temporarily to map back from the inserted content rows to get their ID's.
     type temporaryNameSpaceMapper = {
       namespace: string;
       name: string;
@@ -123,7 +124,6 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
           const metaPayload: dbTableValidators.insertWaContentMeta &
             temporaryNameSpaceMapper = {
             ...meta,
-            // todo: namespace-name is the human readable way to get a content row, so temporarily put those on meta and git ancillary objeects, so that once in or upserted we can map the ID's back to the these two tables.
             contentId: restContent.id,
             namespace: restContent.namespace,
             name: restContent.name,
