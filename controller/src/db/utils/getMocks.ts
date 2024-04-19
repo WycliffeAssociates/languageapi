@@ -1,6 +1,7 @@
 import {faker} from "@faker-js/faker";
 import * as apiValidators from "../../routes/validation";
 import {z} from "zod";
+import {createId} from "@paralleldrive/cuid2";
 let mocksToCopys: any = {
   language: [],
   country: [],
@@ -187,7 +188,7 @@ export function getMockedRendering(
   type: "scripture" | "nonscripture" = "scripture"
 ) {
   type apiKeys = z.infer<typeof apiValidators.renderingsPost.element>;
-  const randomUUid = crypto.randomUUID();
+  const randomUUid = createId();
 
   const mockedRender: apiKeys = {
     tempId: randomUUid,

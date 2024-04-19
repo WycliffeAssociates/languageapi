@@ -108,7 +108,8 @@ export async function wacsSbRenderingsApi(
 
     const dbPayload: z.infer<typeof validators.renderingsPost> =
       parsed.RenderedFiles.map((payload) => {
-        const randomUUid = crypto.randomUUID();
+        // Used to tie together metadata to rendering
+        const randomUUid = createId();
         let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
           tempId: randomUUid,
           namespace,
