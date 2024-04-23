@@ -1,4 +1,3 @@
-import react from "react";
 import {useEffect, useState} from "react";
 import {getHighlighter, type Highlighter} from "shiki";
 import {CopyCodeBtn} from "./components/CopyCodeBtn";
