@@ -4,22 +4,19 @@
   "private": true,
   "dependencies": {
     "@hasura/public-graphiql": "^0.1.22",
-    "graphql": "^16.7.1",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "@types/react": "^16.0.0",
+    "@types/react-dom": "^16.0.0",
+    "graphql": "^16.7.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": " 7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": " 7.21.11",
+    "shiki": "^1.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

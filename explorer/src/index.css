@@ -47,3 +47,28 @@ code {
 .change-endpoint-button:hover {
   background-color: #f2f2f2;
 }
+
+.docs-code-block {
+  border: solid 1px black;
+  padding: 0.5rem 3rem 0.5rem 1rem;
+}
+.docs-code-container {
+  width: fit-content;
+}
+.docs-code-block h1 {
+  width: fit-content;
+  margin: 0;
+}
+.relative {
+  position: relative;
+}
+/* .docs-code-block {
+  padding: 1rem 0.5rem;
+  border: solid 1px black;
+  position: relative;
+} */
+.docs-code-block-copy-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}

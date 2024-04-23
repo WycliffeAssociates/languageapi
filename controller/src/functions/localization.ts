@@ -17,7 +17,11 @@ export async function populateLocalization(
   myTimer: Timer,
   context: InvocationContext
 ): Promise<void> {
-  context.log("Timer function processed request.");
+  context.log(
+    `Timer function processed request. at ${new Date()}.  Next is ${
+      myTimer.scheduleStatus?.next
+    }`
+  );
   const bookNamesResult = await populateScripturalBookNames();
   context.log(
     Array.isArray(bookNamesResult)
@@ -49,9 +53,9 @@ async function populationResourceTypes() {
     tableKey: "localization",
     content: payload,
     onConflictDoUpdateArgs: {
-      target: [table.ietfCode, table.key],
+      target: [table.ietfCode, table.key, table.category],
       // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. For localization though, it just updates the value.
-      set: onConflictSetAllFieldsToSqlExcluded(table, ["ietfCode", "key"]),
+      set: onConflictSetAllFieldsToSqlExcluded(table, ["value"]),
     },
   });
   return res;
@@ -104,6 +108,18 @@ async function populateScripturalBookNames() {
       )
     )
     .as("sq");
+  // for debuggin
+  // const finalSql = db
+  //   .select({
+  //     book_name: subquery.book_name,
+  //     book_slug: subquery.book_slug,
+  //     ietf_code: subquery.ietf_code,
+  //     id: subquery.id,
+  //   })
+  //   .from(subquery)
+  //   .where(eq(subquery.rn, 1))
+  //   .orderBy(subquery.ietf_code, subquery.book_slug)
+  //   .toSQL();
   const result = await db
     .select({
       book_name: subquery.book_name,
@@ -141,15 +157,16 @@ async function populateScripturalBookNames() {
     tableKey: "localization",
     content: payload,
     onConflictDoUpdateArgs: {
-      target: [table.ietfCode, table.key],
-      set: onConflictSetAllFieldsToSqlExcluded(table, ["ietfCode", "key"]),
+      target: [table.ietfCode, table.key, table.category],
+      // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. For localization though, it just updates the value.
+      set: onConflictSetAllFieldsToSqlExcluded(table, ["value"]),
     },
   });
   return inserted;
 }
 
 app.timer("manageLocalizationTable", {
-  schedule: "0 0 0 * * *",
+  schedule: "*/30 * * * * *",
   handler: populateLocalization,
   useMonitor: false,
 });
