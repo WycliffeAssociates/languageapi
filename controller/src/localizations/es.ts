@@ -1,5 +1,9 @@
-import en from "./en";
-import es from "./es";
-export const localizations = [en, es];
-
-// Obj
+const en = {
+  tw: "Translations Words",
+  tn: "Translation Notes"
+};
+export type keysType = keyof typeof en;
+export default {
+  dict: en,
+  ietf: "es-419"
+};
