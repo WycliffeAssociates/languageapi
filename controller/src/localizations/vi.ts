@@ -5,5 +5,5 @@ const en = {
 export type keysType = keyof typeof en;
 export default {
   dict: en,
-  ietf: "es-419"
+  ietf: "en"
 };
