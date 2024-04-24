@@ -1,9 +1,9 @@
-const en = {
-  tw: "Translations Words",
-  tn: "Translation Notes"
+import type { keysType } from "./en";
+export const es: Record<keysType, string> = {
+  tn: "Notas de traducción",
+  tw: "Palabras de traducción"
 };
-export type keysType = keyof typeof en;
 export default {
-  dict: en,
-  ietf: "en"
+  dict: es,
+  ietf: "es-419"
 };
