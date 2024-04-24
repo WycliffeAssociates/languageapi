@@ -1,6 +1,7 @@
 const en = {
   tw: "Translations Words",
-  tn: "Translation Notes"
+  tn: "Translation Notes",
+  obs: "Open Bible Stories"
 };
 export type keysType = keyof typeof en;
 export default {
