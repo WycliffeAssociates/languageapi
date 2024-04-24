@@ -1,7 +1,9 @@
-import type {keysType} from "./en";
-export const es: Record<keysType, string> = {
-  tn: "Notas de traducción",
-  tw: "Palabras de traducción",
+const en = {
+  tw: "Translations Words",
+  tn: "Translation Notes"
 };
-
-export default {dict: es, ietf: "es-419"};
+export type keysType = keyof typeof en;
+export default {
+  dict: en,
+  ietf: "en"
+};
