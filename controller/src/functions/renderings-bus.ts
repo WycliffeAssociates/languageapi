@@ -24,7 +24,6 @@ const renderedFileSchema = z.object({
 });
 
 const titlesSchema = z.record(z.string().nullable());
-const titlesSchema = z.record(z.string().nullable());
 
 const renderingsSchema = z.object({
   Successful: z.boolean(),
@@ -164,7 +163,6 @@ export async function wacsSbRenderingsApi(
       } else {
         // Insert new renderings and meta
         context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
-        context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
         const postResult = await handleRenderingPost(dbPayload);
         if (postResult.status != 200) {
           tx.rollback();
@@ -186,7 +184,6 @@ export async function wacsSbRenderingsApi(
       }
     });
   } catch (error) {
-    context.error(`Error processing ${JSON.stringify(message)}`);
     context.error(`Error processing ${JSON.stringify(message)}`);
     context.error(error);
     if (error instanceof z.ZodError) {

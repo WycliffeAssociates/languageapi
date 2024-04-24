@@ -1,7 +1,6 @@
 import {app, InvocationContext} from "@azure/functions";
 import {getDb as startDb} from "../db/config";
 import {z} from "zod";
-<<<<<<< HEAD
 import {eq, and} from "drizzle-orm";
 import {handlePost as handleGitPost} from "../routes/git";
 import {handlePost as handleContentPost} from "../routes/content";
@@ -12,13 +11,6 @@ import * as dbSchema from "../db/schema/schema";
 const db = startDb();
 
 // import {createId} from "@paralleldrive/cuid2";
-=======
-import {handlePost as handleGitPost} from "../routes/git";
-import {handlePost as handleContentPost} from "../routes/content";
-import * as validators from "../routes/validation";
-import {checkContentExists} from "../functions/renderings-bus";
-startDb();
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
 
 const latestCommitSchema = z.object({
   Hash: z.string(),
@@ -45,7 +37,6 @@ export async function wacsSbLangApi(
   message: unknown,
   context: InvocationContext
 ) {
-<<<<<<< HEAD
   const namespace = "wacs";
   // If zod or the db action below throws here, the message will end up in the dead letter queue.
   try {
@@ -110,45 +101,6 @@ export async function wacsSbLangApi(
     const shapedForDb: z.infer<typeof validators.gitPost> = [
       {
         contentId: contentCuid,
-=======
-  // If zod or the db action below throws here, the message will end up in the dead letter queue.
-  try {
-    context.log(message);
-    const parsed = eventSchema.parse(message);
-    context.log(
-      `GIT BUS RECEIVED: received a message for ${parsed.Repo} of event type ${parsed.EventType}`
-    );
-    const thatContentRowExists = await checkContentExists(
-      `wac-${parsed.User}/${parsed.Repo}`.toLowerCase()
-    );
-    if (!thatContentRowExists) {
-      context.log(
-        `wac-${parsed.User}/${parsed.Repo} is not already in api. Creating new row in table`
-      );
-      const newContentRow: z.infer<typeof validators.contentPost> = [
-        {
-          namespace: "wacs",
-          id: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
-          type: "text",
-        },
-      ];
-      const newRowRes = await handleContentPost(newContentRow);
-      if (newRowRes.status !== 200) {
-        context.log(
-          `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
-        );
-        throw new Error(
-          `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
-        );
-      }
-    }
-
-    // api built with bulk ops in mind, so arrays are passed, even for single op, versus having insertSingle vs insertMany type routes
-    const shapedForDb: z.infer<typeof validators.gitPost> = [
-      {
-        namespace: "wacs",
-        contentId: `${parsed.User}/${parsed.Repo}`,
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
         repoName: parsed.Repo,
         repoUrl: parsed.RepoHtmlUrl,
         username: parsed.User,

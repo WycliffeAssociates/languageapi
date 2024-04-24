@@ -48,7 +48,6 @@ array_relationships:
         table:
           name: language_alternate_name
           schema: public
-<<<<<<< HEAD
   - name: localizations
     using:
       foreign_key_constraint_on:
@@ -62,21 +61,6 @@ array_relationships:
         column: ietf_code
         table:
           name: wa_language_metadata
-=======
-  - name: gateway_languages
-    using:
-      foreign_key_constraint_on:
-        column: dependent_language_ietf
-        table:
-          name: gateway_language_to_dependent_language
-          schema: public
-  - name: dependent_languages
-    using:
-      foreign_key_constraint_on:
-        column: gateway_language_ietf
-        table:
-          name: gateway_language_to_dependent_language
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
           schema: public
 select_permissions:
   - role: anonymous

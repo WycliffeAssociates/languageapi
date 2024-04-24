@@ -98,13 +98,8 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     const payloadParsed = validationSchema.parse(payload);
     const payloadsWithGuids = payloadParsed.map((payload) => {
       return {
-<<<<<<< HEAD
         ...payload,
         id: createId(),
-=======
-        ...contentPayload,
-        id: `${namespace}-${contentPayload.id}`.toLowerCase(),
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties)
       };
     });
     type accType = {

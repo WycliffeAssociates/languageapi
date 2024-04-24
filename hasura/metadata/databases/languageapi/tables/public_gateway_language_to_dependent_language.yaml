@@ -2,21 +2,12 @@ table:
   name: gateway_language_to_dependent_language
   schema: public
 object_relationships:
-<<<<<<< HEAD:hasura/metadata/databases/languageapi/tables/public_gateway_language_to_dependent_language.yaml
   - name: dependent_language
     using:
       foreign_key_constraint_on: dependent_language_ietf
   - name: gateway_language
     using:
       foreign_key_constraint_on: gateway_language_ietf
-=======
-  - name: gateway_language
-    using:
-      foreign_key_constraint_on: gateway_language_ietf
-  - name: dependent_language
-    using:
-      foreign_key_constraint_on: dependent_language_ietf
->>>>>>> 90cec3e (add renderings table.  Move gateway to walangmeta. Rename some properties):hasura/metadata/databases/languageapi/tables/public_languages_to_languages.yaml
 select_permissions:
   - role: anonymous
     permission:
