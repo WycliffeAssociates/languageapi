@@ -1,9 +1,5 @@
-import type { keysType } from "./en";
-export const es: Record<keysType, string> = {
-  tn: "Notas de traducción",
-  tw: "Palabras de traducción"
-};
-export default {
-  dict: es,
-  ietf: "es-419"
-};
+import en from "./en";
+import es from "./es";
+export const localizations = [en, es];
+
+// Obj
