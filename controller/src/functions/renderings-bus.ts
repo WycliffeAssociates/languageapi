@@ -10,7 +10,7 @@ import * as validators from "../routes/validation";
 import * as schema from "../db/schema/schema";
 import {and, eq} from "drizzle-orm";
 import {createId} from "@paralleldrive/cuid2";
-import {determineResourceType} from "src/utils";
+import {determineResourceType} from "../utils";
 
 const db = startDb();
 

@@ -27,8 +27,7 @@ import {getDb} from "../db/config";
 import {onConflictSetAllFieldsToSqlExcluded} from "../utils";
 import {z} from "zod";
 import {PostgresError} from "postgres";
-import {languagesToLanguages} from "../db/schema/schema";
-import {doBlackListLangauge} from "src/lib/blacklist";
+import {doBlackListLangauge} from "../lib/blacklist";
 
 // FILE LEVEL SCOPE
 const db = getDb();
