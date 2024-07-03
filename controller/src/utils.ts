@@ -239,7 +239,7 @@ export function determineResourceType(slug: string) {
   if (bibleBookSortOrder[upperSlug] !== undefined) {
     return "scripture";
   }
-  if (["ULB", "UDB", "F10", "REG"].includes(upperSlug)) {
+  if (["ULB", "UDB", "F10", "REG", "BIBLE"].includes(upperSlug)) {
     return "scripture";
   }
   if (["TN", "TQ", "BC"].includes(upperSlug)) {
@@ -248,5 +248,5 @@ export function determineResourceType(slug: string) {
   if (["TW"].includes(upperSlug)) {
     return "peripheral";
   }
-  return "unknown";
+  return null;
 }
