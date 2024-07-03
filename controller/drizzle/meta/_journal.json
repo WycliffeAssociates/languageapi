@@ -176,6 +176,13 @@
       "when": 1712691755151,
       "tag": "0024_daffy_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "5",
+      "when": 1720020864257,
+      "tag": "0025_wandering_snowbird",
+      "breakpoints": true
     }
   ]
 }
