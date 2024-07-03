@@ -2,8 +2,8 @@
 -- REMOVE OLD CONSTRAINTS
 ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gateway_language_ietf_language_ietf_code";
 --> statement-breakpoint
-
 ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gateway_language_to_ietf_language_ietf_c";
+ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_pkey";
 --> statement-breakpoint
 
 -- ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gateway_language_ietf_gateway_language_t";
