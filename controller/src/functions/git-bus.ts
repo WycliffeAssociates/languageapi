@@ -5,9 +5,9 @@ import {eq, and} from "drizzle-orm";
 import {handlePost as handleGitPost} from "../routes/git";
 import {handlePost as handleContentPost} from "../routes/content";
 import * as validators from "../routes/validation";
-import {checkContentExists} from "../functions/renderings-bus";
 import {createId} from "@paralleldrive/cuid2";
 import * as dbSchema from "../db/schema/schema";
+import {checkContentExists} from "../utils";
 const db = startDb();
 
 // import {createId} from "@paralleldrive/cuid2";
@@ -46,10 +46,10 @@ export async function wacsSbLangApi(
     context.log(
       `GIT BUS RECEIVED: received a message for ${parsed.Repo} of event type ${parsed.EventType}`
     );
-    // todo: check on name/namesapce,
     const {exists, id} = await checkContentExists({
       name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
       namespace: namespace,
+      db,
     });
     if (!exists) {
       context.log(

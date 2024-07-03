@@ -7,12 +7,10 @@ import {
 } from "../routes/rendering";
 import {handlePost as handleContentPost} from "../routes/content";
 import * as validators from "../routes/validation";
-import * as schema from "../db/schema/schema";
-import {and, eq} from "drizzle-orm";
+import {checkContentExists} from "../utils";
 import {createId} from "@paralleldrive/cuid2";
 
 const db = startDb();
-
 const renderedFileSchema = z.object({
   Path: z.string(),
   Size: z.number(),
@@ -61,6 +59,7 @@ export async function wacsSbRenderingsApi(
       return;
     }
     const parsed = renderingsSchema.parse(message);
+    // Id for wacs text repos is this user/repo lower string
     const id = `${parsed.User}/${parsed.Repo}`.toLowerCase();
     context.log(
       `RENDERINGS BUS RECEIVED: received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`
@@ -69,8 +68,11 @@ export async function wacsSbRenderingsApi(
     const {exists, id: currentExistingId} = await checkContentExists({
       name: id,
       namespace,
+      db,
     });
-    if (currentExistingId) contentCuid = currentExistingId;
+    if (currentExistingId) {
+      contentCuid = currentExistingId;
+    }
     if (!exists) {
       context.log(
         `${namespace}-${id} is not already in api. Creating new row in table`
@@ -194,27 +196,6 @@ export async function wacsSbRenderingsApi(
   }
 }
 
-export async function checkContentExists({
-  name,
-  namespace,
-}: {
-  name: string;
-  namespace: string;
-}) {
-  const doesExist = await db
-    .select({id: schema.content.id})
-    .from(schema.content)
-    .where(
-      and(
-        eq(schema.content.namespace, namespace),
-        eq(schema.content.name, name)
-      )
-    );
-
-  let dbId = doesExist[0]?.id ?? null;
-
-  return {exists: doesExist.length > 0, id: dbId};
-}
 console.log("booting up the renderings bus listener");
 app.serviceBusTopic("waLangApiRenderings", {
   connection: "BUS_CONN",

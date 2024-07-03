@@ -99,7 +99,8 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     const payloadsWithGuids = payloadParsed.map((payload) => {
       return {
         ...payload,
-        id: createId(),
+        // some routes provide their own unique cuids
+        id: payload.id ? payload.id : createId(),
       };
     });
     type accType = {

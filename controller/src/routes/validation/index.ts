@@ -79,7 +79,7 @@ export const contentDelete = z.object({
 /* //@===========  Renderings   ===========   */
 export const contentRenderingWithMeta =
   dbValidators.insertRenderingSchema.extend({
-    tempId: z.string(),
+    tempId: z.string(), //Tghis is used not in db, but for doing some connecting meta and rendering during batched inserts.
     fileType: z.string().trim().toLowerCase(),
     namespace: z.string().trim().toLowerCase(),
     scripturalMeta: dbValidators.insertScripturalRenderingMetadataSchema
