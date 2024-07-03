@@ -24,7 +24,7 @@ export async function polymorphicInsert<T extends zodValidationKeys>({
   onConflictDoNothingArgs,
 }: polymorphicInsertArgs<T>): Promise<ModelType<T>[] | handlerReturnError> {
   const handle = transactionHandle ? transactionHandle : db;
-  // db will thorw if this isn't the proper content, but all the api routes have zod validations in them at their call sites
+  // db will thorw if this isn't the proper content, but all the api routes have zod validations in them at their call sites. So this is just an extra layer of protection on data integrity for getting an array;
   const validator = z.array(z.unknown());
   const dbTable = validations.insertSchemas[tableKey].table;
   try {

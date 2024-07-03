@@ -1,5 +1,5 @@
 table:
-  name: wa_language_meta
+  name: localization
   schema: public
 object_relationships:
   - name: language
@@ -9,8 +9,8 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - show_on_biel
+        - category
         - ietf_code
-        - id
+        - key
+        - value
       filter: {}
-      allow_aggregations: true

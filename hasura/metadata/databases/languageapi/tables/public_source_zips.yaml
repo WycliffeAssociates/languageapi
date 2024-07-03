@@ -1,0 +1,21 @@
+table:
+  name: source_zips
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - unique_book_slugs_count
+        - show_on_biel
+        - id
+        - meta_status
+        - name
+        - namespace
+        - language_english_name
+        - language_name
+        - resource_type
+        - zip_url
+        - created_on
+        - modified_on
+        - domain
+      filter: {}

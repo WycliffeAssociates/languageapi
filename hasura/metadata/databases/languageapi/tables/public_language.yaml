@@ -5,6 +5,13 @@ object_relationships:
   - name: country
     using:
       foreign_key_constraint_on: home_country_alpha2
+  - name: wa_language_meta
+    using:
+      foreign_key_constraint_on:
+        column: ietf_code
+        table:
+          name: wa_language_meta
+          schema: public
 array_relationships:
   - name: contents
     using:
@@ -20,6 +27,20 @@ array_relationships:
         table:
           name: country_to_language
           schema: public
+  - name: dependent_languages
+    using:
+      foreign_key_constraint_on:
+        column: gateway_language_ietf
+        table:
+          name: gateway_language_to_dependent_language
+          schema: public
+  - name: gateway_languages
+    using:
+      foreign_key_constraint_on:
+        column: dependent_language_ietf
+        table:
+          name: gateway_language_to_dependent_language
+          schema: public
   - name: language_alternate_names
     using:
       foreign_key_constraint_on:
@@ -27,26 +48,19 @@ array_relationships:
         table:
           name: language_alternate_name
           schema: public
-  - name: languagesToLanguagesByGatewayLanguageToIetf
-    using:
-      foreign_key_constraint_on:
-        column: gateway_language_to_ietf
-        table:
-          name: languages_to_languages
-          schema: public
-  - name: languages_to_languages
-    using:
-      foreign_key_constraint_on:
-        column: gateway_language_ietf
-        table:
-          name: languages_to_languages
-          schema: public
-  - name: wa_language_meta
+  - name: localizations
     using:
       foreign_key_constraint_on:
         column: ietf_code
         table:
-          name: wa_language_meta
+          name: localization
+          schema: public
+  - name: wa_language_metadata
+    using:
+      foreign_key_constraint_on:
+        column: ietf_code
+        table:
+          name: wa_language_metadata
           schema: public
 select_permissions:
   - role: anonymous

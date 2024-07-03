@@ -56,9 +56,9 @@ async function handle(
   try {
     switch (request.method) {
       case "POST":
-        return handlePost({request, table});
+        return handlePostRequest({request, table});
       case "DELETE":
-        return handleDel({request, table});
+        return handleDelRequest({request, table});
       case "GET":
         return handleGet({request, table});
       default:
@@ -79,40 +79,42 @@ async function handle(
     });
   }
 }
-async function handlePost<T extends TableConfig>({
+async function handlePostRequest<T extends TableConfig>({
   request,
 }: apiRouteHandlerArgs<T>): Promise<HttpResponseInit> {
+  const payload = await request.json();
+  const result = await handlePost(payload);
+  return result;
+}
+export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
 
   try {
-    const payload = await request.json();
     const validationSchema = validators.renderingsPost;
     const payloadParsed = validationSchema.parse(payload);
     const payloadsWithNamespacedId = payloadParsed.map((payload) => {
-      const {namespace, ...renderPayload} = payload;
-      // port making content ids that are like user-repo.  It should provide a contentId that matches (e.g. user-repo) and a namesapce (dcs).   We prefix it here and make that that its contentId so 'dcs-user-repo'. Another, non-git-system might just use 'ab-en_ulb' for its content id if en_ulb is all it needs as its content identifier. So this is just normalizing and consolidating the namespace plus provided contentId
-      const contentId = `${namespace.toLowerCase()}-${renderPayload.contentId}`;
-      if (renderPayload.nonScripturalMeta) {
+      if (payload.nonScripturalMeta) {
         // I'm intentionally adding string of wrong type here.  and below for expect error. These will not be inserted. I'm adding this property as a way to ensure that in the transaction, once the renderigns are inserted, I can pluck the ids off the inserts ids and map it back to the metadata via this common obj. property
         // @ts-expect-error
-        renderPayload.nonScripturalMeta.renderingId = contentId;
+        payload.nonScripturalMeta.renderingId = payload.contentId;
       }
-      if (renderPayload.scripturalMeta) {
+      if (payload.scripturalMeta) {
         // @ts-expect-error
-        renderPayload.scripturalMeta.renderingId = contentId;
+        payload.scripturalMeta.renderingId = payload.contentId;
       }
-      return {
-        ...renderPayload,
-        contentId: `${namespace.toLowerCase()}-${renderPayload.contentId}`,
-      };
+      return payload;
     });
 
     type accType = {
-      renderPayloads: dbTableValidators.insertRendering[];
-      scripturalMetaPayloads: dbTableValidators.insertScripturalRenderingMetadata[];
-      nonScripturalMetaPayloads: dbTableValidators.insertNonScripturalRenderingMetadata[];
+      renderPayloads: ({tempId: string} & dbTableValidators.insertRendering)[];
+      scripturalMetaPayloads: ({
+        tempId: string;
+      } & dbTableValidators.insertScripturalRenderingMetadata)[];
+      nonScripturalMetaPayloads: ({
+        tempId: string;
+      } & dbTableValidators.insertNonScripturalRenderingMetadata)[];
     };
 
     const reduced = payloadsWithNamespacedId.reduce(
@@ -133,7 +135,7 @@ async function handlePost<T extends TableConfig>({
 
     const transacted = await db.transaction(async (tx) => {
       const renderingInserted = await polymorphicInsert({
-        tableKey: "rendering", //extra string for type completion instead of tablename
+        tableKey: "rendering", //extra string for type completion instead of tablename variable above
         content: reduced.renderPayloads,
         transactionHandle: tx,
         onConflictDoUpdateArgs: {
@@ -143,21 +145,38 @@ async function handlePost<T extends TableConfig>({
       });
       if (Array.isArray(renderingInserted)) {
         reduced.scripturalMetaPayloads.forEach((payload) => {
-          const matching = renderingInserted.find((inserted) => {
+          const matchingWithTmpId = reduced.renderPayloads.find((inserted) => {
             // map back from expected error above
-            return inserted.contentId == String(payload.renderingId);
+            return inserted.tempId == payload.tempId;
           });
-          if (matching) {
-            // adjust to number id instead of string
-            payload.renderingId = matching.id;
+
+          if (matchingWithTmpId) {
+            const matchingFromInserted = renderingInserted.find((inserted) => {
+              return (
+                inserted.hash == matchingWithTmpId.hash &&
+                inserted.url == matchingWithTmpId.url
+              );
+            });
+            if (matchingFromInserted) {
+              // adjust to number id instead of string
+              payload.renderingId = matchingFromInserted.id;
+            }
           }
         });
         reduced.nonScripturalMetaPayloads.forEach((payload) => {
-          const matching = renderingInserted.find((inserted) => {
-            return inserted.contentId == String(payload.renderingId);
+          const matchingWithTmpId = reduced.renderPayloads.find((inserted) => {
+            return inserted.tempId == payload.tempId;
           });
-          if (matching) {
-            payload.renderingId = matching.id;
+          if (matchingWithTmpId) {
+            const matchingFromInserted = renderingInserted.find((inserted) => {
+              return (
+                inserted.hash == matchingWithTmpId.hash &&
+                inserted.url == matchingWithTmpId.url
+              );
+            });
+            if (matchingFromInserted) {
+              payload.renderingId = matchingFromInserted.id;
+            }
           }
         });
       }
@@ -229,19 +248,21 @@ async function handlePost<T extends TableConfig>({
   }
 }
 
-async function handleDel<T extends TableConfig>({
+async function handleDelRequest<T extends TableConfig>({
   request,
-  table,
 }: apiRouteHandlerArgs<T>): Promise<HttpResponseInit> {
+  const payload = await request.json();
+  const result = await handleDel(payload);
+  return result;
+}
+export async function handleDel(payload: unknown): Promise<HttpResponseInit> {
   const thisMethod = "delete";
   try {
-    const deletedPayloads = await request.json();
     const deleteSchema = validators.renderingDelete;
-    const deletePayloadsParsed = deleteSchema.parse(deletedPayloads);
-    const rowsToDeleteByContentId = deletePayloadsParsed.contentIds.map(
-      (row) => `${row.namespace}-${row.id}`
-    );
+    const deletePayloadsParsed = deleteSchema.parse(payload);
+    const rowsToDeleteByContentId = deletePayloadsParsed.contentIds;
 
+    // E.g. delete all rendergins (and cascade accross) where the guid of a project is passed
     const deleteOnField = schema.rendering.contentId;
     // const deleteOn
     const result = await polymorphicDelete(

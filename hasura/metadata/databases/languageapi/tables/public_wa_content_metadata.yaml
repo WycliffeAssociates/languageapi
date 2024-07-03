@@ -1,5 +1,5 @@
 table:
-  name: wa_content_meta
+  name: wa_content_metadata
   schema: public
 object_relationships:
   - name: content

@@ -1,0 +1,1 @@
+DROP TABLE "connected_content";

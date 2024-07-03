@@ -47,10 +47,6 @@ export const langMetaRelations = relations(db.waLangMetadata, ({one}) => ({
 }));
 export const contentRelations = relations(db.content, ({one, many}) => ({
   renderings: many(db.rendering),
-  gitRepo: one(db.gitRepo, {
-    fields: [db.content.gitId],
-    references: [db.gitRepo.id],
-  }),
 }));
 
 export const contentMetaRelations = relations(
@@ -63,19 +59,6 @@ export const contentMetaRelations = relations(
   })
 );
 
-export const connectedContentRelations = relations(
-  db.connectedContent,
-  ({one}) => ({
-    content1: one(db.content, {
-      fields: [db.connectedContent.contentId1],
-      references: [db.content.id],
-    }),
-    content2: one(db.content, {
-      fields: [db.connectedContent.contentId2],
-      references: [db.content.id],
-    }),
-  })
-);
 export const gitRepoRelations = relations(db.gitRepo, ({one}) => ({
   content: one(db.content, {
     fields: [db.gitRepo.contentId],
@@ -90,10 +73,6 @@ export const renderingRelations = relations(db.rendering, ({one}) => ({
   }),
 }));
 
-// export const countryRelations = relations(db.country, ({one, many}) => ({
-//   province: many(db.province),
-//   countryRegion: many(db.countryRegion),
-// }));
 export const worldRegionRelations = relations(
   db.worldRegion,
   ({one, many}) => ({

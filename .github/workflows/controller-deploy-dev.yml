@@ -34,6 +34,7 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           DATABASE_URL: "op://AppDev Scripture Accessibility/languageapi-dev/connection string"
+          BUS_CONN: "op://AppDev Scripture Accessibility/languageapi-bus-con/dev/conn_string"
       - name: "Load PNPM"
         uses: pnpm/action-setup@v2
         with:

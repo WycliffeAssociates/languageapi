@@ -26,6 +26,7 @@ import * as schema from "../db/schema/schema";
 import {eq, inArray} from "drizzle-orm";
 import {TableConfig} from "drizzle-orm/pg-core";
 import {getDb} from "../db/config";
+import {createId} from "@paralleldrive/cuid2";
 
 // FILE LEVEL SCOPE
 const db = getDb();
@@ -55,7 +56,7 @@ async function handle(
   try {
     switch (request.method) {
       case "POST":
-        return handlePost({request, table});
+        return handlePostRequest({request, table});
       case "DELETE":
         return handleDel({request, table});
       case "GET":
@@ -79,44 +80,63 @@ async function handle(
   }
 }
 
-async function handlePost<T extends TableConfig>({
+async function handlePostRequest<T extends TableConfig>({
   request,
 }: apiRouteHandlerArgs<T>): Promise<HttpResponseInit> {
+  const payload = await request.json();
+  const result = await handlePost(payload);
+  return result;
+}
+
+export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
   try {
-    const payload = await request.json();
     // Parse here cause countries come with additional ietf from port
     const validationSchema = validators.contentPost;
     const payloadParsed = validationSchema.parse(payload);
-    const payloadsWithNamespacedId = payloadParsed.map((payload) => {
-      const {namespace, ...contentPayload} = payload;
+    const payloadsWithGuids = payloadParsed.map((payload) => {
       return {
-        ...contentPayload,
-        id: `${namespace.toLowerCase()}-${contentPayload.id}`,
+        ...payload,
+        id: createId(),
       };
     });
     type accType = {
       contentPayloads: dbTableValidators.insertContent[];
-      contentMetaPayloads: dbTableValidators.insertWaContentMeta[];
-      gitPayload: dbTableValidators.insertGitRepo[];
+      contentMetaPayloads: Array<
+        dbTableValidators.insertWaContentMeta & temporaryNameSpaceMapper
+      >;
+      gitPayload: Array<
+        dbTableValidators.insertGitRepo & temporaryNameSpaceMapper
+      >;
     };
-    const split = payloadsWithNamespacedId.reduce(
+    // Thhis namesapce/name is a unique constraint on the content table, so we can stick those on the meta and git tables temporarily to map back from the inserted content rows to get their ID's.
+    type temporaryNameSpaceMapper = {
+      namespace: string;
+      name: string;
+    };
+    const split = payloadsWithGuids.reduce(
       (acc: accType, curr) => {
         const {meta, gitEntry, ...restContent} = curr;
         acc.contentPayloads.push(restContent);
         if (meta) {
-          const metaPayload: dbTableValidators.insertWaContentMeta = {
+          const metaPayload: dbTableValidators.insertWaContentMeta &
+            temporaryNameSpaceMapper = {
             ...meta,
             contentId: restContent.id,
+            namespace: restContent.namespace,
+            name: restContent.name,
           };
           acc.contentMetaPayloads.push(metaPayload);
         }
         if (gitEntry) {
-          const entry: dbTableValidators.insertGitRepo = {
+          const entry: dbTableValidators.insertGitRepo &
+            temporaryNameSpaceMapper = {
             ...gitEntry,
             contentId: restContent.id, //git route requires a namespace to match, but if it were passed as a batch to "content" then we can just tack it on here and skip the namespacing.
+            namespace: restContent.namespace,
+            name: restContent.name,
           };
           acc.gitPayload.push(entry);
         }
@@ -138,12 +158,36 @@ async function handlePost<T extends TableConfig>({
         content: split.contentPayloads,
         transactionHandle: tx,
         onConflictDoUpdateArgs: {
-          target: schema.content.id,
+          // need to see that if we try to update the same name/namespace that it is indeed an upsert so the cuids don't change.
+          target: [schema.content.name, schema.content.namespace],
           set: onConflictSetAllFieldsToSqlExcluded(schema.content),
         },
       });
+
+      if (dbTxDidErr(contentInserted)) {
+        addlErrs.push(contentInserted);
+        return tx.rollback();
+        // const err = {}
+      }
+
       let metaInserted = null;
       if (split.contentMetaPayloads.length) {
+        // Get cuids from the inserted row and attach: to contentMeta table and gitTable again for if this was an upsert
+        split.contentMetaPayloads = split.contentMetaPayloads?.map(
+          (payload) => {
+            // find matching content row inserted, and make sure it's id is this id.
+            const matching = contentInserted.find((row) => {
+              return (
+                row.namespace === payload.namespace && row.name === payload.name
+              );
+            });
+            if (matching) {
+              payload.contentId = matching.id;
+            }
+            return payload;
+          }
+        );
+
         metaInserted = await polymorphicInsert({
           tableKey: "contentMeta",
           content: split.contentMetaPayloads,
@@ -156,6 +200,19 @@ async function handlePost<T extends TableConfig>({
       }
       let attachedGitInserted = null;
       if (split.gitPayload.length) {
+        split.gitPayload = split.gitPayload?.map((payload) => {
+          // find matching content row inserted, and make sure it's id is this id.
+          const matching = contentInserted.find((row) => {
+            return (
+              row.namespace === payload.namespace && row.name === payload.name
+            );
+          });
+          if (matching) {
+            payload.contentId = matching.id;
+          }
+          return payload;
+        });
+
         attachedGitInserted = await polymorphicInsert({
           tableKey: "gitRepo",
           content: split.gitPayload,
@@ -168,34 +225,6 @@ async function handlePost<T extends TableConfig>({
             ]),
           },
         });
-      }
-      // loop through git rows to find correspoding content rows that join on id, in order to update content rows with
-      if (
-        Array.isArray(contentInserted) &&
-        Array.isArray(attachedGitInserted)
-      ) {
-        for await (const gitRow of attachedGitInserted) {
-          const matching = contentInserted.find(
-            (contentRow) => contentRow.id === gitRow.contentId
-          );
-          if (matching) {
-            const updateWithGit = await polymorphicUpdate(
-              "content",
-              {
-                gitId: gitRow.id,
-              },
-              eq(table.id, matching.id),
-              tx
-            );
-            if (dbTxDidErr(updateWithGit)) {
-              tx.rollback();
-              throw new Error("could not update with gitId");
-            } else {
-              // for sake of return value checking
-              matching.gitId = gitRow.id;
-            }
-          }
-        }
       }
 
       [metaInserted, contentInserted, attachedGitInserted].forEach(
@@ -234,6 +263,7 @@ async function handlePost<T extends TableConfig>({
     });
   }
 }
+
 async function handleDel<T extends TableConfig>({
   request,
   table,
