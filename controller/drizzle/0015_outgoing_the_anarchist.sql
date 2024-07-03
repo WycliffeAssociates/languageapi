@@ -6,7 +6,7 @@ ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gat
 ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gateway_language_to_ietf_language_ietf_c";
 --> statement-breakpoint
 
-ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gateway_language_ietf_gateway_language_t";
+-- ALTER TABLE "languages_to_languages" DROP CONSTRAINT "languages_to_languages_gateway_language_ietf_gateway_language_t";
 --> statement-breakpoint
 
 ALTER TABLE "connected_content" DROP CONSTRAINT "connected_content_content_id_1_content_id_2";--> statement-breakpoint
