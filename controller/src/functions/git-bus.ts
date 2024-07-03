@@ -56,12 +56,13 @@ export async function wacsSbLangApi(
         `namespace: ${namespace} and name: ${parsed.User}/${parsed.Repo} is not already in api. Creating new row in table`
       );
       const cuid = createId();
-      const newContentPayload = {
-        id: cuid,
-        name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
-        namespace: namespace,
-        type: "text",
-      } as const;
+      const newContentPayload: z.infer<typeof validators.contentPost.element> =
+        {
+          id: cuid,
+          name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
+          namespace: namespace,
+          type: "text",
+        };
       const newContentRow: z.infer<typeof validators.contentPost> = [
         newContentPayload,
       ];

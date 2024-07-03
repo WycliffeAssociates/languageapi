@@ -232,3 +232,21 @@ export function statusCodeFromErrType(err: unknown) {
   if (err instanceof ZodError) return 400;
   return 400;
 }
+
+export function determineResourceType(slug: string) {
+  // "scripture" | "gloss" | "parascriptural" | "peripheral" | null | undefined
+  const upperSlug = slug.toUpperCase();
+  if (bibleBookSortOrder[upperSlug] !== undefined) {
+    return "scripture";
+  }
+  if (["ULB", "UDB", "F10", "REG"].includes(upperSlug)) {
+    return "scripture";
+  }
+  if (["TN", "TQ", "BC"].includes(upperSlug)) {
+    return "parascriptural";
+  }
+  if (["TW"].includes(upperSlug)) {
+    return "peripheral";
+  }
+  return "unknown";
+}

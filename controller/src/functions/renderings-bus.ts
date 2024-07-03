@@ -10,6 +10,7 @@ import * as validators from "../routes/validation";
 import * as schema from "../db/schema/schema";
 import {and, eq} from "drizzle-orm";
 import {createId} from "@paralleldrive/cuid2";
+import {determineResourceType} from "src/utils";
 
 const db = startDb();
 
@@ -61,28 +62,42 @@ export async function wacsSbRenderingsApi(
       return;
     }
     const parsed = renderingsSchema.parse(message);
-    const id = `${parsed.User}/${parsed.Repo}`.toLowerCase();
+    const joinedName = `${parsed.User}/${parsed.Repo}`.toLowerCase();
     context.log(
       `RENDERINGS BUS RECEIVED: received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`
     );
 
     const {exists, id: currentExistingId} = await checkContentExists({
-      name: id,
+      name: joinedName,
       namespace,
     });
     if (currentExistingId) contentCuid = currentExistingId;
     if (!exists) {
       context.log(
-        `${namespace}-${id} is not already in api. Creating new row in table`
+        `${joinedName}} is not already in api. Creating new row in table`
       );
       const cuid = createId();
       contentCuid = cuid;
-      const newContentPayload = {
-        id: cuid,
-        name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
-        namespace: namespace,
-        type: "text",
-      } as const;
+
+      const newContentPayload: z.infer<typeof validators.contentPost.element> =
+        {
+          id: cuid,
+          name: joinedName,
+          namespace: namespace,
+          type: "text",
+        };
+      if (parsed.LanguageCode) {
+        newContentPayload.languageId = parsed.LanguageCode;
+      }
+      if (parsed.ResourceType) {
+        newContentPayload.resourceType = parsed.ResourceType;
+      }
+      if (parsed.ResourceType) {
+        newContentPayload.resourceType = determineResourceType(
+          parsed.ResourceType
+        );
+      }
+
       const newContentRow: z.infer<typeof validators.contentPost> = [
         newContentPayload,
       ];
@@ -98,7 +113,7 @@ export async function wacsSbRenderingsApi(
     }
 
     if (!contentCuid) {
-      throw new Error(`Failed to find contentCuid for ${id}`);
+      throw new Error(`Failed to find contentCuid for ${joinedName}`);
     }
 
     // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
@@ -150,7 +165,6 @@ export async function wacsSbRenderingsApi(
         }
         return baseLoad;
       });
-    // todo: becuase these are rendered over and over, we want to delete everything from the renderings and renderings meta tables for the given content id, and new meta (since blobs are replaced and not versioned out). Then we can post to the renderings and meta tables
     await db.transaction(async (tx) => {
       // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
       context.log(`Clearing prev renderings for ${parsed.User}/${parsed.Repo}`);
