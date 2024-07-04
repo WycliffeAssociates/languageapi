@@ -6,9 +6,11 @@ import {
   handleDel,
 } from "../routes/rendering";
 import {handlePost as handleContentPost} from "../routes/content";
+import {handlePost as handleGitPost} from "../routes/git";
 import * as validators from "../routes/validation";
 import {checkContentExists} from "../utils";
 import {createId} from "@paralleldrive/cuid2";
+import {determineResourceType} from "../utils";
 
 const db = startDb();
 const renderedFileSchema = z.object({
@@ -28,7 +30,7 @@ const renderingsSchema = z.object({
   Message: z.string().nullable(),
   User: z.string(),
   Repo: z.string(),
-  RepoUrl: z.string().nullable(),
+  RepoUrl: z.string(),
   LanguageCode: z.string().nullable(),
   LanguageName: z.string().nullable(),
   ResourceType: z.string(),
@@ -59,104 +61,133 @@ export async function wacsSbRenderingsApi(
       return;
     }
     const parsed = renderingsSchema.parse(message);
-    // Id for wacs text repos is this user/repo lower string
-    const id = `${parsed.User}/${parsed.Repo}`.toLowerCase();
+    const joinedName = `${parsed.User}/${parsed.Repo}`.toLowerCase();
     context.log(
       `RENDERINGS BUS RECEIVED: received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`
     );
 
     const {exists, id: currentExistingId} = await checkContentExists({
-      name: id,
+      name: joinedName,
       namespace,
       db,
     });
-    if (currentExistingId) {
-      contentCuid = currentExistingId;
-    }
-    if (!exists) {
-      context.log(
-        `${namespace}-${id} is not already in api. Creating new row in table`
-      );
-      const cuid = createId();
-      contentCuid = cuid;
-      const newContentPayload = {
-        id: cuid,
-        name: `${parsed.User}/${parsed.Repo}`.toLowerCase(),
-        namespace: namespace,
-        type: "text",
-      } as const;
-      const newContentRow: z.infer<typeof validators.contentPost> = [
-        newContentPayload,
-      ];
-      const newRowRes = await handleContentPost(newContentRow);
-      if (newRowRes.status !== 200) {
-        context.log(
-          `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
-        );
-        throw new Error(
-          `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
-        );
-      }
-    }
-
-    if (!contentCuid) {
-      throw new Error(`Failed to find contentCuid for ${id}`);
-    }
-
-    // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
-    const deletePayload: z.infer<typeof validators.renderingDelete> = {
-      contentIds: [contentCuid],
-    };
-
-    const dbPayload: z.infer<typeof validators.renderingsPost> =
-      parsed.RenderedFiles.map((payload) => {
-        // Used to tie together metadata to rendering
-        const randomUUid = createId();
-        let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
-          tempId: randomUUid,
-          namespace,
-          contentId: contentCuid!,
-          fileType: payload.FileType,
-          url: payload.Path,
-          fileSizeBytes: payload.Size || 0,
-          hash: payload.Hash,
-        };
-        if (
-          ["bible", "tn", "tq", "bc"].includes(
-            parsed.ResourceType.toLowerCase()
-          )
-        ) {
-          const bookName = parsed.Titles[payload.Book || ""];
-          const isWholeBook = !payload.Chapter && !!payload.Book;
-          let isWholeProject =
-            !payload.Chapter &&
-            !payload.Book &&
-            ["download", "index", "whole"].includes(payload.Path);
-
-          baseLoad.scripturalMeta = {
-            tempId: randomUUid,
-            bookName: bookName,
-            chapter: payload.Chapter,
-            isWholeBook,
-            isWholeProject,
-          };
-          payload.Book && (baseLoad.scripturalMeta.bookSlug = payload.Book);
-          bookName && (baseLoad.scripturalMeta.bookName = bookName);
-        } else {
-          baseLoad.nonScripturalMeta = {
-            tempId: randomUUid,
-            name: payload.Slug,
-          };
-          // noop for now.
-          // but baseLoad.nonScripturalMeta would go here
-        }
-        return baseLoad;
-      });
-    // todo: becuase these are rendered over and over, we want to delete everything from the renderings and renderings meta tables for the given content id, and new meta (since blobs are replaced and not versioned out). Then we can post to the renderings and meta tables
+    if (currentExistingId) contentCuid = currentExistingId;
     await db.transaction(async (tx) => {
+      // CREATE CONTENT if content cuid not existing
+      if (!exists) {
+        context.log(
+          `${joinedName}} is not already in api. Creating new row in table`
+        );
+        const cuid = createId();
+        contentCuid = cuid;
+        const newContentPayload: z.infer<
+          typeof validators.contentPost.element
+        > = {
+          id: cuid,
+          name: joinedName,
+          namespace: namespace,
+          type: "text",
+          createdOn: new Date().toISOString(),
+          modifiedOn: new Date().toISOString(),
+        };
+        if (parsed.LanguageCode) {
+          newContentPayload.languageId = parsed.LanguageCode;
+        }
+        if (parsed.ResourceType) {
+          newContentPayload.resourceType = parsed.ResourceType;
+        }
+        if (parsed.ResourceType) {
+          newContentPayload.domain = determineResourceType(parsed.ResourceType);
+        }
+
+        const newContentRow: z.infer<typeof validators.contentPost> = [
+          newContentPayload,
+        ];
+        const newRowRes = await handleContentPost(newContentRow);
+        if (newRowRes.status !== 200) {
+          context.log(
+            `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+          );
+          tx.rollback();
+          throw new Error(
+            `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+          );
+        }
+      }
+      // if !exists, created in prev step of making new content row. If it failed somehow, throw.
+      if (!contentCuid) {
+        throw new Error(`Failed to find contentCuid for ${joinedName}`);
+      }
+
+      // we got a repoRendered from gitea, so create a git row while we are it.
+      const newGitRow: z.infer<typeof validators.gitPost> = [
+        {
+          contentId: contentCuid,
+          repoName: parsed.Repo,
+          repoUrl: parsed.RepoUrl,
+          username: parsed.User,
+        },
+      ];
+      const gitResult = await handleGitPost(newGitRow);
+      if (gitResult.status !== 200) {
+        context.error(
+          `Failed to create new git row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+        );
+        tx.rollback();
+      }
+
+      // ========================================
+      // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
+      const deleteOldContentRowsPayload: z.infer<
+        typeof validators.renderingDelete
+      > = {
+        contentIds: [contentCuid],
+      };
+
+      const renderedContentPayload: z.infer<typeof validators.renderingsPost> =
+        parsed.RenderedFiles.map((payload) => {
+          // Used to tie together metadata to rendering
+          const randomUUid = createId();
+          let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
+            tempId: randomUUid,
+            namespace,
+            contentId: contentCuid!,
+            fileType: payload.FileType,
+            url: payload.Path,
+            fileSizeBytes: payload.Size || 0,
+            hash: payload.Hash,
+          };
+          const domain = determineResourceType(parsed.ResourceType);
+          if (["scripture", "gloss", "parascriptural"].includes(domain || "")) {
+            const bookName = parsed.Titles[payload.Book || ""];
+            const isWholeBook = !payload.Chapter && !!payload.Book;
+            let isWholeProject =
+              !payload.Chapter &&
+              !payload.Book &&
+              ["download", "index", "whole"].includes(payload.Path);
+
+            baseLoad.scripturalMeta = {
+              tempId: randomUUid,
+              bookName: bookName,
+              chapter: payload.Chapter,
+              isWholeBook,
+              isWholeProject,
+            };
+            payload.Book && (baseLoad.scripturalMeta.bookSlug = payload.Book);
+            bookName && (baseLoad.scripturalMeta.bookName = bookName);
+          } else {
+            baseLoad.nonScripturalMeta = {
+              tempId: randomUUid,
+              name: payload.Slug,
+            };
+            // noop for now.
+            // but baseLoad.nonScripturalMeta would go here
+          }
+          return baseLoad;
+        });
       // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
       context.log(`Clearing prev renderings for ${parsed.User}/${parsed.Repo}`);
-      const delResult = await handleDel(deletePayload);
+      const delResult = await handleDel(deleteOldContentRowsPayload);
       if (delResult.status != 200) {
         tx.rollback();
         if (delResult.jsonBody) {
@@ -165,7 +196,7 @@ export async function wacsSbRenderingsApi(
       } else {
         // Insert new renderings and meta
         context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
-        const postResult = await handleRenderingPost(dbPayload);
+        const postResult = await handleRenderingPost(renderedContentPayload);
         if (postResult.status != 200) {
           tx.rollback();
           if (postResult.jsonBody) {

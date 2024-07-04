@@ -27,7 +27,7 @@ import {getDb} from "../db/config";
 import {onConflictSetAllFieldsToSqlExcluded} from "../utils";
 import {z} from "zod";
 import {PostgresError} from "postgres";
-import {languagesToLanguages} from "../db/schema/schema";
+import {doBlackListLangauge} from "../lib/blacklist";
 
 // FILE LEVEL SCOPE
 const db = getDb();
@@ -91,8 +91,12 @@ async function handlePost<T extends TableConfig>({
     const payload = await request.json();
     const validationSchema = validators.langPost;
     const payloadParsed = validationSchema.parse(payload);
+    // Get those not blacklisted
+    const payloadFiltered = payloadParsed.filter(
+      (lang) => !doBlackListLangauge(lang)
+    );
 
-    const separated = parseLangPayload(payloadParsed);
+    const separated = parseLangPayload(payloadFiltered);
 
     // validate langCountry and altNames now:
     const validatedCountryLangPivot = validators.postLangToCountryMany.parse(

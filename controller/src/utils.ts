@@ -257,3 +257,20 @@ export async function checkContentExists({
   let dbId = doesExist[0]?.id ?? null;
   return {exists: doesExist.length > 0, id: dbId};
 }
+export function determineResourceType(slug: string) {
+  // "scripture" | "gloss" | "parascriptural" | "peripheral" | null | undefined
+  const upperSlug = slug.toUpperCase();
+  if (bibleBookSortOrder[upperSlug] !== undefined) {
+    return "scripture";
+  }
+  if (["ULB", "UDB", "F10", "REG", "BIBLE"].includes(upperSlug)) {
+    return "scripture";
+  }
+  if (["TN", "TQ", "BC"].includes(upperSlug)) {
+    return "parascriptural";
+  }
+  if (["TW"].includes(upperSlug)) {
+    return "peripheral";
+  }
+  return null;
+}
