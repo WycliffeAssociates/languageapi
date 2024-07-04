@@ -8,9 +8,11 @@ select_permissions:
         - unique_book_slugs_count
         - show_on_biel
         - id
+        - ietf_code
         - meta_status
         - name
         - namespace
+        - repo_url
         - language_english_name
         - language_name
         - resource_type

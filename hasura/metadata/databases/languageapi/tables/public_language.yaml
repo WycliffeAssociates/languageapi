@@ -5,13 +5,6 @@ object_relationships:
   - name: country
     using:
       foreign_key_constraint_on: home_country_alpha2
-  - name: wa_language_meta
-    using:
-      foreign_key_constraint_on:
-        column: ietf_code
-        table:
-          name: wa_language_meta
-          schema: public
 array_relationships:
   - name: contents
     using:
