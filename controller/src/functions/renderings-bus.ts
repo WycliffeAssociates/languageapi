@@ -16,7 +16,12 @@ import {determineResourceType} from "../utils";
 const db = startDb();
 
 const renderedFileSchema = z.object({
-  Path: z.string(),
+  Path: z.string().transform((val, ctx) => {
+    if (!val.startsWith("/")) {
+      val = `/${val}`;
+    }
+    return val;
+  }),
   Size: z.number(),
   FileType: z.string(),
   Hash: z.string(),
@@ -39,6 +44,12 @@ const renderingsSchema = z.object({
   RenderedAt: z.string(),
   RepoId: z.number(),
   RenderedFiles: z.array(renderedFileSchema),
+  FileBasePath: z.string().transform((val, ctx) => {
+    if (val.endsWith("/")) {
+      val.slice(0, -1);
+    }
+    return val;
+  }),
   Titles: titlesSchema,
 });
 
@@ -154,7 +165,8 @@ export async function wacsSbRenderingsApi(
             namespace,
             contentId: contentCuid!,
             fileType: payload.FileType,
-            url: payload.Path,
+            // zod handles the / separatore. Base Path should end with
+            url: `${parsed.FileBasePath}${payload.Path}`,
             fileSizeBytes: payload.Size || 0,
             hash: payload.Hash,
           };
