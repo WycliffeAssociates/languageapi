@@ -139,7 +139,7 @@ registry.registerPath({
   // apiValidators.langDelete
   request: {
     body: {
-      description: "A list of ietfCodes corresponding to languages to delete",
+      description: "",
       content: {
         "applications/json": {
           schema: apiValidators.countryDelete,
@@ -292,8 +292,7 @@ registry.registerPath({
   // apiValidators.langDelete
   request: {
     body: {
-      description:
-        "A list of ietfCodes corresponding to languages to delete. Whereas inserts are namespaced, as: namespace-id, the client is expected to namespace (lowered, trimmed) to delete its ids",
+      description: "",
       content: {
         "applications/json": {
           schema: apiValidators.contentDelete,
