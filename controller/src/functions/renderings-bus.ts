@@ -119,7 +119,7 @@ export async function wacsSbRenderingsApi(
         throw new Error(`Failed to find contentCuid for ${joinedName}`);
       }
 
-      // we got a repoRendered from gitea, so create a git row while we are it.
+      // we got a repoRendered from gitea, so create a git row while we are it. go ahead and upsert in case the repoName or username or something changed
       const newGitRow: z.infer<typeof validators.gitPost> = [
         {
           contentId: contentCuid,
@@ -158,7 +158,10 @@ export async function wacsSbRenderingsApi(
             hash: payload.Hash,
           };
           const domain = determineResourceType(parsed.ResourceType);
-          if (["scripture", "gloss", "parascriptural"].includes(domain || "")) {
+          if (
+            !!domain &&
+            ["scripture", "gloss", "parascriptural"].includes(domain)
+          ) {
             const bookName = parsed.Titles[payload.Book || ""];
             const isWholeBook = !payload.Chapter && !!payload.Book;
             let isWholeProject =
@@ -217,8 +220,15 @@ export async function wacsSbRenderingsApi(
       }
     });
   } catch (error) {
-    context.error(`Error processing ${JSON.stringify(message)}`);
-    context.error(error);
+    const repo =
+      typeof message == "object" && !!message && "Repo" in message
+        ? message.Repo
+        : "unknown repo";
+    const user =
+      typeof message == "object" && !!message && "User" in message
+        ? message.User
+        : "unknown user";
+    context.error(`Error processing ${user}/${repo}`);
     if (error instanceof z.ZodError) {
       error.issues.forEach((issue) => {
         context.error(JSON.stringify(issue));
@@ -231,6 +241,9 @@ console.log("booting up the renderings bus listener");
 app.serviceBusTopic("waLangApiRenderings", {
   connection: "BUS_CONN",
   topicName: "reporendered",
-  subscriptionName: "reporendered-languageapi",
+  subscriptionName:
+    process.env.NODE_ENV?.toUpperCase() == "DEV"
+      ? "will-local"
+      : "reporendered-languageapi",
   handler: wacsSbRenderingsApi,
 });
