@@ -112,7 +112,7 @@ export function getMockedContent() {
   // scripture" | "gloss" | "parascriptural" | "peripheral
   const fakeIdWord = faker.word.words(1);
   const mockedContent: apiKeys = {
-    id: fakeIdWord,
+    // id: fakeIdWord,
     namespace: "wacs",
     domain: faker.helpers.arrayElement([
       "scripture",

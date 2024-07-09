@@ -8,15 +8,18 @@ import {
 import {handlePost as handleContentPost} from "../routes/content";
 import {handlePost as handleGitPost} from "../routes/git";
 import * as validators from "../routes/validation";
-import * as schema from "../db/schema/schema";
-import {and, eq} from "drizzle-orm";
+import {checkContentExists} from "../utils";
 import {createId} from "@paralleldrive/cuid2";
 import {determineResourceType} from "../utils";
 
 const db = startDb();
-
 const renderedFileSchema = z.object({
-  Path: z.string(),
+  Path: z.string().transform((val, ctx) => {
+    if (!val.startsWith("/")) {
+      val = `/${val}`;
+    }
+    return val;
+  }),
   Size: z.number(),
   FileType: z.string(),
   Hash: z.string(),
@@ -39,6 +42,12 @@ const renderingsSchema = z.object({
   RenderedAt: z.string(),
   RepoId: z.number(),
   RenderedFiles: z.array(renderedFileSchema),
+  FileBasePath: z.string().transform((val, ctx) => {
+    if (val.endsWith("/")) {
+      val.slice(0, -1);
+    }
+    return val;
+  }),
   Titles: titlesSchema,
 });
 
@@ -71,6 +80,7 @@ export async function wacsSbRenderingsApi(
     const {exists, id: currentExistingId} = await checkContentExists({
       name: joinedName,
       namespace,
+      db,
     });
     if (currentExistingId) contentCuid = currentExistingId;
     await db.transaction(async (tx) => {
@@ -120,7 +130,7 @@ export async function wacsSbRenderingsApi(
         throw new Error(`Failed to find contentCuid for ${joinedName}`);
       }
 
-      // we got a repoRendered from gitea, so create a git row while we are it.
+      // we got a repoRendered from gitea, so create a git row while we are it. go ahead and upsert in case the repoName or username or something changed
       const newGitRow: z.infer<typeof validators.gitPost> = [
         {
           contentId: contentCuid,
@@ -154,12 +164,16 @@ export async function wacsSbRenderingsApi(
             namespace,
             contentId: contentCuid!,
             fileType: payload.FileType,
-            url: payload.Path,
+            // zod handles the / separatore. Base Path should end with
+            url: `${parsed.FileBasePath}${payload.Path}`,
             fileSizeBytes: payload.Size || 0,
             hash: payload.Hash,
           };
           const domain = determineResourceType(parsed.ResourceType);
-          if (["scripture", "gloss", "parascriptural"].includes(domain || "")) {
+          if (
+            !!domain &&
+            ["scripture", "gloss", "parascriptural"].includes(domain)
+          ) {
             const bookName = parsed.Titles[payload.Book || ""];
             const isWholeBook = !payload.Chapter && !!payload.Book;
             let isWholeProject =
@@ -218,8 +232,15 @@ export async function wacsSbRenderingsApi(
       }
     });
   } catch (error) {
-    context.error(`Error processing ${JSON.stringify(message)}`);
-    context.error(error);
+    const repo =
+      typeof message == "object" && !!message && "Repo" in message
+        ? message.Repo
+        : "unknown repo";
+    const user =
+      typeof message == "object" && !!message && "User" in message
+        ? message.User
+        : "unknown user";
+    context.error(`Error processing ${user}/${repo}`);
     if (error instanceof z.ZodError) {
       error.issues.forEach((issue) => {
         context.error(JSON.stringify(issue));
@@ -228,31 +249,13 @@ export async function wacsSbRenderingsApi(
   }
 }
 
-export async function checkContentExists({
-  name,
-  namespace,
-}: {
-  name: string;
-  namespace: string;
-}) {
-  const doesExist = await db
-    .select({id: schema.content.id})
-    .from(schema.content)
-    .where(
-      and(
-        eq(schema.content.namespace, namespace),
-        eq(schema.content.name, name)
-      )
-    );
-
-  let dbId = doesExist[0]?.id ?? null;
-
-  return {exists: doesExist.length > 0, id: dbId};
-}
 console.log("booting up the renderings bus listener");
 app.serviceBusTopic("waLangApiRenderings", {
   connection: "BUS_CONN",
   topicName: "reporendered",
-  subscriptionName: "reporendered-languageapi",
+  subscriptionName:
+    process.env.NODE_ENV?.toUpperCase() == "DEV"
+      ? "will-local"
+      : "reporendered-languageapi",
   handler: wacsSbRenderingsApi,
 });

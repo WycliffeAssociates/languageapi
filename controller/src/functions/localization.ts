@@ -1,6 +1,5 @@
 import {app, InvocationContext, Timer} from "@azure/functions";
 import {getDb as startDb} from "../db/config";
-import {localizations} from "../localizations";
 import type {insertLocalizationType} from "../db/schema/validations";
 import {insertSchemas} from "../db/schema/validations";
 import {polymorphicInsert} from "../db/handlers";
@@ -8,6 +7,7 @@ import {onConflictSetAllFieldsToSqlExcluded} from "../utils";
 import * as dbSchema from "../db/schema/schema";
 import {eq, sql, and, ilike, isNotNull} from "drizzle-orm";
 import {z} from "zod";
+import {readdir} from "fs/promises";
 const db = startDb();
 const table = insertSchemas.localization.table;
 
@@ -28,6 +28,7 @@ export async function populateLocalization(
       ? `inserted ${bookNamesResult.length} rows of book names`
       : bookNamesResult.message
   );
+
   const resourceTypesResult = await populationResourceTypes();
   context.log(
     Array.isArray(resourceTypesResult)
@@ -36,7 +37,26 @@ export async function populateLocalization(
   );
 }
 
+async function getLocalizations() {
+  const cwd = process.cwd();
+  const dirPath = `${cwd}/src/localizations`;
+  const files = await readdir(dirPath);
+  const localizations = await Promise.all(
+    files.map(async (file) => {
+      // const filePath = `${dirPath}/${file}`;
+      const importString = `../localizations/${file.replace(".ts", "")}`;
+      const module = await import(importString);
+      return module.default as {
+        dict: Record<string, string>;
+        ietf: string;
+      };
+    })
+  );
+  return localizations;
+}
+
 async function populationResourceTypes() {
+  const localizations = await getLocalizations();
   const category = "resource_type";
   const payload = localizations.reduce(
     (acc: insertLocalizationType[], curr) => {

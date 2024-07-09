@@ -1,8 +1,10 @@
-import {DrizzleError, SQL, sql} from "drizzle-orm";
+import {DrizzleError, SQL, and, eq, sql} from "drizzle-orm";
 import {PgTableWithColumns, TableConfig} from "drizzle-orm/pg-core";
 import {PostgresError} from "postgres";
 import {handlerReturnError} from "./customTypes/types";
 import {ZodError} from "zod";
+import * as schema from "./db/schema/schema";
+import {PostgresJsDatabase} from "drizzle-orm/postgres-js";
 
 export const BibleBookCategories = {
   OT: [
@@ -233,6 +235,28 @@ export function statusCodeFromErrType(err: unknown) {
   return 400;
 }
 
+export async function checkContentExists({
+  name,
+  namespace,
+  db,
+}: {
+  name: string;
+  namespace: string;
+  db: PostgresJsDatabase<typeof schema>;
+}) {
+  const doesExist = await db
+    .select({id: schema.content.id})
+    .from(schema.content)
+    .where(
+      and(
+        eq(schema.content.namespace, namespace),
+        eq(schema.content.name, name)
+      )
+    );
+
+  let dbId = doesExist[0]?.id ?? null;
+  return {exists: doesExist.length > 0, id: dbId};
+}
 export function determineResourceType(slug: string) {
   // "scripture" | "gloss" | "parascriptural" | "peripheral" | null | undefined
   const upperSlug = slug.toUpperCase();

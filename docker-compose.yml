@@ -1,5 +1,4 @@
 #TODO: There's a lot of placeholders in here
-version: "3.8"
 
 services:
   # controller:
