@@ -163,23 +163,46 @@ async function handlePost<T extends TableConfig>({
           },
         });
       }
-      [langsInserted, langAltNames, langCountryInsert, gatewayLangs].forEach(
-        (dbAction) => {
-          if (dbAction && dbTxDidErr(dbAction)) {
-            addlErrs.push({
-              name: dbAction.name,
-              message: dbAction.message,
-            });
-            if (dbAction instanceof PostgresError) {
-              status = 500;
-            }
+
+      let waLanguageMeta;
+      if (separated.waLangMeta.length) {
+        waLanguageMeta = await polymorphicInsert({
+          tableKey: "langMeta",
+          content: separated.waLangMeta,
+          transactionHandle: tx,
+          onConflictDoNothingArgs: {
+            hasArgs: false,
+          },
+        });
+      }
+
+      [
+        langsInserted,
+        langAltNames,
+        langCountryInsert,
+        gatewayLangs,
+        waLanguageMeta,
+      ].forEach((dbAction) => {
+        if (dbAction && dbTxDidErr(dbAction)) {
+          addlErrs.push({
+            name: dbAction.name,
+            message: dbAction.message,
+          });
+          if (dbAction instanceof PostgresError) {
+            status = 500;
           }
         }
-      );
+      });
       if (addlErrs.length) {
         tx.rollback();
       }
-      return {langsInserted, langCountryInsert, langAltNames, gatewayLangs};
+      return {
+        langsInserted,
+        langCountryInsert,
+        langAltNames,
+        gatewayLangs,
+        waLanguageMeta,
+      };
     });
 
     const returnVal = handleApiMethodReturn({
