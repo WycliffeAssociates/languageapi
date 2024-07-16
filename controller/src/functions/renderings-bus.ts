@@ -8,10 +8,8 @@ import {
 import {handlePost as handleContentPost} from "../routes/content";
 import {handlePost as handleGitPost} from "../routes/git";
 import * as validators from "../routes/validation";
-import * as schema from "../db/schema/schema";
-import {and, eq} from "drizzle-orm";
 import {createId} from "@paralleldrive/cuid2";
-import {determineResourceType} from "../utils";
+import {checkContentExists, determineResourceType} from "../utils";
 
 const db = startDb();
 
@@ -82,6 +80,7 @@ export async function wacsSbRenderingsApi(
     const {exists, id: currentExistingId} = await checkContentExists({
       name: joinedName,
       namespace,
+      db,
     });
     if (currentExistingId) contentCuid = currentExistingId;
     await db.transaction(async (tx) => {
@@ -250,27 +249,6 @@ export async function wacsSbRenderingsApi(
   }
 }
 
-export async function checkContentExists({
-  name,
-  namespace,
-}: {
-  name: string;
-  namespace: string;
-}) {
-  const doesExist = await db
-    .select({id: schema.content.id})
-    .from(schema.content)
-    .where(
-      and(
-        eq(schema.content.namespace, namespace),
-        eq(schema.content.name, name)
-      )
-    );
-
-  let dbId = doesExist[0]?.id ?? null;
-
-  return {exists: doesExist.length > 0, id: dbId};
-}
 console.log("booting up the renderings bus listener");
 app.serviceBusTopic("waLangApiRenderings", {
   connection: "BUS_CONN",

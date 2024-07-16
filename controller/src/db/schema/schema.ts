@@ -126,7 +126,9 @@ export const content = pgTable(
   "content",
   {
     id: varchar("id", {length: 256}).primaryKey().notNull(),
-    languageId: varchar("language_id").references(() => language.ietfCode),
+    languageId: varchar("language_id").references(() => language.ietfCode, {
+      onUpdate: "cascade",
+    }),
     name: varchar("name", {length: 256}).notNull(),
     namespace: varchar("namespace", {length: 256}).notNull(),
     type: contentTypeEnum("type").notNull(),

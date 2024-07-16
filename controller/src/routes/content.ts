@@ -23,7 +23,7 @@ import {
 import * as validators from "./validation";
 import * as dbTableValidators from "../db/schema/validations";
 import * as schema from "../db/schema/schema";
-import {eq, inArray} from "drizzle-orm";
+import {sql} from "drizzle-orm";
 import {TableConfig} from "drizzle-orm/pg-core";
 import {getDb} from "../db/config";
 import {createId} from "@paralleldrive/cuid2";
@@ -273,11 +273,9 @@ async function handleDel<T extends TableConfig>({
     const deletedPayloads = await request.json();
     const deleteSchema = validators.contentDelete;
     const deletePayloadsParsed = deleteSchema.parse(deletedPayloads);
-    const deleteOnField = table.id;
-    const result = await polymorphicDelete(
-      tableName,
-      inArray(deleteOnField, deletePayloadsParsed.ids)
-    );
+    // const deleteOnField = table.name
+    const deleteOnField = sql`(name, namespace) in ${deletePayloadsParsed}`;
+    const result = await polymorphicDelete(tableName, deleteOnField);
     const returnVal = handleApiMethodReturn({
       result,
       method: thisMethod,

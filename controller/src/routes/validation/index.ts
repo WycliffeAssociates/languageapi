@@ -72,9 +72,9 @@ export const contentPost = z.array(
   })
 );
 
-export const contentDelete = z.object({
-  ids: z.array(z.string()),
-});
+export const contentDelete = z.array(
+  z.object({name: z.string(), namespace: z.string()})
+);
 
 /* //@===========  Renderings   ===========   */
 export const contentRenderingWithMeta =
