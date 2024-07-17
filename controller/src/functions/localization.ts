@@ -158,7 +158,7 @@ async function populateScripturalBookNames() {
     content: payload,
     onConflictDoUpdateArgs: {
       target: [table.ietfCode, table.key, table.category],
-      // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. For localization though, it just updates the value.
+      // loops through every column in given table setting the column to be the value of the excluded (e.g. conflicting) row except for those given in the second argument. no second arg means every column is set to the value of the excluded row
       set: onConflictSetAllFieldsToSqlExcluded(table),
     },
   });

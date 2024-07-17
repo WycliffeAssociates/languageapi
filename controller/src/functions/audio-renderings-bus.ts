@@ -9,6 +9,7 @@ import * as schema from "../db/schema/schema";
 import {eq, and, inArray} from "drizzle-orm";
 import {handlePost as handleRenderingPost} from "../routes/rendering";
 import {insertContent} from "../db/schema/validations";
+import {contentDomainEnum} from "../db/schema/constants";
 
 const db = startDb();
 
@@ -46,8 +47,8 @@ const audioMessageSchema = z.object({
   type: z.string(),
   domain: z.string(),
   resourceType: z.string(),
-  createdOn: z.string().optional(), //todo check
-  modifiedOn: z.string().optional(), //todo check
+  createdOn: z.string().optional(),
+  modifiedOn: z.string().optional(),
   namespace: z.string().toLowerCase(),
   files: z.array(audioMessageFileSchema),
 });
@@ -89,8 +90,7 @@ export async function audioRenderedContentListener(
         );
       }
 
-      // messages for audio can't always fit into a single repo + all it's files since there are 3k plus files for each Bible due to mp3, cue, wav, etc for each chapter.So, we'll need to upsert on the url for each row in rendered_content table.
-      // But what about metadata row? But if I just insert the metadata row, there could be duplicates. Probably just best to query all rendered_content rows for a given contentId.  Merge in any existing IDs from db, and then ovveride the rest of the properties with what's given.
+      // messages for audio can't always fit into a single message from the queue due to size constraints.  We can't make that assumption and just delete all the previous renderings as such, So, this operation is an upsert on the unique url for each rendering and its metadata. Migrating to a different cdn or somethign would likley mean scrubbing these row based on a url startsWith {oldCdnUrl}
       const renderedContentRowsAlreadyInDb = await db
         .select({
           renderedRowId: schema.rendering.id,
@@ -100,7 +100,6 @@ export async function audioRenderedContentListener(
         })
         .from(schema.rendering)
         .leftJoin(
-          // metadata and rendered_row are 1-1;
           schema.scripturalRenderingMetadata,
           eq(
             schema.rendering.id,
@@ -117,13 +116,12 @@ export async function audioRenderedContentListener(
             )
           )
         );
-      // queue messages are ones to process, but we'll grab id's from db on existing for upserts;
-      // Create a set of rendered_row + meta for each retrieval.
-      // renderedRowsWithMetaSet
+      // grab existing ids from db for upserts;
+      // Then create payload of rendered_row + meta for each retrieval.
       type returnedRowType = (typeof renderedContentRowsAlreadyInDb)[number];
       let renderedRowsLookup: Record<string, returnedRowType> = {};
       renderedContentRowsAlreadyInDb.forEach((row) => {
-        // @ts-ignore.  Some types are wrong somewhere, cause this is become a day when queried back out.
+        // @ts-ignore.  Some types are wrong somewhere, cause this is become a date object when queried back out.
         if (row.createdAt instanceof Date) {
           row.createdAt = row.createdAt.toISOString();
         }
@@ -133,7 +131,7 @@ export async function audioRenderedContentListener(
       // Prepare the rows to insert and upsert renderedContent and meta;
       const dbPayload: z.infer<typeof validators.renderingsPost> =
         parsed.files.map((file) => {
-          // used to tie together metadata to a rendering and maintain a key constraint.
+          // tempid used to tie together metadata to a rendering and maintain a key constraint. I.e when I post an array of renderings, We use this tempId to find inserted rendering row that corresponds to the metadata row, and then we can put that id to statisfy the key constraint.
           const tempId = createId();
           let payload: z.infer<typeof validators.renderingsPost.element> = {
             tempId: tempId,
@@ -153,13 +151,13 @@ export async function audioRenderedContentListener(
             },
           };
           if (renderedRowsLookup[file.url]) {
+            const row = renderedRowsLookup[file.url];
             // Add the ids if we have them, for upserts, otherwise leave blank to auto create
-            payload.createdAt =
-              renderedRowsLookup[file.url].createdAt ||
-              new Date().toISOString();
-            payload.id = renderedRowsLookup[file.url].renderedRowId;
-            //@ts-ignore. I gave the type above for autocomplate and warnings, but meta is there above.
-            payload.scripturalMeta.id = renderedRowsLookup[file.url].metadataId;
+            payload.createdAt = row.createdAt || new Date().toISOString();
+            payload.id = row.renderedRowId;
+            if (payload.scripturalMeta && row.metadataId) {
+              payload.scripturalMeta.id = row.metadataId;
+            }
           }
           return payload;
         });
@@ -183,7 +181,6 @@ export async function audioRenderedContentListener(
       }
     });
   } catch (error) {
-    // @ts-ignore
     let sessionId =
       typeof message == "object" && !!message && "session_id" in message
         ? message.session_id
@@ -209,13 +206,21 @@ async function createContentRow({context, row}: createContentRowArgs) {
     `${row.namespace}-${row.name} is not already in api. Creating new row in table`
   );
   const cuid = createId();
+  // type guard to keep enum clean
+  const isValidDomain = (
+    val: unknown
+  ): val is (typeof contentDomainEnum.enumValues)[number] => {
+    return contentDomainEnum.enumValues.includes(
+      val as (typeof contentDomainEnum.enumValues)[number]
+    );
+  };
+
   const newContentPayload: insertContent = {
     id: cuid,
     name: row.name,
     namespace: row.namespace,
     type: "audio",
-    // @ts-ignore. All are scritpure hardcoded for now, gonna leave the hard code on the message sender side
-    domain: row.domain,
+    domain: isValidDomain(row.domain) ? row.domain : null,
     languageId: row.languageIetf,
     resourceType: row.resourceType,
     createdOn: row.createdOn,
@@ -244,6 +249,5 @@ app.serviceBusTopic("waAudioRenderings", {
       : "languageapi",
   handler: audioRenderedContentListener,
   isSessionsEnabled:
-    // todo: make local dev session enabled too with dan
     process.env.NODE_ENV?.toUpperCase() == "DEV" ? false : true,
 });
