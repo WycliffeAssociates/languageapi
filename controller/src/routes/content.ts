@@ -273,7 +273,6 @@ async function handleDel<T extends TableConfig>({
     const deletedPayloads = await request.json();
     const deleteSchema = validators.contentDelete;
     const deletePayloadsParsed = deleteSchema.parse(deletedPayloads);
-    // const deleteOnField = table.name
     const deleteOnField = sql`(name, namespace) in ${deletePayloadsParsed}`;
     const result = await polymorphicDelete(tableName, deleteOnField);
     const returnVal = handleApiMethodReturn({
