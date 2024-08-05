@@ -12,6 +12,7 @@ import {
   json,
   uniqueIndex,
   bigint,
+  index,
 } from "drizzle-orm/pg-core";
 import {
   langDirectionsEnum,
@@ -144,6 +145,7 @@ export const content = pgTable(
         table.name,
         table.namespace
       ),
+      languageIdx: index("language_idx").on(table.languageId),
     };
   }
 );
@@ -162,6 +164,7 @@ export const waContentMetadata = pgTable(
   (table) => {
     return {
       contentIdx: uniqueIndex("content_idx").on(table.contentId),
+      bielIdx: index("show_biel_idx").on(table.showOnBiel),
     };
   }
 );
@@ -205,6 +208,7 @@ export const gitRepo = pgTable(
         repo.username,
         repo.repoName
       ),
+      usernameIdx: index("username_idx").on(repo.username),
       contentIdIdx: uniqueIndex("content_id_idx").on(repo.contentId),
     };
   }
@@ -227,7 +231,8 @@ export const rendering = pgTable(
   },
   (table) => {
     return {
-      urlIdx: uniqueIndex("rendering_unique_idx").on(table.url),
+      contentIdIdx: index("render_content_id_idx").on(table.contentId),
+      typeIdx: index("file_type_idx").on(table.fileType),
     };
   }
 );
@@ -254,6 +259,9 @@ export const scripturalRenderingMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
+      renderingIdx: index("scriptural_metadata_rendering_idx").on(
+        table.renderingId
+      ),
     };
   }
 );
@@ -275,6 +283,9 @@ export const nonScripturalRenderingMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
+      renderingIdx: index("nonscriptural_metadata_rendering_idx").on(
+        table.renderingId
+      ),
     };
   }
 );
