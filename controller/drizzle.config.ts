@@ -2,18 +2,17 @@ import {defineConfig} from "drizzle-kit";
 import {config as dotenv} from "dotenv";
 dotenv();
 
-const drizzleConfig = defineConfig({
+export default defineConfig({
   schema: [
     "./src/db/schema/schema.ts",
     "./src/db/schema/constants.ts",
     "./src/db/schema/relations.ts",
   ],
   out: "./drizzle",
-  driver: "pg",
   // @ts-ignore applies to drizzle-kit commands. Can always check back and see if it is fixed
   dialect: "postgresql",
   dbCredentials: {
-    connectionString: process.env?.DATABASE_URL || "testValue",
+    url: process.env?.DATABASE_URL || "testValue",
   },
 });
 // https://orm.drizzle.team/kit-docs/config-reference#schema
@@ -29,4 +28,4 @@ const drizzleConfig = defineConfig({
 //     connectionString: process.env?.DATABASE_URL || "testValue",
 //   },
 // };
-export default drizzleConfig;
+// export default drizzleConfig;

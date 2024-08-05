@@ -1,10 +1,8 @@
 {
-  "id": "a40f1708-6c55-418a-8ac1-ef4aeb8cde78",
-  "prevId": "e51ae2f9-5f6d-4b78-94f2-654266d5b14b",
-  "version": "5",
-  "dialect": "pg",
+  "version": "7",
+  "dialect": "postgresql",
   "tables": {
-    "content": {
+    "public.content": {
       "name": "content",
       "schema": "",
       "columns": {
@@ -71,12 +69,25 @@
       },
       "indexes": {
         "name_namespace_idx": {
-          "name": "name_namespace_idx",
           "columns": [
-            "name",
-            "namespace"
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "namespace",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "name_namespace_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -97,7 +108,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "country": {
+    "public.country": {
       "name": "country",
       "schema": "",
       "columns": {
@@ -152,11 +163,19 @@
       },
       "indexes": {
         "alpha_2_idx": {
-          "name": "alpha_2_idx",
           "columns": [
-            "alpha_2"
+            {
+              "expression": "alpha_2",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "alpha_2_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -177,7 +196,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "country_to_language": {
+    "public.country_to_language": {
       "name": "country_to_language",
       "schema": "",
       "columns": {
@@ -234,7 +253,7 @@
       },
       "uniqueConstraints": {}
     },
-    "git_repo": {
+    "public.git_repo": {
       "name": "git_repo",
       "schema": "",
       "columns": {
@@ -271,19 +290,40 @@
       },
       "indexes": {
         "username_reponame_idx": {
-          "name": "username_reponame_idx",
           "columns": [
-            "username",
-            "repo_name"
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "repo_name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "username_reponame_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         },
         "content_id_idx": {
-          "name": "content_id_idx",
           "columns": [
-            "content_id"
+            {
+              "expression": "content_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "content_id_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -304,7 +344,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "language": {
+    "public.language": {
       "name": "language",
       "schema": "",
       "columns": {
@@ -371,18 +411,34 @@
       },
       "indexes": {
         "ietf_idx": {
-          "name": "ietf_idx",
           "columns": [
-            "ietf_code"
+            {
+              "expression": "ietf_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "ietf_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         },
         "id_idx": {
-          "name": "id_idx",
           "columns": [
-            "id"
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "id_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -403,7 +459,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "language_alternate_name": {
+    "public.language_alternate_name": {
       "name": "language_alternate_name",
       "schema": "",
       "columns": {
@@ -428,12 +484,25 @@
       },
       "indexes": {
         "name_ietf_idx": {
-          "name": "name_ietf_idx",
           "columns": [
-            "name",
-            "ietf_code"
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "ietf_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "name_ietf_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -454,7 +523,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "gateway_language_to_dependent_language": {
+    "public.gateway_language_to_dependent_language": {
       "name": "gateway_language_to_dependent_language",
       "schema": "",
       "columns": {
@@ -511,7 +580,7 @@
       },
       "uniqueConstraints": {}
     },
-    "localization": {
+    "public.localization": {
       "name": "localization",
       "schema": "",
       "columns": {
@@ -568,7 +637,7 @@
       },
       "uniqueConstraints": {}
     },
-    "nonscriptural_rendering_metadata": {
+    "public.nonscriptural_rendering_metadata": {
       "name": "nonscriptural_rendering_metadata",
       "schema": "",
       "columns": {
@@ -616,7 +685,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "rendered_content": {
+    "public.rendered_content": {
       "name": "rendered_content",
       "schema": "",
       "columns": {
@@ -672,11 +741,19 @@
       },
       "indexes": {
         "rendering_unique_idx": {
-          "name": "rendering_unique_idx",
           "columns": [
-            "url"
+            {
+              "expression": "url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "rendering_unique_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -697,7 +774,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "scriptural_rendering_metadata": {
+    "public.scriptural_rendering_metadata": {
       "name": "scriptural_rendering_metadata",
       "schema": "",
       "columns": {
@@ -769,7 +846,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "wa_content_metadata": {
+    "public.wa_content_metadata": {
       "name": "wa_content_metadata",
       "schema": "",
       "columns": {
@@ -800,11 +877,19 @@
       },
       "indexes": {
         "content_idx": {
-          "name": "content_idx",
           "columns": [
-            "content_id"
+            {
+              "expression": "content_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "content_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -825,7 +910,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "wa_language_metadata": {
+    "public.wa_language_metadata": {
       "name": "wa_language_metadata",
       "schema": "",
       "columns": {
@@ -873,7 +958,7 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "world_region": {
+    "public.world_region": {
       "name": "world_region",
       "schema": "",
       "columns": {
@@ -904,11 +989,19 @@
       },
       "indexes": {
         "region_name_idx": {
-          "name": "region_name_idx",
           "columns": [
-            "region"
+            {
+              "expression": "region",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
           ],
-          "isUnique": true
+          "with": {},
+          "name": "region_name_idx",
+          "isUnique": true,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {},
@@ -917,36 +1010,42 @@
     }
   },
   "enums": {
-    "domain": {
+    "public.domain": {
       "name": "domain",
-      "values": {
-        "scripture": "scripture",
-        "gloss": "gloss",
-        "parascriptural": "parascriptural",
-        "peripheral": "peripheral"
-      }
+      "schema": "public",
+      "values": [
+        "scripture",
+        "gloss",
+        "parascriptural",
+        "peripheral"
+      ]
     },
-    "type_id": {
+    "public.type_id": {
       "name": "type_id",
-      "values": {
-        "text": "text",
-        "audio": "audio",
-        "video": "video",
-        "braille": "braille"
-      }
+      "schema": "public",
+      "values": [
+        "text",
+        "audio",
+        "video",
+        "braille"
+      ]
     },
-    "direction": {
+    "public.direction": {
       "name": "direction",
-      "values": {
-        "ltr": "ltr",
-        "rtl": "rtl"
-      }
+      "schema": "public",
+      "values": [
+        "ltr",
+        "rtl"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "a40f1708-6c55-418a-8ac1-ef4aeb8cde78",
+  "prevId": "e51ae2f9-5f6d-4b78-94f2-654266d5b14b",
+  "sequences": {}
 }
