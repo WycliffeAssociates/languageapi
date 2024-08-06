@@ -1,6 +1,6 @@
 .PHONY: console
 console:
-	hasura console \
+	cd hasura && hasura console \
 	--admin-secret $$(op read "op://AppDev Scripture Accessibility/languageapi-hasura-dev-container-secrets/hasura-graphql-admin-secret") \
 	--endpoint $$(op read "op://AppDev Scripture Accessibility/languageapi-hasura-dev-container-secrets/url")
 

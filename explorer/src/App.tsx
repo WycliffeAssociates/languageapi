@@ -6,7 +6,7 @@ import {Docs} from "./Docs";
 function App() {
   const {defaultHeaders, defaultQuery, defaultUrl, defaultVariables} =
     getPresets();
-  if (window.location.pathname === "/examples") {
+  if (window.location.pathname === "/docs") {
     return <Docs />;
   }
 

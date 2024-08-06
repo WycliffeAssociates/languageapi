@@ -248,6 +248,5 @@ app.serviceBusTopic("waAudioRenderings", {
       ? "languageapi-localdev"
       : "languageapi",
   handler: audioRenderedContentListener,
-  isSessionsEnabled:
-    process.env.NODE_ENV?.toUpperCase() == "DEV" ? false : true,
+  isSessionsEnabled: true,
 });

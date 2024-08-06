@@ -69,6 +69,7 @@ export const waLangMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
+      waLangIetfIdx: uniqueIndex("wa_lang_meta_ietf_idx").on(table.ietfCode),
     };
   }
 );

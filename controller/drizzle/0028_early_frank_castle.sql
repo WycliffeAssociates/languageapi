@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS "wa_lang_meta_ietf_idx" ON "wa_language_metadata" USING btree ("ietf_code");
