@@ -70,7 +70,7 @@ export const localization: overview = {
     "For client side applications, this table provides localization for resource types (i.e. Translations Notes -> Notas de Traduccíon) and  for scripture books in their native names (i.e. Matthew -> Mateo.  Currently a WIP for resource types. ",
 };
 
-export default [
+const entities: overview[] = [
   language,
   gatewayLanguage,
   contentOverview,
@@ -81,3 +81,4 @@ export default [
   source_zips,
   viewLangnames,
 ];
+export default entities;
