@@ -23,11 +23,12 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
-        - file_size_bytes
         - content_id
-        - file_type
-        - id
-        - url
         - created_at
+        - file_size_bytes
+        - file_type
+        - hash
+        - id
         - modified_on
+        - url
       filter: {}

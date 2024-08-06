@@ -12,6 +12,7 @@ import {
   json,
   uniqueIndex,
   bigint,
+  index,
 } from "drizzle-orm/pg-core";
 import {
   langDirectionsEnum,
@@ -68,6 +69,7 @@ export const waLangMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
+      waLangIetfIdx: uniqueIndex("wa_lang_meta_ietf_idx").on(table.ietfCode),
     };
   }
 );
@@ -126,7 +128,9 @@ export const content = pgTable(
   "content",
   {
     id: varchar("id", {length: 256}).primaryKey().notNull(),
-    languageId: varchar("language_id").references(() => language.ietfCode),
+    languageId: varchar("language_id").references(() => language.ietfCode, {
+      onUpdate: "cascade",
+    }),
     name: varchar("name", {length: 256}).notNull(),
     namespace: varchar("namespace", {length: 256}).notNull(),
     type: contentTypeEnum("type").notNull(),
@@ -142,6 +146,7 @@ export const content = pgTable(
         table.name,
         table.namespace
       ),
+      languageIdx: index("language_idx").on(table.languageId),
     };
   }
 );
@@ -160,6 +165,7 @@ export const waContentMetadata = pgTable(
   (table) => {
     return {
       contentIdx: uniqueIndex("content_idx").on(table.contentId),
+      bielIdx: index("show_biel_idx").on(table.showOnBiel),
     };
   }
 );
@@ -203,6 +209,7 @@ export const gitRepo = pgTable(
         repo.username,
         repo.repoName
       ),
+      usernameIdx: index("username_idx").on(repo.username),
       contentIdIdx: uniqueIndex("content_id_idx").on(repo.contentId),
     };
   }
@@ -225,7 +232,8 @@ export const rendering = pgTable(
   },
   (table) => {
     return {
-      urlIdx: uniqueIndex("rendering_unique_idx").on(table.url),
+      contentIdIdx: index("render_content_id_idx").on(table.contentId),
+      typeIdx: index("file_type_idx").on(table.fileType),
     };
   }
 );
@@ -252,6 +260,9 @@ export const scripturalRenderingMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
+      renderingIdx: index("scriptural_metadata_rendering_idx").on(
+        table.renderingId
+      ),
     };
   }
 );
@@ -273,6 +284,9 @@ export const nonScripturalRenderingMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
+      renderingIdx: index("nonscriptural_metadata_rendering_idx").on(
+        table.renderingId
+      ),
     };
   }
 );

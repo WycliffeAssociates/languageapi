@@ -1,4 +1,6 @@
 {
+  "id": "6aa54352-2aa1-46f9-9bf9-76d07185b2f8",
+  "prevId": "415e8056-232b-46fd-8805-c3f83a42ffea",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -33,12 +35,14 @@
         "type": {
           "name": "type",
           "type": "type_id",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "domain": {
           "name": "domain",
           "type": "domain",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -69,6 +73,7 @@
       },
       "indexes": {
         "name_namespace_idx": {
+          "name": "name_namespace_idx",
           "columns": [
             {
               "expression": "name",
@@ -83,26 +88,40 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "name_namespace_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "language_idx": {
+          "name": "language_idx",
+          "columns": [
+            {
+              "expression": "language_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
         "content_language_id_language_ietf_code_fk": {
           "name": "content_language_id_language_ietf_code_fk",
           "tableFrom": "content",
+          "tableTo": "language",
           "columnsFrom": [
             "language_id"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -163,6 +182,7 @@
       },
       "indexes": {
         "alpha_2_idx": {
+          "name": "alpha_2_idx",
           "columns": [
             {
               "expression": "alpha_2",
@@ -171,26 +191,25 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "alpha_2_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "country_world_region_id_world_region_id_fk": {
           "name": "country_world_region_id_world_region_id_fk",
           "tableFrom": "country",
+          "tableTo": "world_region",
           "columnsFrom": [
             "world_region_id"
           ],
-          "tableTo": "world_region",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -218,28 +237,28 @@
         "country_to_language_language_ietf_code_language_ietf_code_fk": {
           "name": "country_to_language_language_ietf_code_language_ietf_code_fk",
           "tableFrom": "country_to_language",
+          "tableTo": "language",
           "columnsFrom": [
             "language_ietf_code"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         },
         "country_to_language_country_alpha_2_country_alpha_2_fk": {
           "name": "country_to_language_country_alpha_2_country_alpha_2_fk",
           "tableFrom": "country_to_language",
+          "tableTo": "country",
           "columnsFrom": [
             "country_alpha_2"
           ],
-          "tableTo": "country",
           "columnsTo": [
             "alpha_2"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -290,6 +309,7 @@
       },
       "indexes": {
         "username_reponame_idx": {
+          "name": "username_reponame_idx",
           "columns": [
             {
               "expression": "username",
@@ -304,13 +324,28 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "username_reponame_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "username_idx": {
+          "name": "username_idx",
+          "columns": [
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         },
         "content_id_idx": {
+          "name": "content_id_idx",
           "columns": [
             {
               "expression": "content_id",
@@ -319,26 +354,25 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "content_id_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "git_repo_content_id_content_id_fk": {
           "name": "git_repo_content_id_content_id_fk",
           "tableFrom": "git_repo",
+          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
-          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -375,6 +409,7 @@
         "direction": {
           "name": "direction",
           "type": "direction",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -411,6 +446,7 @@
       },
       "indexes": {
         "ietf_idx": {
+          "name": "ietf_idx",
           "columns": [
             {
               "expression": "ietf_code",
@@ -419,13 +455,13 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "ietf_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         },
         "id_idx": {
+          "name": "id_idx",
           "columns": [
             {
               "expression": "id",
@@ -434,26 +470,25 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "id_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "language_home_country_alpha2_country_alpha_2_fk": {
           "name": "language_home_country_alpha2_country_alpha_2_fk",
           "tableFrom": "language",
+          "tableTo": "country",
           "columnsFrom": [
             "home_country_alpha2"
           ],
-          "tableTo": "country",
           "columnsTo": [
             "alpha_2"
           ],
-          "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -484,6 +519,7 @@
       },
       "indexes": {
         "name_ietf_idx": {
+          "name": "name_ietf_idx",
           "columns": [
             {
               "expression": "name",
@@ -498,26 +534,25 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "name_ietf_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {
         "language_alternate_name_ietf_code_language_ietf_code_fk": {
           "name": "language_alternate_name_ietf_code_language_ietf_code_fk",
           "tableFrom": "language_alternate_name",
+          "tableTo": "language",
           "columnsFrom": [
             "ietf_code"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -545,28 +580,28 @@
         "gateway_language_to_dependent_language_gateway_language_ietf_language_ietf_code_fk": {
           "name": "gateway_language_to_dependent_language_gateway_language_ietf_language_ietf_code_fk",
           "tableFrom": "gateway_language_to_dependent_language",
+          "tableTo": "language",
           "columnsFrom": [
             "gateway_language_ietf"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         },
         "gateway_language_to_dependent_language_dependent_language_ietf_language_ietf_code_fk": {
           "name": "gateway_language_to_dependent_language_dependent_language_ietf_language_ietf_code_fk",
           "tableFrom": "gateway_language_to_dependent_language",
+          "tableTo": "language",
           "columnsFrom": [
             "dependent_language_ietf"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -614,15 +649,15 @@
         "localization_ietf_code_language_ietf_code_fk": {
           "name": "localization_ietf_code_language_ietf_code_fk",
           "tableFrom": "localization",
+          "tableTo": "language",
           "columnsFrom": [
             "ietf_code"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {
@@ -666,20 +701,36 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "nonscriptural_metadata_rendering_idx": {
+          "name": "nonscriptural_metadata_rendering_idx",
+          "columns": [
+            {
+              "expression": "rendering_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "nonscriptural_meta_rendering_fk": {
           "name": "nonscriptural_meta_rendering_fk",
           "tableFrom": "nonscriptural_rendering_metadata",
+          "tableTo": "rendered_content",
           "columnsFrom": [
             "rendering_id"
           ],
-          "tableTo": "rendered_content",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -740,35 +791,50 @@
         }
       },
       "indexes": {
-        "rendering_unique_idx": {
+        "render_content_id_idx": {
+          "name": "render_content_id_idx",
           "columns": [
             {
-              "expression": "url",
+              "expression": "content_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "rendering_unique_idx",
-          "isUnique": true,
+          "isUnique": false,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "file_type_idx": {
+          "name": "file_type_idx",
+          "columns": [
+            {
+              "expression": "file_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
         "rendered_content_content_id_content_id_fk": {
           "name": "rendered_content_content_id_content_id_fk",
           "tableFrom": "rendered_content",
+          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
-          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -827,20 +893,36 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "scriptural_metadata_rendering_idx": {
+          "name": "scriptural_metadata_rendering_idx",
+          "columns": [
+            {
+              "expression": "rendering_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "rendering_fk": {
           "name": "rendering_fk",
           "tableFrom": "scriptural_rendering_metadata",
+          "tableTo": "rendered_content",
           "columnsFrom": [
             "rendering_id"
           ],
-          "tableTo": "rendered_content",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -877,6 +959,7 @@
       },
       "indexes": {
         "content_idx": {
+          "name": "content_idx",
           "columns": [
             {
               "expression": "content_id",
@@ -885,26 +968,40 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "content_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
+        },
+        "show_biel_idx": {
+          "name": "show_biel_idx",
+          "columns": [
+            {
+              "expression": "show_on_biel",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
         "wa_content_metadata_content_id_content_id_fk": {
           "name": "wa_content_metadata_content_id_content_id_fk",
           "tableFrom": "wa_content_metadata",
+          "tableTo": "content",
           "columnsFrom": [
             "content_id"
           ],
-          "tableTo": "content",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -939,20 +1036,36 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "wa_lang_meta_ietf_idx": {
+          "name": "wa_lang_meta_ietf_idx",
+          "columns": [
+            {
+              "expression": "ietf_code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "metadata_language_fk": {
           "name": "metadata_language_fk",
           "tableFrom": "wa_language_metadata",
+          "tableTo": "language",
           "columnsFrom": [
             "ietf_code"
           ],
-          "tableTo": "language",
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -989,6 +1102,7 @@
       },
       "indexes": {
         "region_name_idx": {
+          "name": "region_name_idx",
           "columns": [
             {
               "expression": "region",
@@ -997,11 +1111,10 @@
               "nulls": "last"
             }
           ],
-          "with": {},
-          "name": "region_name_idx",
           "isUnique": true,
+          "concurrently": false,
           "method": "btree",
-          "concurrently": false
+          "with": {}
         }
       },
       "foreignKeys": {},
@@ -1040,12 +1153,10 @@
     }
   },
   "schemas": {},
+  "sequences": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "a40f1708-6c55-418a-8ac1-ef4aeb8cde78",
-  "prevId": "e51ae2f9-5f6d-4b78-94f2-654266d5b14b",
-  "sequences": {}
+    "tables": {}
+  }
 }

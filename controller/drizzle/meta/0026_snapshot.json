@@ -101,7 +101,7 @@
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "no action",
+          "onUpdate": "cascade",
           "onDelete": "no action"
         }
       },
@@ -1045,7 +1045,7 @@
     "tables": {},
     "columns": {}
   },
-  "id": "a40f1708-6c55-418a-8ac1-ef4aeb8cde78",
-  "prevId": "e51ae2f9-5f6d-4b78-94f2-654266d5b14b",
+  "id": "9cdd11d0-df5a-4a16-a14b-caaa6748e803",
+  "prevId": "a40f1708-6c55-418a-8ac1-ef4aeb8cde78",
   "sequences": {}
 }

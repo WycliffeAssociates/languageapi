@@ -88,6 +88,21 @@
           "isUnique": true,
           "method": "btree",
           "concurrently": false
+        },
+        "language_idx": {
+          "columns": [
+            {
+              "expression": "language_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "language_idx",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
@@ -101,7 +116,7 @@
           "columnsTo": [
             "ietf_code"
           ],
-          "onUpdate": "no action",
+          "onUpdate": "cascade",
           "onDelete": "no action"
         }
       },
@@ -307,6 +322,21 @@
           "with": {},
           "name": "username_reponame_idx",
           "isUnique": true,
+          "method": "btree",
+          "concurrently": false
+        },
+        "username_idx": {
+          "columns": [
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "username_idx",
+          "isUnique": false,
           "method": "btree",
           "concurrently": false
         },
@@ -666,7 +696,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "nonscriptural_metadata_rendering_idx": {
+          "columns": [
+            {
+              "expression": "rendering_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "nonscriptural_metadata_rendering_idx",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "nonscriptural_meta_rendering_fk": {
           "name": "nonscriptural_meta_rendering_fk",
@@ -740,18 +786,33 @@
         }
       },
       "indexes": {
-        "rendering_unique_idx": {
+        "render_content_id_idx": {
           "columns": [
             {
-              "expression": "url",
+              "expression": "content_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
           "with": {},
-          "name": "rendering_unique_idx",
-          "isUnique": true,
+          "name": "render_content_id_idx",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
+        },
+        "file_type_idx": {
+          "columns": [
+            {
+              "expression": "file_type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "file_type_idx",
+          "isUnique": false,
           "method": "btree",
           "concurrently": false
         }
@@ -827,7 +888,23 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "scriptural_metadata_rendering_idx": {
+          "columns": [
+            {
+              "expression": "rendering_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "scriptural_metadata_rendering_idx",
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
+        }
+      },
       "foreignKeys": {
         "rendering_fk": {
           "name": "rendering_fk",
@@ -888,6 +965,21 @@
           "with": {},
           "name": "content_idx",
           "isUnique": true,
+          "method": "btree",
+          "concurrently": false
+        },
+        "show_biel_idx": {
+          "columns": [
+            {
+              "expression": "show_on_biel",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
+          "name": "show_biel_idx",
+          "isUnique": false,
           "method": "btree",
           "concurrently": false
         }
@@ -1045,7 +1137,7 @@
     "tables": {},
     "columns": {}
   },
-  "id": "a40f1708-6c55-418a-8ac1-ef4aeb8cde78",
-  "prevId": "e51ae2f9-5f6d-4b78-94f2-654266d5b14b",
+  "id": "415e8056-232b-46fd-8805-c3f83a42ffea",
+  "prevId": "9cdd11d0-df5a-4a16-a14b-caaa6748e803",
   "sequences": {}
 }

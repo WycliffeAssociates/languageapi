@@ -1,5 +1,4 @@
 #TODO: There's a lot of placeholders in here
-version: "3.8"
 
 services:
   # controller:
@@ -18,45 +17,6 @@ services:
   #       condition: service_healthy
   #     db-migrate:
   #       condition: service_completed_successfully
-  db-seed:
-    build:
-      context: ./controller
-      # dockerfile: Dockerfile
-    entrypoint:
-      [
-        "sh",
-        "-c",
-        "psql postgres://docker:docker@postgres:5432/docker -f data_dump.sql",
-      ]
-    expose:
-      - 7071
-    depends_on:
-      postgres:
-        condition: service_healthy
-
-  db-migrate:
-    build:
-      context: ./controller
-      dockerfile: Dockerfile
-      # IF you want to run the functions in the container and migrate
-    # entrypoint: ["sh", "-c", "pnpm run migrate && pnpm run start"]
-    # IF you only want to migrate so hasura is up to date on migrations done locally
-    entrypoint: pnpm run migrate
-    expose:
-      - 7071
-      - 3000
-    # volumes:
-    #   - ./data_dump.sql:/home/site/wwwroot/data_dump.sql
-    ports:
-      - 7071:7071
-      - 3000:3000
-    environment:
-      - DATABASE_URL=postgres://docker:docker@postgres:5432/docker
-    depends_on:
-      postgres:
-        condition: service_healthy
-      db-seed:
-        condition: service_completed_successfully
 
   postgres:
     image: postgres:13
@@ -84,8 +44,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      db-migrate:
-        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
       interval: 5s

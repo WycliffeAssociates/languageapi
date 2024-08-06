@@ -170,8 +170,9 @@ async function handlePost<T extends TableConfig>({
           tableKey: "langMeta",
           content: separated.waLangMeta,
           transactionHandle: tx,
-          onConflictDoNothingArgs: {
-            hasArgs: false,
+          onConflictDoUpdateArgs: {
+            target: schema.waLangMetadata.ietfCode,
+            set: onConflictSetAllFieldsToSqlExcluded(schema.waLangMetadata),
           },
         });
       }
