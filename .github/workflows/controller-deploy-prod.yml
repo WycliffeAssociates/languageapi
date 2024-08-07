@@ -8,8 +8,12 @@ on:
     branches:
       - prod
     paths:
-      - controller
+      - controller/**
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: "./controller" # set this to the path to your web app project, defaults to the repository root
