@@ -1,0 +1,1 @@
+ALTER TABLE "rendered_content" ADD CONSTRAINT "rendered_content_url_unique" UNIQUE("url");

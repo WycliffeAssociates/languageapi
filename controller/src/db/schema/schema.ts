@@ -225,7 +225,7 @@ export const rendering = pgTable(
       .notNull(),
     fileType: varchar("file_type").notNull(),
     fileSizeBytes: bigint("file_size_bytes", {mode: "number"}),
-    url: text("url").notNull(),
+    url: text("url").notNull().unique(),
     hash: varchar("hash"),
     createdAt: timestamp("created_at", {mode: "string"}),
     modifiedOn: timestamp("modified_on", {mode: "string"}).defaultNow(),

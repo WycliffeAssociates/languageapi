@@ -3,7 +3,6 @@
 - "!include public_country_to_language.yaml"
 - "!include public_gateway_language_to_dependent_language.yaml"
 - "!include public_git_repo.yaml"
-- "!include public_langjson.yaml"
 - "!include public_language.yaml"
 - "!include public_language_alternate_name.yaml"
 - "!include public_localization.yaml"

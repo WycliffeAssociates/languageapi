@@ -140,7 +140,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
         transactionHandle: tx,
         onConflictDoUpdateArgs: {
           target: schema.rendering.url,
-          set: onConflictSetAllFieldsToSqlExcluded(schema.rendering, ["id"]),
+          set: onConflictSetAllFieldsToSqlExcluded(schema.rendering),
         },
       });
       if (Array.isArray(renderingInserted)) {

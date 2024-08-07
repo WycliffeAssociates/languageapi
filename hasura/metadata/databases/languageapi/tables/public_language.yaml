@@ -13,13 +13,6 @@ array_relationships:
         table:
           name: content
           schema: public
-  - name: country_to_languages
-    using:
-      foreign_key_constraint_on:
-        column: language_ietf_code
-        table:
-          name: country_to_language
-          schema: public
   - name: dependent_languages
     using:
       foreign_key_constraint_on:

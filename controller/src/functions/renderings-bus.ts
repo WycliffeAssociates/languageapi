@@ -3,7 +3,7 @@ import {getDb as startDb} from "../db/config";
 import {z} from "zod";
 import {
   handlePost as handleRenderingPost,
-  handleDel,
+  handleDel as handleRenderingDel,
 } from "../routes/rendering";
 import {handlePost as handleContentPost} from "../routes/content";
 import {handlePost as handleGitPost} from "../routes/git";
@@ -202,7 +202,7 @@ export async function wacsSbRenderingsApi(
         });
       // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
       context.log(`Clearing prev renderings for ${parsed.User}/${parsed.Repo}`);
-      const delResult = await handleDel(deleteOldContentRowsPayload);
+      const delResult = await handleRenderingDel(deleteOldContentRowsPayload);
       if (delResult.status != 200) {
         tx.rollback();
         if (delResult.jsonBody) {
