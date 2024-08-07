@@ -51,3 +51,4 @@ select_permissions:
         - domain
         - type
       filter: {}
+      allow_aggregations: true

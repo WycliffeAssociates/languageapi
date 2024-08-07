@@ -18,4 +18,3 @@ select_permissions:
         - created_on
         - modified_on
       filter: {}
-      allow_aggregations: true

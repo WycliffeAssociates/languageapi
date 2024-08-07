@@ -19,6 +19,14 @@ object_relationships:
         table:
           name: scriptural_rendering_metadata
           schema: public
+array_relationships:
+  - name: nonscripturalRenderingMetadataByRenderingId
+    using:
+      foreign_key_constraint_on:
+        column: rendering_id
+        table:
+          name: nonscriptural_rendering_metadata
+          schema: public
 select_permissions:
   - role: anonymous
     permission:
@@ -32,3 +40,4 @@ select_permissions:
         - modified_on
         - url
       filter: {}
+      allow_aggregations: true
