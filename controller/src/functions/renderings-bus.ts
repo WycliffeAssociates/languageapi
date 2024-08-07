@@ -1,15 +1,13 @@
 import {app, InvocationContext} from "@azure/functions";
 import {getDb as startDb} from "../db/config";
 import {z} from "zod";
-import {
-  handlePost as handleRenderingPost,
-  handleDel as handleRenderingDel,
-} from "../routes/rendering";
+import {handlePost as handleRenderingPost} from "../routes/rendering";
 import {handlePost as handleContentPost} from "../routes/content";
 import {handlePost as handleGitPost} from "../routes/git";
 import * as validators from "../routes/validation";
 import {createId} from "@paralleldrive/cuid2";
 import {checkContentExists, determineResourceType} from "../utils";
+import {getExistingRenderedContentRows} from "../lib/shared";
 
 const db = startDb();
 
@@ -148,12 +146,15 @@ export async function wacsSbRenderingsApi(
       }
 
       // ========================================
-      // Delete all renderings connected to this repo/project/content row: When we transact this delete, it should cascade to meta tables as long as cascade is set in schema.
-      const deleteOldContentRowsPayload: z.infer<
-        typeof validators.renderingDelete
-      > = {
-        contentIds: [contentCuid],
-      };
+      // Note: query what's already in DB to perform upserts on the existing content given the URL's of this payload. If we end up in a spot with URls that should apply anymore, it'll be a `delete where url startsWith` sort of sql scrub. This upserts on any existing rendered_content, and the meta tables
+
+      const renderedContentRowsAlreadyInDb =
+        await getExistingRenderedContentRows({
+          contentCuid,
+          urlArray: parsed.RenderedFiles.map(
+            (payload) => `${parsed.FileBasePath}${payload.Path}`
+          ),
+        });
 
       const renderedContentPayload: z.infer<typeof validators.renderingsPost> =
         parsed.RenderedFiles.map((payload) => {
@@ -161,8 +162,8 @@ export async function wacsSbRenderingsApi(
           const randomUUid = createId();
           let baseLoad: z.infer<typeof validators.contentRenderingWithMeta> = {
             tempId: randomUUid,
-            namespace,
             contentId: contentCuid!,
+            namespace,
             fileType: payload.FileType,
             // zod handles the / separatore. Base Path should end with
             url: `${parsed.FileBasePath}${payload.Path}`,
@@ -198,35 +199,42 @@ export async function wacsSbRenderingsApi(
             // noop for now.
             // but baseLoad.nonScripturalMeta would go here
           }
+          const matchingFromLookup = renderedContentRowsAlreadyInDb.find(
+            (row) => row.url === `${parsed.FileBasePath}${payload.Path}`
+          );
+          if (matchingFromLookup) {
+            // Add the ids from existing lookup if we have them for rendered_content, and both meta tables, for upserts, otherwise leave blank to auto create.  If the rows exist, the content_id foreign keys will just propogate on due to no conflict.
+            baseLoad.id = matchingFromLookup.renderedRowId;
+            baseLoad.modifiedOn = new Date().toISOString();
+            if (!!baseLoad.scripturalMeta && matchingFromLookup.metadataId) {
+              baseLoad.scripturalMeta.id = matchingFromLookup.metadataId;
+            }
+            if (
+              !!baseLoad.nonScripturalMeta &&
+              matchingFromLookup.nonScripturalMetadataId
+            ) {
+              baseLoad.nonScripturalMeta.id =
+                matchingFromLookup.nonScripturalMetadataId;
+            }
+          }
           return baseLoad;
         });
-      // Clear out all renderings and meta (cascade) for this wacs repo first since the pipeline recreates all blobs on a path on render.
-      context.log(`Clearing prev renderings for ${parsed.User}/${parsed.Repo}`);
-      const delResult = await handleRenderingDel(deleteOldContentRowsPayload);
-      if (delResult.status != 200) {
+
+      // Insert new renderings and meta
+      context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
+      const postResult = await handleRenderingPost(renderedContentPayload);
+      if (postResult.status != 200) {
         tx.rollback();
-        if (delResult.jsonBody) {
-          throw new Error(delResult.jsonBody.message || "failed to delete");
-        }
-      } else {
-        // Insert new renderings and meta
-        context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
-        const postResult = await handleRenderingPost(renderedContentPayload);
-        if (postResult.status != 200) {
-          tx.rollback();
-          if (postResult.jsonBody) {
-            if (postResult.jsonBody.additionalErrors) {
-              const errMessage = JSON.stringify(
-                `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n 
+        if (postResult.jsonBody) {
+          if (postResult.jsonBody.additionalErrors) {
+            const errMessage = JSON.stringify(
+              `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n 
                 LAST ERR: 
                 ${postResult.jsonBody.message}`
-              );
-              throw new Error(errMessage);
-            } else {
-              throw new Error(
-                postResult.jsonBody.message || "failed to delete"
-              );
-            }
+            );
+            throw new Error(errMessage);
+          } else {
+            throw new Error(postResult.jsonBody.message || "failed to delete");
           }
         }
       }

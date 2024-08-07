@@ -16,7 +16,7 @@
   "extensions": {
     "serviceBus": {
       "messageHandlerOptions": {
-        "maxConcurrentCalls": 1
+        "maxConcurrentCalls": 2
       }
     }
   }
