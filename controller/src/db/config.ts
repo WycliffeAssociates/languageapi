@@ -8,11 +8,10 @@ let db: PostgresJsDatabase<typeof schema>;
 export function getDb() {
   if (db) return db;
   const queryClient = postgres(`${process.env.DATABASE_URL!}`, {
-    max: 4,
+    max: 2,
   });
   db = drizzle(queryClient, {
     schema,
-    // logger: true,
   });
   return db;
 }
