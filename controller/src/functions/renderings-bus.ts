@@ -180,7 +180,9 @@ export async function wacsSbRenderingsApi(
             let isWholeProject =
               !payload.Chapter &&
               !payload.Book &&
-              ["download", "index", "whole"].includes(payload.Path);
+              ["download", "index", "whole", "print_all"].includes(
+                payload.Path.toLowerCase()
+              );
 
             baseLoad.scripturalMeta = {
               tempId: randomUUid,
