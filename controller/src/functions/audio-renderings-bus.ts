@@ -1,6 +1,6 @@
 import {z} from "zod";
 import {app, InvocationContext} from "@azure/functions";
-import {checkContentExists} from "../utils";
+import {checkContentExists, upsertContentFromRenderingBus} from "../utils";
 import {createId} from "@paralleldrive/cuid2";
 import * as validators from "../routes/validation";
 import {handlePost as handleContentPost} from "../routes/content";
@@ -47,6 +47,7 @@ const audioMessageSchema = z.object({
   type: z.string(),
   domain: z.string(),
   resourceType: z.string(),
+  resourceTitle: z.string().nullable().optional(),
   createdOn: z.string().optional(),
   modifiedOn: z.string().optional(),
   namespace: z.string().toLowerCase(),
@@ -82,6 +83,21 @@ export async function audioRenderedContentListener(
         contentCuid = await createContentRow({
           context,
           row: parsed,
+        });
+      } else {
+        // port / wacs non currently tracking audio info, but we still want to upsert if something changes from batch to batch since this is currently only route for content audio and renderings
+        await upsertContentFromRenderingBus({
+          existingId: currentExistingId,
+          payload: {
+            // todo: if wacs becomes source of truth over port for some items, or tracks some stuff that port doesn,'t can add that here
+            title: parsed.resourceTitle || null,
+            modifiedOn: parsed.modifiedOn || new Date().toISOString(),
+            resourceType: parsed.resourceType,
+            languageId: parsed.languageIetf,
+            name: parsed.name,
+            namespace: parsed.namespace,
+          },
+          db,
         });
       }
       if (!contentCuid) {
@@ -167,8 +183,8 @@ export async function audioRenderedContentListener(
         if (postResult.jsonBody) {
           if (postResult.jsonBody.additionalErrors) {
             const errMessage = JSON.stringify(
-              `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n 
-              LAST ERR: 
+              `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n
+              LAST ERR:
               ${postResult.jsonBody.message}`
             );
             throw new Error(errMessage);
@@ -225,6 +241,7 @@ async function createContentRow({context, row}: createContentRowArgs) {
     resourceType: row.resourceType,
     createdOn: row.createdOn,
     modifiedOn: row.modifiedOn,
+    title: row.resourceTitle ? row.resourceTitle : null,
   } as const;
   const newContentRow: z.infer<typeof validators.contentPost> = [
     newContentPayload,

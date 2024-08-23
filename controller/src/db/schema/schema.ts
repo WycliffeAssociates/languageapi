@@ -133,6 +133,7 @@ export const content = pgTable(
     }),
     name: varchar("name", {length: 256}).notNull(),
     namespace: varchar("namespace", {length: 256}).notNull(),
+    title: varchar("title"),
     type: contentTypeEnum("type").notNull(),
     domain: contentDomainEnum("domain"),
     resourceType: text("resource_type"), //tw, tn, lexicon, ideally something standard though

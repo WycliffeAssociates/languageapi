@@ -211,6 +211,13 @@
       "when": 1723050286702,
       "tag": "0029_panoramic_captain_britain",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1724433097970,
+      "tag": "0030_mushy_serpent_society",
+      "breakpoints": true
     }
   ]
 }
