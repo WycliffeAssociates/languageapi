@@ -40,15 +40,16 @@ select_permissions:
   - role: anonymous
     permission:
       columns:
+        - created_on
+        - domain
         - id
         - language_id
         - level
+        - modified_on
         - name
         - namespace
         - resource_type
-        - created_on
-        - modified_on
-        - domain
+        - title
         - type
       filter: {}
       allow_aggregations: true
