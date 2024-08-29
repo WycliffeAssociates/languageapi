@@ -6,7 +6,11 @@ import {handlePost as handleContentPost} from "../routes/content";
 import {handlePost as handleGitPost} from "../routes/git";
 import * as validators from "../routes/validation";
 import {createId} from "@paralleldrive/cuid2";
-import {checkContentExists, determineResourceType} from "../utils";
+import {
+  checkContentExists,
+  determineResourceType,
+  upsertContentFromRenderingBus,
+} from "../utils";
 import {getExistingRenderedContentRows} from "../lib/shared";
 
 const db = startDb();
@@ -34,6 +38,7 @@ const renderingsSchema = z.object({
   User: z.string(),
   Repo: z.string(),
   RepoUrl: z.string(),
+  ResourceName: z.string().nullable().optional(),
   LanguageCode: z.string().nullable(),
   LanguageName: z.string().nullable(),
   ResourceType: z.string(),
@@ -108,6 +113,9 @@ export async function wacsSbRenderingsApi(
         if (parsed.ResourceType) {
           newContentPayload.domain = determineResourceType(parsed.ResourceType);
         }
+        if (parsed.ResourceName) {
+          newContentPayload.title = parsed.ResourceName;
+        }
 
         const newContentRow: z.infer<typeof validators.contentPost> = [
           newContentPayload,
@@ -122,6 +130,16 @@ export async function wacsSbRenderingsApi(
             `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
           );
         }
+      } else {
+        // some properties we want to upsert on becuase PORT does not track them, such as the title, so if they've changed coming from the renderings bus, we need to upsert them.
+        await upsertContentFromRenderingBus({
+          existingId: currentExistingId,
+          payload: {
+            // as needed: if wacs becomes source of truth over port for some items, or tracks some stuff that port doesn,'t can add that here
+            title: parsed.ResourceName || null,
+          },
+          db,
+        });
       }
       // if !exists, created in prev step of making new content row. If it failed somehow, throw.
       if (!contentCuid) {
@@ -230,8 +248,8 @@ export async function wacsSbRenderingsApi(
         if (postResult.jsonBody) {
           if (postResult.jsonBody.additionalErrors) {
             const errMessage = JSON.stringify(
-              `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n 
-                LAST ERR: 
+              `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n
+                LAST ERR:
                 ${postResult.jsonBody.message}`
             );
             throw new Error(errMessage);
