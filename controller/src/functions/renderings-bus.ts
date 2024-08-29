@@ -147,6 +147,7 @@ export async function wacsSbRenderingsApi(
       }
 
       // we got a repoRendered from gitea, so create a git row while we are it. go ahead and upsert in case the repoName or username or something changed
+      // todo: see if arq will upsert on rerendering? one of those
       const newGitRow: z.infer<typeof validators.gitPost> = [
         {
           contentId: contentCuid,
