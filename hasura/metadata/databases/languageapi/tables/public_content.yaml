@@ -14,6 +14,13 @@ object_relationships:
   - name: language
     using:
       foreign_key_constraint_on: language_id
+  - name: wa_content_metadata
+    using:
+      foreign_key_constraint_on:
+        column: content_id
+        table:
+          name: wa_content_metadata
+          schema: public
 array_relationships:
   - name: git_repos
     using:
@@ -28,13 +35,6 @@ array_relationships:
         column: content_id
         table:
           name: rendered_content
-          schema: public
-  - name: wa_content_metadata
-    using:
-      foreign_key_constraint_on:
-        column: content_id
-        table:
-          name: wa_content_metadata
           schema: public
 select_permissions:
   - role: anonymous
