@@ -5,7 +5,7 @@ console:
 	--endpoint $$(op read "op://AppDev Scripture Accessibility/languageapi-hasura-dev-container-secrets/url")
 
 # -n drizzle schema is for to get the same migrations that have been applied to the dev database applied. This presumes a workflow of dumping dev data incl. it's migrations, and then trying out new stuff from there. When the docker compose postgres volume spins ups, its uses psql and mounts in this dump. 
-# If you're resetting local back to dev parity, docker
+# If you're resetting local back to dev parity, datadump, the make clean (to get rid of volumen), then compose up postgres, then make localdataingest (manual) if compoes file doesn't auto create populate it form dump
 .PHONY: datadump
 datadump:
 	pg_dump "$$(op read "op://AppDev Scripture Accessibility/languageapi-dev/connection string")" -n public -n drizzle > data_dump.sql

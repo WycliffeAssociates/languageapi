@@ -1,12 +1,16 @@
-import { DrizzleError, SQL, and, eq, sql } from "drizzle-orm";
+import {DrizzleError, SQL, and, eq, sql} from "drizzle-orm";
 
-import { PgTableWithColumns, TableConfig } from "drizzle-orm/pg-core";
-import { PostgresError } from "postgres";
-import { handlerReturnError } from "./customTypes/types";
-import { ZodError } from "zod";
+import {
+  PgTableWithColumns,
+  PgTransaction,
+  TableConfig,
+} from "drizzle-orm/pg-core";
+import {PostgresError} from "postgres";
+import {handlerReturnError} from "./customTypes/types";
+import {ZodError} from "zod";
 import * as schema from "./db/schema/schema";
-import { PostgresJsDatabase } from "drizzle-orm/postgres-js";
-import { insertContent } from "./db/schema/validations";
+import {PostgresJsDatabase} from "drizzle-orm/postgres-js";
+import {insertContent} from "./db/schema/validations";
 
 export const BibleBookCategories = {
   OT: [
@@ -89,7 +93,7 @@ const bibleBookSortOrder = Object.values(BibleBookCategories)
     acc[value] = index + 1;
     return acc;
   }, {});
-export { bibleBookSortOrder };
+export {bibleBookSortOrder};
 
 export function getBibleBookSortOrder(slug: string) {
   return bibleBookSortOrder[slug.toUpperCase()] || -1;
@@ -104,7 +108,7 @@ export function batchArr<T, U>(array: T[], batchSize: number): Array<Array<T>> {
   return batches;
 }
 export function isErrorWithMessage(
-  error: unknown,
+  error: unknown
 ): error is handlerReturnError {
   return (
     typeof error === "object" &&
@@ -196,10 +200,10 @@ export function dbTxDidErr(val: unknown): val is handlerReturnError {
  */
 export function onConflictSetAllFieldsToSqlExcluded<
   T extends TableConfig,
-  UTableCols extends keyof PgTableWithColumns<T>["_"]["columns"],
+  UTableCols extends keyof PgTableWithColumns<T>["_"]["columns"]
 >(
   table: PgTableWithColumns<T>,
-  omitConflictUpdateKeys: UTableCols[] = ["id" as UTableCols],
+  omitConflictUpdateKeys: UTableCols[] = ["id" as UTableCols]
 ) {
   let setVal: Record<string, SQL<unknown>> = {};
 
@@ -264,31 +268,32 @@ export async function checkContentExists({
   db: PostgresJsDatabase<typeof schema>;
 }) {
   const doesExist = await db
-    .select({ id: schema.content.id })
+    .select({id: schema.content.id})
     .from(schema.content)
     .where(
       and(
         eq(schema.content.namespace, namespace),
-        eq(schema.content.name, name),
-      ),
+        eq(schema.content.name, name)
+      )
     );
 
   let dbId = doesExist[0]?.id ?? null;
-  return { exists: doesExist.length > 0, id: dbId };
+  return {exists: doesExist.length > 0, id: dbId};
 }
 
 // some properties we want to upsert on becuase PORT does not track them, such as the title, so if they've changed coming from the renderings bus, we need to upsert them.
 type upsertContentFromRenderingBusArgs = {
   existingId: string;
   payload: Partial<insertContent>;
-  db: PostgresJsDatabase<typeof schema>;
+  handle: PgTransaction<any, any, any> | PostgresJsDatabase<typeof schema>;
 };
+
 export async function upsertContentFromRenderingBus({
-  db,
+  handle,
   existingId,
   payload,
 }: upsertContentFromRenderingBusArgs) {
-  await db
+  await handle
     .update(schema.content)
     .set(payload)
     .where(eq(schema.content.id, existingId));

@@ -138,7 +138,7 @@ export async function wacsSbRenderingsApi(
             // as needed: if wacs becomes source of truth over port for some items, or tracks some stuff that port doesn,'t can add that here
             title: parsed.ResourceName || null,
           },
-          db,
+          handle: tx,
         });
       }
       // if !exists, created in prev step of making new content row. If it failed somehow, throw.
@@ -274,6 +274,8 @@ export async function wacsSbRenderingsApi(
       error.issues.forEach((issue) => {
         context.error(JSON.stringify(issue));
       });
+    } else {
+      context.error(error);
     }
   }
 }

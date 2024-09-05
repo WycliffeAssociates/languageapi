@@ -97,7 +97,7 @@ export async function audioRenderedContentListener(
             name: parsed.name,
             namespace: parsed.namespace,
           },
-          db,
+          handle: tx,
         });
       }
       if (!contentCuid) {
