@@ -132,6 +132,7 @@ export async function wacsSbRenderingsApi(
         }
       } else {
         // some properties we want to upsert on becuase PORT does not track them, such as the title, so if they've changed coming from the renderings bus, we need to upsert them.
+        console.log(`upserting for ${joinedName}`);
         await upsertContentFromRenderingBus({
           existingId: currentExistingId,
           payload: {
