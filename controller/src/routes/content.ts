@@ -99,6 +99,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     const payloadsWithGuids = payloadParsed.map((payload) => {
       return {
         ...payload,
+        // this is only used if needed. the insert below will ignore it if not needed adn the name/namespace already exists.  It returns that idea to the caller as well
         id: payload.id ? payload.id : createId(),
       };
     });
@@ -243,7 +244,11 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
         tx.rollback();
       }
 
-      return {...metaInserted, ...contentInserted, ...attachedGitInserted};
+      return {
+        metaInserted,
+        contentInserted,
+        attachedGitInserted,
+      };
     });
     const returnVal = handleApiMethodReturn({
       result: transacted,

@@ -47,6 +47,14 @@ export const langMetaRelations = relations(db.waLangMetadata, ({one}) => ({
 }));
 export const contentRelations = relations(db.content, ({one, many}) => ({
   renderings: many(db.rendering),
+  gitRepo: one(db.gitRepo, {
+    fields: [db.content.id],
+    references: [db.gitRepo.contentId],
+  }),
+  waContentMetadata: one(db.waContentMetadata, {
+    fields: [db.content.id],
+    references: [db.waContentMetadata.contentId],
+  }),
 }));
 
 export const contentMetaRelations = relations(

@@ -59,6 +59,7 @@ export const gitDelete = z.object({
 export const contentPost = z.array(
   dbValidators.insertContentSchema.extend({
     id: z.string().optional(),
+    name: z.string().trim().toLowerCase(),
     namespace: z.string().trim().toLowerCase(),
     meta: dbValidators.insertWaContentMetaSchema
       .omit({contentId: true})

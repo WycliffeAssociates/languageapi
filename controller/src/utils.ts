@@ -241,7 +241,7 @@ export function statusCodeFromErrType(err: unknown) {
   return 400;
 }
 
-export function determineResourceType(slug: string) {
+export function determineDomainType(slug: string) {
   // "scripture" | "gloss" | "parascriptural" | "peripheral" | null | undefined
   const upperSlug = slug.toUpperCase();
   if (bibleBookSortOrder[upperSlug] !== undefined) {

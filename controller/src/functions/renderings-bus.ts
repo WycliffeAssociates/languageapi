@@ -8,7 +8,7 @@ import * as validators from "../routes/validation";
 import {createId} from "@paralleldrive/cuid2";
 import {
   checkContentExists,
-  determineResourceType,
+  determineDomainType,
   upsertContentFromRenderingBus,
 } from "../utils";
 import {getExistingRenderedContentRows} from "../lib/shared";
@@ -111,7 +111,7 @@ export async function wacsSbRenderingsApi(
           newContentPayload.resourceType = parsed.ResourceType;
         }
         if (parsed.ResourceType) {
-          newContentPayload.domain = determineResourceType(parsed.ResourceType);
+          newContentPayload.domain = determineDomainType(parsed.ResourceType);
         }
         if (parsed.ResourceName) {
           newContentPayload.title = parsed.ResourceName;
@@ -190,13 +190,17 @@ export async function wacsSbRenderingsApi(
             fileSizeBytes: payload.Size || 0,
             hash: payload.Hash,
           };
-          const domain = determineResourceType(parsed.ResourceType);
+          const domain = determineDomainType(parsed.ResourceType);
           if (
             !!domain &&
             ["scripture", "gloss", "parascriptural"].includes(domain)
           ) {
             const bookName = parsed.Titles[payload.Book || ""];
-            const isWholeBook = !payload.Chapter && !!payload.Book;
+            const isWholeBook =
+              !payload.Chapter &&
+              !!payload.Book &&
+              !payload.Path.includes("intro.html") &&
+              !payload.Path.includes("front.html");
             let isWholeProject =
               !payload.Chapter &&
               !payload.Book &&
