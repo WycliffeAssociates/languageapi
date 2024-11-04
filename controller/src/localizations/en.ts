@@ -10,7 +10,7 @@ const en = {
   ta: "Translation Academy",
   tn: "Translation Notes",
   tq: "Translation Questions",
-  tw: "Translations Words",
+  tw: "Translation Words",
   udb: "Unlocked Dynamic Bible",
   uhb: "Hebrew Old Testament",
   ulb: "Unlocked Literal Bible",

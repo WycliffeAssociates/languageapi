@@ -27,7 +27,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       # - Only runs when empty
-      - ./controller/data-dump.sql:/docker-entrypoint-initdb.d/data_dump.sql
+      - ./data-dump.sql:/docker-entrypoint-initdb.d/data_dump.sql
     expose:
       - 5432
     ports:
