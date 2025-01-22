@@ -4,6 +4,7 @@ import {contentRoute} from "./content";
 import {regionRoute} from "./region";
 import {gitRoute} from "./git";
 import {renderingRoute} from "./rendering";
+import {contentWithRenderingRoute} from "./contentWithRendering";
 
 export const routes = [
   languageRoute,
@@ -12,4 +13,5 @@ export const routes = [
   regionRoute,
   gitRoute,
   renderingRoute,
+  contentWithRenderingRoute,
 ];

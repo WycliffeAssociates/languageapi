@@ -56,22 +56,21 @@ export const gitDelete = z.object({
 
 /* //@===============  CONTENT   =============   */
 
-export const contentPost = z.array(
-  dbValidators.insertContentSchema.extend({
-    id: z.string().optional(),
-    name: z.string().trim().toLowerCase(),
-    namespace: z.string().trim().toLowerCase(),
-    meta: dbValidators.insertWaContentMetaSchema
-      .omit({contentId: true})
-      .optional(),
-    resourceType: z.nullable(z.string().trim().toLowerCase()).optional(),
-    gitEntry: dbValidators.insertGitRepoSchema
-      .omit({
-        contentId: true, //will grab from insert
-      })
-      .optional(),
-  })
-);
+const contentPostSingle = dbValidators.insertContentSchema.extend({
+  id: z.string().optional(),
+  name: z.string().trim().toLowerCase(),
+  namespace: z.string().trim().toLowerCase(),
+  meta: dbValidators.insertWaContentMetaSchema
+    .omit({contentId: true})
+    .optional(),
+  resourceType: z.nullable(z.string().trim().toLowerCase()).optional(),
+  gitEntry: dbValidators.insertGitRepoSchema
+    .omit({
+      contentId: true, //will grab from insert
+    })
+    .optional(),
+});
+export const contentPost = z.array(contentPostSingle);
 
 export const contentDelete = z.array(
   z.object({name: z.string(), namespace: z.string()})
@@ -94,7 +93,31 @@ export const contentRenderingWithMeta =
       })
       .optional(),
   });
+
 export const renderingsPost = z.array(contentRenderingWithMeta);
+
+export const contentWithRenderingAttached = z.array(
+  contentPostSingle.extend({
+    renderings: z.array(
+      contentRenderingWithMeta.extend({
+        tempId: z.string().optional(),
+        contentId: z.string().optional(),
+        scripturalMeta: dbValidators.insertScripturalRenderingMetadataSchema
+          .extend({
+            tempId: z.string().optional(),
+          })
+          .optional(),
+        nonScripturalMeta:
+          dbValidators.insertNonScripturalRenderingMetadataSchema
+            .extend({
+              tempId: z.string().optional(),
+            })
+            .optional(),
+      })
+    ),
+  })
+);
+
 export type typeOfContentRenderingWithMeta = z.infer<
   typeof contentRenderingWithMeta
 >;
