@@ -91,6 +91,7 @@ async function handlePostRequest({
       payload.renderings.forEach((r) => {
         r.contentId = id;
         const tempId = createId();
+        r.tempId = tempId;
         if (r.scripturalMeta) {
           r.scripturalMeta.tempId = tempId;
         }
@@ -118,7 +119,7 @@ async function handlePostRequest({
       content,
       renderings,
     });
-    await db.transaction(async (tx) => {
+    const transacted = await db.transaction(async (tx) => {
       const contentInserted = await handleContentPost(content);
       if (dbTxDidErr(contentInserted)) {
         addlErrs.push({
@@ -147,13 +148,17 @@ async function handlePostRequest({
       if (addlErrs.length) {
         tx.rollback();
       }
+      return;
     });
     const returnVal = handleApiMethodReturn({
-      result: "ok",
+      result: transacted,
       method: thisMethod,
       addlErrs,
       status,
     });
+    if (addlErrs.length) {
+      throw new Error("Error inserting content or renderings");
+    }
     return returnVal;
     // Now that these are joined with unique ids, we should just be able to split and send off to create content and create renderings functions;
   } catch (error) {
