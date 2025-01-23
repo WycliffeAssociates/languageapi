@@ -146,9 +146,11 @@ async function handlePostRequest({
         });
       }
       if (addlErrs.length) {
-        context.warn({
-          message: "Error inserting content or renderings",
-          addlErrs,
+        addlErrs.forEach((err) => {
+          context.warn({
+            message: "Error in additional errors",
+            err,
+          });
         });
         tx.rollback();
       }
