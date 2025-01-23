@@ -46,7 +46,7 @@ async function handle(
   try {
     switch (request.method) {
       case "POST":
-        return handlePostRequest({request});
+        return handlePostRequest({request, context});
       default:
         return {
           status: 404,
@@ -67,13 +67,21 @@ async function handle(
 }
 
 // While the service bus function for content from WACS can insert content with its renderings attached, this is a route that is more closely alined to app schema and can be called directly and provides all needed ids for relationships.
-async function handlePostRequest<T extends TableConfig>({
+async function handlePostRequest({
   request,
-}: Omit<apiRouteHandlerArgs<T>, "table">): Promise<HttpResponseInit> {
+  context,
+}: {
+  request: HttpRequest;
+  context: InvocationContext;
+}): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
   const payload = await request.json();
+  context.log({
+    message: "Received request to insert content with renderings",
+    payload,
+  });
   try {
     const validationSchema = validators.contentWithRenderingAttached;
     const payloadParsed = validationSchema.parse(payload);
@@ -93,7 +101,7 @@ async function handlePostRequest<T extends TableConfig>({
       return payload;
     });
     // any to defer validation to content and renderings routes respectively
-    const {content, renderings} = await augmented.reduce(
+    const {content, renderings} = augmented.reduce(
       (acc: {content: any[]; renderings: any[]}, curr) => {
         const {renderings, ...content} = curr;
         acc.content.push(content);
@@ -105,8 +113,12 @@ async function handlePostRequest<T extends TableConfig>({
         renderings: [],
       }
     );
-
-    const tx = await db.transaction(async (tx) => {
+    context.log({
+      message: "Inserting content and renderings",
+      content,
+      renderings,
+    });
+    await db.transaction(async (tx) => {
       const contentInserted = await handleContentPost(content);
       if (dbTxDidErr(contentInserted)) {
         addlErrs.push({
@@ -114,10 +126,18 @@ async function handlePostRequest<T extends TableConfig>({
           name: contentInserted.name,
         });
       }
+      context.log({
+        message: "Content inserted",
+        contentInserted,
+      });
       if (addlErrs.length) {
         tx.rollback();
       }
       const renderingsInserted = await handleRenderingPost(renderings);
+      context.log({
+        message: "Renderings inserted",
+        renderingsInserted,
+      });
       if (dbTxDidErr(renderingsInserted)) {
         addlErrs.push({
           message: "Error inserting renderings",
