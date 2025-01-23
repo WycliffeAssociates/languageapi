@@ -121,10 +121,10 @@ async function handlePostRequest({
     });
     const transacted = await db.transaction(async (tx) => {
       const contentInserted = await handleContentPost(content);
-      if (dbTxDidErr(contentInserted)) {
+      if (contentInserted.status != 200) {
         addlErrs.push({
-          message: "Error inserting content",
-          name: contentInserted.name,
+          name: "Error inserting content",
+          message: contentInserted.jsonBody,
         });
       }
       if (addlErrs.length) {
@@ -139,17 +139,12 @@ async function handlePostRequest({
         contentInserted,
       });
       const renderingsInserted = await handleRenderingPost(renderings);
-
-      if (dbTxDidErr(renderingsInserted)) {
+      if (renderingsInserted.status != 200) {
         addlErrs.push({
-          message: "Error inserting renderings",
-          name: renderingsInserted.name,
+          name: "Error inserting renderings",
+          message: renderingsInserted.jsonBody,
         });
       }
-      context.log({
-        message: "Renderings inserted",
-        renderingsInserted,
-      });
       if (addlErrs.length) {
         context.warn({
           message: "Error inserting content or renderings",
