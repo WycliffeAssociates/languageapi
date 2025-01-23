@@ -1,4 +1,5 @@
 import {print, parse} from "graphql";
+import {genericErrShape} from "../../controller/src/customTypes/types";
 
 export function getPresets() {
   const link = process.env.REACT_APP_HASURA_URL!;
@@ -50,6 +51,8 @@ export function updateLocation(endpointInput: string) {
     urlParams.toString();
   window.history.replaceState({}, " ", updatedUrl);
 }
+
+export function flattenAddlErrors(errors: genericErrShape[]) {}
 
 export function goTo(url: string, newTab = false) {
   if (newTab) window.open(url, "__blank");
