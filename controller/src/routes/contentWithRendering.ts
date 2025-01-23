@@ -127,25 +127,34 @@ async function handlePostRequest({
           name: contentInserted.name,
         });
       }
+      if (addlErrs.length) {
+        context.warn({
+          message: "Error inserting content",
+          addlErrs,
+        });
+        tx.rollback();
+      }
       context.log({
         message: "Content inserted",
         contentInserted,
       });
-      if (addlErrs.length) {
-        tx.rollback();
-      }
       const renderingsInserted = await handleRenderingPost(renderings);
-      context.log({
-        message: "Renderings inserted",
-        renderingsInserted,
-      });
+
       if (dbTxDidErr(renderingsInserted)) {
         addlErrs.push({
           message: "Error inserting renderings",
           name: renderingsInserted.name,
         });
       }
+      context.log({
+        message: "Renderings inserted",
+        renderingsInserted,
+      });
       if (addlErrs.length) {
+        context.warn({
+          message: "Error inserting content or renderings",
+          addlErrs,
+        });
         tx.rollback();
       }
       return;
