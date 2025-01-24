@@ -4,14 +4,16 @@ import {
   InvocationContext,
 } from "@azure/functions";
 import {externalRouteType, genericErrShape} from "../customTypes/types";
-import {handleApiMethodReturn, statusCodeFromErrType} from "../utils";
+import {
+  checkContentExists,
+  handleApiMethodReturn,
+  statusCodeFromErrType,
+} from "../utils";
 import * as validators from "./validation";
-import {sql} from "drizzle-orm";
 import {getDb} from "../db/config";
 import {createId} from "@paralleldrive/cuid2";
 import {handlePost as handleContentPost} from "./content";
 import {handlePost as handleRenderingPost} from "./rendering";
-import {polymorphicSelect} from "../db/handlers";
 
 // FILE LEVEL SCOPE
 const db = getDb();
@@ -72,62 +74,30 @@ async function handlePostRequest({
   let status = 200;
   const payload = await request.json();
   context.log({
-    message: "Received request to insert content with renderings",
+    message: "Received request for content+renderings",
     payload,
   });
   try {
     const validationSchema = validators.contentWithRenderingAttached;
     const payloadParsed = validationSchema.parse(payload);
 
-    const nameNamespaces = payloadParsed.map((payload) => {
-      return [payload.name, payload.namespace];
-    });
-    const existingContent = await polymorphicSelect(
-      "content",
-      sql`(name, namespace) IN ${nameNamespaces}`
-    );
-    const isntErrExistingContent = Array.isArray(existingContent);
-    const augmented = payloadParsed.map((payload) => {
-      const matching =
-        isntErrExistingContent &&
-        existingContent.find(
-          (c) => c.name === payload.name && c.namespace === payload.namespace
-        );
-      const id = matching ? matching.id : createId();
-      payload.id = id;
-      payload.renderings.forEach((r) => {
-        r.contentId = id;
-        const tempId = createId();
-        r.tempId = tempId;
-        if (r.scripturalMeta) {
-          r.scripturalMeta.tempId = tempId;
-        }
-        if (r.nonScripturalMeta) {
-          r.nonScripturalMeta.tempId = tempId;
-        }
-      });
-      return payload;
-    });
-    // any to defer validation to content and renderings routes respectively
-    const {content, renderings} = augmented.reduce(
-      (acc: {content: any[]; renderings: any[]}, curr) => {
+    // Insert (or upsert) content
+    const {content} = payloadParsed.reduce(
+      (acc: {content: any[]}, curr) => {
         const {renderings, ...content} = curr;
         acc.content.push(content);
-        acc.renderings.push(...renderings);
         return acc;
       },
       {
         content: [],
-        renderings: [],
       }
     );
-    context.log({
-      message: "Inserting content and renderings",
-      content,
-      renderings,
-    });
+
     const transacted = await db.transaction(async (tx) => {
       const contentInserted = await handleContentPost(content);
+      context.log({
+        message: "inserting content",
+      });
       if (contentInserted.status != 200) {
         context.warn({
           message: "Error inserting content",
@@ -135,12 +105,36 @@ async function handlePostRequest({
         });
         tx.rollback();
       }
-
+      // content Inserted is an http response, but we don't send back those in post requests right now, so just query for what we just inserted to get the ids:
+      // Get those ids from inserted and add to the renderings for fk constraint
+      for await (const payload of payloadParsed) {
+        const existing = await checkContentExists({
+          db,
+          name: payload.name,
+          namespace: payload.namespace,
+        });
+        let id = existing.id!;
+        payload.renderings.forEach((r) => {
+          r.contentId = id;
+          const tempId = createId();
+          r.tempId = tempId;
+          if (r.scripturalMeta) {
+            r.scripturalMeta.tempId = tempId;
+          }
+          if (r.nonScripturalMeta) {
+            r.nonScripturalMeta.tempId = tempId;
+          }
+        });
+      }
+      const renderingsOnly = payloadParsed
+        .map((payload) => payload.renderings)
+        .flat();
+      // post the renderings
+      const renderingsInserted = await handleRenderingPost(renderingsOnly);
       context.log({
-        message: "Content inserted",
-        contentInserted,
+        message: "inserting renderings for that content",
+        payload: JSON.stringify(renderingsOnly),
       });
-      const renderingsInserted = await handleRenderingPost(renderings);
       if (renderingsInserted.status != 200) {
         context.warn({
           message: "Error inserting renderings",
