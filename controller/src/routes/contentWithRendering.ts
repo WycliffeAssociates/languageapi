@@ -3,22 +3,15 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
-import {
-  apiRouteHandlerArgs,
-  externalRouteType,
-  genericErrShape,
-} from "../customTypes/types";
-import {
-  handleApiMethodReturn,
-  dbTxDidErr,
-  statusCodeFromErrType,
-} from "../utils";
+import {externalRouteType, genericErrShape} from "../customTypes/types";
+import {handleApiMethodReturn, statusCodeFromErrType} from "../utils";
 import * as validators from "./validation";
-import {TableConfig} from "drizzle-orm/pg-core";
+import {sql} from "drizzle-orm";
 import {getDb} from "../db/config";
 import {createId} from "@paralleldrive/cuid2";
 import {handlePost as handleContentPost} from "./content";
 import {handlePost as handleRenderingPost} from "./rendering";
+import {polymorphicSelect} from "../db/handlers";
 
 // FILE LEVEL SCOPE
 const db = getDb();
@@ -85,8 +78,22 @@ async function handlePostRequest({
   try {
     const validationSchema = validators.contentWithRenderingAttached;
     const payloadParsed = validationSchema.parse(payload);
+
+    const nameNamespaces = payloadParsed.map((payload) => {
+      return [payload.name, payload.namespace];
+    });
+    const existingContent = await polymorphicSelect(
+      "content",
+      sql`(name, namespace) IN ${nameNamespaces}`
+    );
+    const isntErrExistingContent = Array.isArray(existingContent);
     const augmented = payloadParsed.map((payload) => {
-      const id = createId();
+      const matching =
+        isntErrExistingContent &&
+        existingContent.find(
+          (c) => c.name === payload.name && c.namespace === payload.namespace
+        );
+      const id = matching ? matching.id : createId();
       payload.id = id;
       payload.renderings.forEach((r) => {
         r.contentId = id;

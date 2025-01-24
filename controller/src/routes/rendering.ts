@@ -182,7 +182,6 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
       }
       let scriptureMetaInserted;
       if (reduced.scripturalMetaPayloads.length) {
-        // todo: see if I need to change these onconflicts to somethign else?
         scriptureMetaInserted = await polymorphicInsert({
           tableKey: "scripturalMetadata",
           content: reduced.scripturalMetaPayloads,

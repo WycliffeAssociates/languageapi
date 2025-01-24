@@ -89,7 +89,7 @@ export async function audioRenderedContentListener(
         await upsertContentFromRenderingBus({
           existingId: currentExistingId,
           payload: {
-            // todo: if wacs becomes source of truth over port for some items, or tracks some stuff that port doesn,'t can add that here
+            // NOTE: if wacs becomes source of truth over port for some items, or tracks some stuff that port doesn,'t can add that here
             title: parsed.resourceTitle || null,
             modifiedOn: parsed.modifiedOn || new Date().toISOString(),
             resourceType: parsed.resourceType,
