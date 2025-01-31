@@ -187,7 +187,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
           content: reduced.scripturalMetaPayloads,
           transactionHandle: tx,
           onConflictDoUpdateArgs: {
-            target: schema.scripturalRenderingMetadata.id,
+            target: schema.scripturalRenderingMetadata.renderingId,
             set: onConflictSetAllFieldsToSqlExcluded(
               schema.scripturalRenderingMetadata,
               ["id"]
@@ -202,7 +202,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
           content: reduced.nonScripturalMetaPayloads,
           transactionHandle: tx,
           onConflictDoUpdateArgs: {
-            target: schema.nonScripturalRenderingMetadata.id,
+            target: schema.nonScripturalRenderingMetadata.renderingId,
             set: onConflictSetAllFieldsToSqlExcluded(
               schema.nonScripturalRenderingMetadata,
               ["id"]

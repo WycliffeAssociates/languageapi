@@ -218,6 +218,20 @@
       "when": 1724433097970,
       "tag": "0030_mushy_serpent_society",
       "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1738349317266,
+      "tag": "0031_chubby_gamma_corps",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1738351000810,
+      "tag": "0032_dusty_tombstone",
+      "breakpoints": true
     }
   ]
 }

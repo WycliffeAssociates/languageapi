@@ -1,5 +1,7 @@
 hasura/seeds/languageapi/data_dump.sql
 data_dump.sql
+data_dump_dev.sql
+data_dump_prod.sql
 proj_notes.md
 mise.toml
 .tool-versions

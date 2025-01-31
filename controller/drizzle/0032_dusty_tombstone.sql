@@ -1,0 +1,2 @@
+DROP INDEX "nonscriptural_metadata_rendering_idx";--> statement-breakpoint
+CREATE UNIQUE INDEX "nonscriptural_metadata_rendering_idx" ON "nonscriptural_rendering_metadata" USING btree ("rendering_id");

@@ -261,7 +261,7 @@ export const scripturalRenderingMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
-      renderingIdx: index("scriptural_metadata_rendering_idx").on(
+      renderingIdx: uniqueIndex("scriptural_metadata_rendering_idx").on(
         table.renderingId
       ),
     };
@@ -285,7 +285,7 @@ export const nonScripturalRenderingMetadata = pgTable(
       })
         .onDelete("cascade")
         .onUpdate("cascade"),
-      renderingIdx: index("nonscriptural_metadata_rendering_idx").on(
+      renderingIdx: uniqueIndex("nonscriptural_metadata_rendering_idx").on(
         table.renderingId
       ),
     };

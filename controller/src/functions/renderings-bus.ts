@@ -210,12 +210,11 @@ export async function wacsSbRenderingsApi(
             baseLoad.scripturalMeta = {
               tempId: randomUUid,
               bookName: bookName,
+              bookSlug: payload.Book ? payload.Book : null,
               chapter: payload.Chapter,
               isWholeBook,
               isWholeProject,
             };
-            payload.Book && (baseLoad.scripturalMeta.bookSlug = payload.Book);
-            bookName && (baseLoad.scripturalMeta.bookName = bookName);
           } else {
             baseLoad.nonScripturalMeta = {
               tempId: randomUUid,
