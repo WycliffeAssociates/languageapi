@@ -13,6 +13,7 @@ const table = insertSchemas.localization.table;
 
 // you can run azrue crons  manually by invoking
 // http://localhost:7071/admin/functions/manageLocalizationTable.  (or the function name below). You must use a post request, header of Content-Type application/json, and the body as follows { "input": "anything"}. The body doesn't actually matter
+// Secondly, if you want to run only one azure function without modifying host.json (which does get deployed), if you have func installed, you can do func start --functions <functionName>
 export async function populateLocalization(
   myTimer: Timer,
   context: InvocationContext
@@ -166,9 +167,9 @@ async function populateScripturalBookNames() {
 }
 
 app.timer("manageLocalizationTable", {
-  schedule: "*/30 * * * * *",
+  schedule: "1 1 */4 * * * ",
   handler: populateLocalization,
-  useMonitor: false,
+  useMonitor: process.env.NODE_ENV?.toUpperCase() == "DEV" ? false : true,
 });
 
 // For resource types,
