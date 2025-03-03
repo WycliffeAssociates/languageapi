@@ -3,6 +3,8 @@ import {getDb as startDb} from "../db/config";
 import {onConflictSetAllFieldsToSqlExcluded} from "../utils";
 import * as dbSchema from "../db/schema/schema";
 import {eq, and, isNotNull, like, notInArray, ne} from "drizzle-orm";
+import {parse as yamlParse} from "yaml";
+import {basename} from "path";
 
 const db = startDb();
 
@@ -20,12 +22,6 @@ export async function populateGlUsfmSources(
   } catch (error) {
     context.error(error);
   }
-  // console.log({body});
-  // we want to query
-  // all content, where
-  // the language -> wa_language_metadata -> is_gateway is true'
-  // the domain is scripture (for usfm)
-  // where there is not an existing source.usfm in the renderings table for that content
 }
 
 async function getApplicableContentRows(context: InvocationContext) {
@@ -39,8 +35,6 @@ async function getApplicableContentRows(context: InvocationContext) {
   // let testCase = res.slice(0, 5);
   let apiBaseUrl = `${WACS_API_URL}/repos`;
 
-  // ie "01-GEN"
-  let usfmRegex = /(\d{2})-(\w{3})/i;
   let counter = 0;
   for await (const row of rows) {
     try {
@@ -56,17 +50,14 @@ async function getApplicableContentRows(context: InvocationContext) {
       const usfmFiles = await getWacsUsfmFromTree({
         ...baseArgs,
         sha,
-        regex: usfmRegex,
       });
+      if (!usfmFiles) continue;
 
       // This loop is serially because I was having problem with doing a batch insert with CTE's causing duplicate parts of the query to reserve the same serial id which was causing the insert to fail. It's fine to just do this as a cron and not stress about the prf of the serial async loop though for this.
       for await (const f of usfmFiles) {
-        const match = f.path.match(usfmRegex);
-        const bookSlug = match[2].toUpperCase();
-        let bookName = await getBookNameFromExistingData({
-          bookSlug,
-          languageId: row.languageId,
-        });
+        const bookSlug = f.bookSlug.toUpperCase();
+        let bookName = f.bookName;
+        console.log({bookSlug, bookName});
         let rawUrl = `${apiBaseUrl}/${row.gitUser}/${
           row.gitRepo
         }/raw/${encodeURIComponent(f.path)}`;
@@ -144,7 +135,6 @@ type WacsArgs = {
 };
 type WacsArgsAndSha = WacsArgs & {
   sha: string;
-  regex: RegExp;
 };
 
 async function getWacsContentSha({baseUrl, user, repo}: WacsArgs) {
@@ -157,43 +147,55 @@ async function getWacsUsfmFromTree({
   user,
   repo,
   sha,
-  regex,
-}: WacsArgsAndSha) {
+}: WacsArgsAndSha): Promise<null | Array<{
+  path: string;
+  sha: string;
+  url: string;
+  bookName: string;
+  bookSlug: string;
+  size: number;
+}>> {
   const treeRes = await fetch(
     `${baseUrl}/${user}/${repo}/git/trees/${sha}?recursive=true`
   );
   const treeBody = await treeRes.json();
   const usfmFiles = treeBody?.tree?.filter(
-    (f: any) =>
-      f.path.endsWith("usfm") && f.type === "blob" && f.path.match(regex).length
+    (f: any) => f.path.endsWith("usfm") && f.type === "blob"
   );
-  return usfmFiles;
-}
-
-async function getBookNameFromExistingData({
-  languageId,
-  bookSlug,
-}: {
-  languageId: string | null;
-  bookSlug: string;
-}) {
-  let bookName: string | null = null;
-  if (languageId) {
-    let bookQ = await db.query.localization.findFirst({
-      columns: {
-        value: true,
-      },
-      where(localization, {and, ilike, eq}) {
-        return and(
-          eq(localization.ietfCode, languageId!),
-          eq(localization.category, "bible_book"),
-          ilike(localization.key, bookSlug)
-        );
-      },
-    });
-    bookName = bookQ?.value ?? null;
-    return bookName;
+  const manifest = treeBody?.tree?.find((f: any) =>
+    f.path.includes("manifest")
+  );
+  if (!manifest) return null;
+  const manifestType = manifest.path.includes("yaml")
+    ? "yaml"
+    : manifest.path.includes("json")
+    ? "json"
+    : null;
+  // ecosystem right now should only have yaml mostly, and a few json(from bttwriter, but those are partial usually, so json really shouldn't even be getting through here based on the filter above)
+  if (!manifestType) return null;
+  const manifestRes = await fetch(manifest.url);
+  const manifestBody = await manifestRes.json();
+  const content = Buffer.from(manifestBody.content, "base64").toString();
+  let parsed = null;
+  if (manifestType === "yaml") {
+    parsed = yamlParse(content);
+  } else if (manifestType === "json") {
+    parsed = JSON.parse(content);
   }
+  // this is a resource container path that maps projects to file paths.
+  const projects = parsed?.projects;
+  if (projects) {
+    usfmFiles?.forEach((f: any) => {
+      const match = projects.find((p: any) =>
+        p.path.toLowerCase().includes(basename(f.path.toLowerCase(), "usfm"))
+      );
+      if (match?.title) {
+        f.bookName = match.title.trim();
+        f.bookSlug = match.identifier?.trim();
+      }
+    });
+  }
+  return usfmFiles;
 }
 
 type TransactDbRowForUsfmArgs = {
@@ -258,7 +260,7 @@ app.timer("populateGlUsfmSources", {
   useMonitor: process.env.NODE_ENV?.toUpperCase() == "DEV" ? false : true,
 });
 
-/* 
+/*
  `https://content.bibletranslationtools.org/api/v1/repos/${
           row.gitUser
         }/${row.gitRepo}/raw/${encodeURIComponent(f.path)}`;
