@@ -57,7 +57,6 @@ async function getApplicableContentRows(context: InvocationContext) {
       for await (const f of usfmFiles) {
         const bookSlug = f.bookSlug.toUpperCase();
         let bookName = f.bookName;
-        console.log({bookSlug, bookName});
         let rawUrl = `${apiBaseUrl}/${row.gitUser}/${
           row.gitRepo
         }/raw/${encodeURIComponent(f.path)}`;
