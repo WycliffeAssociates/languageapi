@@ -76,7 +76,7 @@ export type insertGitRepo = InferInsertModel<typeof schema.gitRepo>;
 
 // ========= renderings
 export const insertRenderingSchema = createInsertSchema(schema.rendering, {
-  fileSizeBytes: (schema) => z.number().nonnegative(),
+  fileSizeBytes: (schema) => schema.nonnegative(),
 });
 export const selectRenderingSchema = createSelectSchema(schema.rendering);
 export type renderingType = InferSelectModel<typeof schema.rendering>;
@@ -93,6 +93,9 @@ export const selectScripturalRenderingMetadataSchema = createSelectSchema(
   schema.scripturalRenderingMetadata
 );
 export type scripturalRenderingMetadataType = InferSelectModel<
+  typeof schema.scripturalRenderingMetadata
+>;
+export type scripturalRenderingMetadataInsert = InferSelectModel<
   typeof schema.scripturalRenderingMetadata
 >;
 export type insertScripturalRenderingMetadata = InferInsertModel<
