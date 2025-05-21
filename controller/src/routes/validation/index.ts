@@ -15,6 +15,7 @@ export const langPost = z.array(
       })
       .optional(),
     gatewayIetf: z.string().trim().optional(),
+    homeCountryAlpha2: z.string().trim().optional().default("ZZ"), //ZZ stands for unknown
   })
 );
 export const langDelete = z.object({ietfCodes: z.array(z.string())});
