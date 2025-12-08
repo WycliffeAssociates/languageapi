@@ -8,13 +8,13 @@ import {and, eq, inArray} from "drizzle-orm";
 const db = startDb();
 
 const wacMessageSchema = z.object({
-  EventType: z.string(),
-  RepoHtmlUrl: z.string(),
+  // EventType: z.string(),
+  // RepoHtmlUrl: z.string(),
   Repo: z.string(),
   User: z.string(),
-  RepoId: z.number(),
-  DefaultBranch: z.string(),
-  Topics: z.array(z.string()),
+  // RepoId: z.number(),
+  // DefaultBranch: z.string(),
+  Topics: z.array(z.string()).nullable(),
 });
 
 export async function wacsSbGitTopicsApi(
@@ -68,7 +68,9 @@ export async function wacsSbGitTopicsApi(
         .where(eq(dbSchema.repoToTopic.repoId, repoId));
 
       const existingNames = new Set(existing.map((t) => t.name));
-      const incomingNames = new Set(parsed.Topics.map((t) => t.toLowerCase()));
+      const incomingNames = new Set(
+        parsed.Topics?.map((t) => t.toLowerCase()) ?? []
+      );
 
       // 3) Determine adds + deletes
       const toAdd = [...incomingNames].filter((n) => !existingNames.has(n));
