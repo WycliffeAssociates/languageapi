@@ -1,0 +1,3 @@
+table:
+  name: vw_consolidated_repos
+  schema: public

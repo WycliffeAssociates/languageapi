@@ -6,7 +6,7 @@ object_relationships:
     using:
       foreign_key_constraint_on: content_id
 array_relationships:
-  - name: git_repo_topics
+  - name: topics
     using:
       foreign_key_constraint_on:
         column: repo_id

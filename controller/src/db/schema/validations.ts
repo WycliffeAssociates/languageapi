@@ -74,6 +74,16 @@ export const selectGitRepoSchema = createSelectSchema(schema.gitRepo);
 export type gitRepoType = InferSelectModel<typeof schema.gitRepo>;
 export type insertGitRepo = InferInsertModel<typeof schema.gitRepo>;
 
+export const insertGitTopicSchema = createInsertSchema(schema.gitTopic);
+export const selectGitTopicSchema = createSelectSchema(schema.gitTopic);
+export type gitTopicType = InferSelectModel<typeof schema.gitTopic>;
+export type insertGitTopic = InferInsertModel<typeof schema.gitTopic>;
+
+export const insertGitRepoTopicSchema = createInsertSchema(schema.repoToTopic);
+export const selectGitRepoTopicSchema = createSelectSchema(schema.repoToTopic);
+export type gitRepoTopicType = InferSelectModel<typeof schema.repoToTopic>;
+export type insertGitRepoTopic = InferInsertModel<typeof schema.repoToTopic>;
+
 // ========= renderings
 export const insertRenderingSchema = createInsertSchema(schema.rendering, {
   fileSizeBytes: (schema) => schema.nonnegative(),

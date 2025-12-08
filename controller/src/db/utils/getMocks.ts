@@ -100,7 +100,7 @@ export function getMockedGit() {
   type apiKeys = z.infer<typeof apiValidators.gitPost.element>;
   const mockedContent: apiKeys = {
     contentId: "wacs-user-repo",
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     repoName: fakerWord(),
     repoUrl: faker.internet.url(),
   };
@@ -151,7 +151,7 @@ export function getMockedContent() {
     gitEntry: faker.helpers.maybe(
       () => {
         return {
-          username: faker.internet.userName(),
+          username: faker.internet.username(),
           repoName: fakerWord(),
           repoUrl: faker.internet.url(),
           namespace: "wacs",
@@ -229,7 +229,7 @@ export function getMockedRendering(
     mockedRender.nonScripturalMeta = {
       tempId: randomUUid,
       name: "nonScripturalName",
-      additionalData: "A json field",
+      additionalData: {},
     };
   }
   return mockedRender;

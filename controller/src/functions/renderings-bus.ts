@@ -30,7 +30,7 @@ const renderedFileSchema = z.object({
   Slug: z.string().nullable(),
 });
 
-const titlesSchema = z.record(z.string().nullable());
+const titlesSchema = z.record(z.string(), z.string().nullable());
 
 const renderingsSchema = z.object({
   Successful: z.boolean(),

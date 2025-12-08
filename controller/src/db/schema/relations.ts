@@ -73,6 +73,11 @@ export const gitRepoRelations = relations(db.gitRepo, ({one}) => ({
     references: [db.content.id],
   }),
 }));
+export const gitRepoTopicRelations = relations(db.gitRepo, ({many}) => ({
+  topics: many(db.gitTopic, {
+    relationName: "topics",
+  }),
+}));
 
 export const renderingRelations = relations(db.rendering, ({one}) => ({
   content: one(db.content, {

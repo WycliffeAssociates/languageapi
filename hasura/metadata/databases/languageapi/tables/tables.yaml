@@ -12,6 +12,7 @@
 - "!include public_repo_topic.yaml"
 - "!include public_scriptural_rendering_metadata.yaml"
 - "!include public_source_zips.yaml"
+- "!include public_vw_consolidated_repos.yaml"
 - "!include public_vw_langnames.yaml"
 - "!include public_wa_content_metadata.yaml"
 - "!include public_wa_language_metadata.yaml"

@@ -20,5 +20,6 @@
         "maxConcurrentCalls": 2
       }
     }
-  }
+  },
+  "functions": ["waLangApiGitTopics"]
 }
