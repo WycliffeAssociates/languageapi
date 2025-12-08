@@ -1,0 +1,10 @@
+table:
+  name: git_topic
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - name
+        - id
+      filter: {}

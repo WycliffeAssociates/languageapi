@@ -1,0 +1,10 @@
+table:
+  name: repo_topic
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - repo_id
+        - topic_id
+      filter: {}
