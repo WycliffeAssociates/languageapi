@@ -12,3 +12,6 @@ select_permissions:
         - repo_id
         - topic_id
       filter: {}
+      allow_aggregations: true
+      query_root_fields: []
+      subscription_root_fields: []
