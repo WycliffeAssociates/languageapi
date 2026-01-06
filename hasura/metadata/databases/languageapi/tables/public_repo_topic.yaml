@@ -1,0 +1,17 @@
+table:
+  name: repo_topic
+  schema: public
+object_relationships:
+  - name: topic
+    using:
+      foreign_key_constraint_on: topic_id
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - repo_id
+        - topic_id
+      filter: {}
+      allow_aggregations: true
+      query_root_fields: []
+      subscription_root_fields: []

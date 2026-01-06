@@ -91,6 +91,7 @@ export const contentRenderingWithMeta =
     nonScripturalMeta: dbValidators.insertNonScripturalRenderingMetadataSchema
       .extend({
         tempId: z.string(),
+        additionalData: z.record(z.string(), z.string()).optional(),
       })
       .optional(),
   });

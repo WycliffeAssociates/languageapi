@@ -232,6 +232,13 @@
       "when": 1738351000810,
       "tag": "0032_dusty_tombstone",
       "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1765216088489,
+      "tag": "0033_loving_red_skull",
+      "breakpoints": true
     }
   ]
 }

@@ -17,3 +17,16 @@
               pk
             }
           }
+      - name: Consolidated Repos
+        query: |
+          query Consolidated {
+            vw_consolidated_repos {
+              language_ietf
+              language_name
+              repo_url
+              title
+              language_english_name
+              repo_name
+              username
+            }
+          }

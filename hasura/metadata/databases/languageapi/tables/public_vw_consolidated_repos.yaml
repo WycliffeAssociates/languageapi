@@ -1,0 +1,16 @@
+table:
+  name: vw_consolidated_repos
+  schema: public
+select_permissions:
+  - role: anonymous
+    permission:
+      columns:
+        - content_id
+        - language_ietf
+        - repo_name
+        - repo_url
+        - title
+        - username
+        - language_english_name
+        - language_name
+      filter: {}

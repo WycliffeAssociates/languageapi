@@ -1,3 +1,12 @@
+- comment: Exposes the materialized view of consolidated repos over rest
+  definition:
+    query:
+      collection_name: allowed-queries
+      query_name: Consolidated Repos
+  methods:
+    - GET
+  name: Consolidated Repos
+  url: consolidated-repos
 - comment: langnames
   definition:
     query:
