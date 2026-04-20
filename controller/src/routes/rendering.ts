@@ -3,30 +3,30 @@ import {
   HttpResponseInit,
   InvocationContext,
 } from "@azure/functions";
+import {inArray, sql} from "drizzle-orm";
+import {TableConfig} from "drizzle-orm/pg-core";
 import {
   apiRouteHandlerArgs,
   externalRouteType,
   genericErrShape,
   zodValidationKeys,
 } from "../customTypes/types";
+import {getDb} from "../db/config";
 import {
   polymorphicDelete,
   polymorphicInsert,
   polymorphicSelect,
 } from "../db/handlers";
+import * as schema from "../db/schema/schema";
+import {scripturalRenderingMetadata} from "../db/schema/schema";
+import * as dbTableValidators from "../db/schema/validations";
 import {
-  handleApiMethodReturn,
   dbTxDidErr,
+  handleApiMethodReturn,
   onConflictSetAllFieldsToSqlExcluded,
   statusCodeFromErrType,
 } from "../utils";
 import * as validators from "./validation";
-import * as dbTableValidators from "../db/schema/validations";
-import * as schema from "../db/schema/schema";
-import {inArray, sql} from "drizzle-orm";
-import {TableConfig} from "drizzle-orm/pg-core";
-import {getDb} from "../db/config";
-import {scripturalRenderingMetadata} from "../db/schema/schema";
 
 // FILE LEVEL SCOPE
 const db = getDb();

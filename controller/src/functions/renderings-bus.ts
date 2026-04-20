@@ -1,17 +1,13 @@
-import {app, InvocationContext} from "@azure/functions";
-import {getDb as startDb} from "../db/config";
-import {z} from "zod";
-import {handlePost as handleRenderingPost} from "../routes/rendering";
-import {handlePost as handleContentPost} from "../routes/content";
-import {handlePost as handleGitPost} from "../routes/git";
+import { app, InvocationContext } from "@azure/functions";
+import { getDb as startDb } from "../db/config";
+import { z } from "zod";
+import { handlePost as handleRenderingPost } from "../routes/rendering";
+import { handlePost as handleContentPost } from "../routes/content";
+import { handlePost as handleGitPost } from "../routes/git";
 import * as validators from "../routes/validation";
-import {createId} from "@paralleldrive/cuid2";
-import {
-  checkContentExists,
-  determineDomainType,
-  upsertContentFromRenderingBus,
-} from "../utils";
-import {getExistingRenderedContentRows} from "../lib/shared";
+import { createId } from "@paralleldrive/cuid2";
+import { checkContentExists, determineDomainType, upsertContentFromRenderingBus } from "../utils";
+import { getExistingRenderedContentRows } from "../lib/shared";
 
 const db = startDb();
 
@@ -54,22 +50,19 @@ const renderingsSchema = z.object({
   Titles: titlesSchema,
 });
 
-export async function wacsSbRenderingsApi(
-  message: unknown,
-  context: InvocationContext
-) {
+export async function wacsSbRenderingsApi(message: unknown, context: InvocationContext) {
   const namespace = "wacs";
   let contentCuid: string | null = null; //we need the guid of a content row to insert or upsert on the renderings Table.
 
   // If zod or the db action below throws here, the message will end up in the dead letter queue.
   try {
-    const successStatus = z.object({Successful: z.boolean()}).parse(message);
+    const successStatus = z.object({ Successful: z.boolean() }).parse(message);
     const wasSuccessful = !!successStatus.Successful;
     if (!wasSuccessful) {
       context.warn(
         `RENDERINGS BUS RECEIVED: received message from bus that was not a successful render. NOOP.  ${JSON.stringify(
-          message
-        )}`
+          message,
+        )}`,
         //  noop at this point. can't do anything.
       );
       return;
@@ -77,10 +70,10 @@ export async function wacsSbRenderingsApi(
     const parsed = renderingsSchema.parse(message);
     const joinedName = `${parsed.User}/${parsed.Repo}`.toLowerCase();
     context.log(
-      `RENDERINGS BUS RECEIVED: received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`
+      `RENDERINGS BUS RECEIVED: received a message for ${parsed.User} for ${parsed.Repo} for ${parsed.ResourceType} type`,
     );
 
-    const {exists, id: currentExistingId} = await checkContentExists({
+    const { exists, id: currentExistingId } = await checkContentExists({
       name: joinedName,
       namespace,
       db,
@@ -89,14 +82,10 @@ export async function wacsSbRenderingsApi(
     await db.transaction(async (tx) => {
       // CREATE CONTENT if content cuid not existing
       if (!exists) {
-        context.log(
-          `${joinedName}} is not already in api. Creating new row in table`
-        );
+        context.log(`${joinedName}} is not already in api. Creating new row in table`);
         const cuid = createId();
         contentCuid = cuid;
-        const newContentPayload: z.infer<
-          typeof validators.contentPost.element
-        > = {
+        const newContentPayload: z.infer<typeof validators.contentPost.element> = {
           id: cuid,
           name: joinedName,
           namespace: namespace,
@@ -117,17 +106,15 @@ export async function wacsSbRenderingsApi(
           newContentPayload.title = parsed.ResourceName;
         }
 
-        const newContentRow: z.infer<typeof validators.contentPost> = [
-          newContentPayload,
-        ];
+        const newContentRow: z.infer<typeof validators.contentPost> = [newContentPayload];
         const newRowRes = await handleContentPost(newContentRow);
         if (newRowRes.status !== 200) {
           context.log(
-            `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+            `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`,
           );
           tx.rollback();
           throw new Error(
-            `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+            `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`,
           );
         }
       } else {
@@ -159,7 +146,7 @@ export async function wacsSbRenderingsApi(
       const gitResult = await handleGitPost(newGitRow);
       if (gitResult.status !== 200) {
         context.error(
-          `Failed to create new git row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`
+          `Failed to create new git row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`,
         );
         tx.rollback();
       }
@@ -167,13 +154,12 @@ export async function wacsSbRenderingsApi(
       // ========================================
       // Note: query what's already in DB to perform upserts on the existing content given the URL's of this payload. If we end up in a spot with URls that should apply anymore, it'll be a `delete where url startsWith` sort of sql scrub. This upserts on any existing rendered_content, and the meta tables
 
-      const renderedContentRowsAlreadyInDb =
-        await getExistingRenderedContentRows({
-          contentCuid,
-          urlArray: parsed.RenderedFiles.map(
-            (payload) => `${parsed.FileBasePath}${payload.Path}`
-          ),
-        });
+      const renderedContentRowsAlreadyInDb = await getExistingRenderedContentRows({
+        contentCuid,
+        urlArray: parsed.RenderedFiles.map((payload) =>
+          `${parsed.FileBasePath}${payload.Path}`.toLowerCase(),
+        ),
+      });
 
       const renderedContentPayload: z.infer<typeof validators.renderingsPost> =
         parsed.RenderedFiles.map((payload) => {
@@ -190,10 +176,7 @@ export async function wacsSbRenderingsApi(
             hash: payload.Hash,
           };
           const domain = determineDomainType(parsed.ResourceType);
-          if (
-            !!domain &&
-            ["scripture", "gloss", "parascriptural"].includes(domain)
-          ) {
+          if (!!domain && ["scripture", "gloss", "parascriptural"].includes(domain)) {
             const bookName = parsed.Titles[payload.Book || ""];
             const isWholeBook =
               !payload.Chapter &&
@@ -203,9 +186,7 @@ export async function wacsSbRenderingsApi(
             let isWholeProject =
               !payload.Chapter &&
               !payload.Book &&
-              ["download", "index", "whole", "print_all"].includes(
-                payload.Path.toLowerCase()
-              );
+              ["download", "index", "whole", "print_all"].includes(payload.Path.toLowerCase());
 
             baseLoad.scripturalMeta = {
               tempId: randomUUid,
@@ -224,7 +205,8 @@ export async function wacsSbRenderingsApi(
             // but baseLoad.nonScripturalMeta would go here
           }
           const matchingFromLookup = renderedContentRowsAlreadyInDb.find(
-            (row) => row.url === `${parsed.FileBasePath}${payload.Path}`
+            (row) =>
+              row.url.toLowerCase() === `${parsed.FileBasePath}${payload.Path}`.toLowerCase(),
           );
           if (matchingFromLookup) {
             // Add the ids from existing lookup if we have them for rendered_content, and both meta tables, for upserts, otherwise leave blank to auto create.  If the rows exist, the content_id foreign keys will just propogate on due to no conflict.
@@ -233,12 +215,8 @@ export async function wacsSbRenderingsApi(
             if (!!baseLoad.scripturalMeta && matchingFromLookup.metadataId) {
               baseLoad.scripturalMeta.id = matchingFromLookup.metadataId;
             }
-            if (
-              !!baseLoad.nonScripturalMeta &&
-              matchingFromLookup.nonScripturalMetadataId
-            ) {
-              baseLoad.nonScripturalMeta.id =
-                matchingFromLookup.nonScripturalMetadataId;
+            if (!!baseLoad.nonScripturalMeta && matchingFromLookup.nonScripturalMetadataId) {
+              baseLoad.nonScripturalMeta.id = matchingFromLookup.nonScripturalMetadataId;
             }
           }
           return baseLoad;
@@ -254,7 +232,7 @@ export async function wacsSbRenderingsApi(
             const errMessage = JSON.stringify(
               `ADDITIONAL ERRORS: \n ${postResult.jsonBody.additionalErrors}\n\n
                 LAST ERR:
-                ${postResult.jsonBody.message}`
+                ${postResult.jsonBody.message}`,
             );
             throw new Error(errMessage);
           } else {
@@ -265,13 +243,9 @@ export async function wacsSbRenderingsApi(
     });
   } catch (error) {
     const repo =
-      typeof message == "object" && !!message && "Repo" in message
-        ? message.Repo
-        : "unknown repo";
+      typeof message == "object" && !!message && "Repo" in message ? message.Repo : "unknown repo";
     const user =
-      typeof message == "object" && !!message && "User" in message
-        ? message.User
-        : "unknown user";
+      typeof message == "object" && !!message && "User" in message ? message.User : "unknown user";
     context.error(`Error processing ${user}/${repo}`);
     if (error instanceof z.ZodError) {
       error.issues.forEach((issue) => {
@@ -288,8 +262,6 @@ app.serviceBusTopic("waLangApiRenderings", {
   connection: "BUS_CONN",
   topicName: "reporendered",
   subscriptionName:
-    process.env.NODE_ENV?.toUpperCase() == "DEV"
-      ? "will-local"
-      : "reporendered-languageapi",
+    process.env.NODE_ENV?.toUpperCase() == "DEV" ? "will-local" : "reporendered-languageapi",
   handler: wacsSbRenderingsApi,
 });
