@@ -271,3 +271,4 @@ __pycache__/
 .DS_Store
 /dist
 fixup.ts
+**/ad-hoc/*

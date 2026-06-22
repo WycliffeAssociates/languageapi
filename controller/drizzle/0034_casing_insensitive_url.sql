@@ -1,0 +1,2 @@
+ALTER TABLE "rendered_content" DROP CONSTRAINT "rendered_content_url_unique";--> statement-breakpoint
+CREATE UNIQUE INDEX "rendered_content_lower_url_idx" ON "rendered_content" USING btree (lower("url"));

@@ -1,6 +1,6 @@
 import * as schema from "../db/schema/schema";
 import {getDb} from "../db/config";
-import {eq, and, inArray} from "drizzle-orm";
+import {eq, and, inArray, sql} from "drizzle-orm";
 
 const db = getDb();
 
@@ -33,8 +33,14 @@ export async function getExistingRenderedContentRows({
     .where(
       and(
         eq(schema.rendering.contentId, contentCuid),
-        // we only have a slice of the files from bus meesage, so we should filter this result based on the urls from parsed queue message: What this query returns will be mapped against queue messages for ids and then updated.  If there is something from queue that is not in db, it'll be inserted.
-        inArray(schema.rendering.url, urlArray)
+        // Case-INSENSITIVE match (one row per lower(url)): find the existing row
+        // whatever its casing so the caller can attach its id for the meta
+        // upserts. We only have a slice of the files from the bus message, so we
+        // filter to just those urls; anything not found will be inserted.
+        inArray(
+          sql`lower(${schema.rendering.url})`,
+          urlArray.map((u) => u.toLowerCase())
+        )
       )
     );
   return renderedContentRowsAlreadyInDb;

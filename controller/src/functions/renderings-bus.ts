@@ -156,8 +156,12 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
 
       const renderedContentRowsAlreadyInDb = await getExistingRenderedContentRows({
         contentCuid,
-        urlArray: parsed.RenderedFiles.map((payload) =>
-          `${parsed.FileBasePath}${payload.Path}`.toLowerCase(),
+        // Store upstream casing verbatim. This exact-match lookup only attaches
+        // existing ids for the metadata upserts; the rendering upsert itself
+        // dedupes case-insensitively via the unique(lower(url)) index (last
+        // casing wins), so a casing change updates the row instead of duplicating.
+        urlArray: parsed.RenderedFiles.map(
+          (payload) => `${parsed.FileBasePath}${payload.Path}`,
         ),
       });
 
@@ -206,7 +210,8 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
           }
           const matchingFromLookup = renderedContentRowsAlreadyInDb.find(
             (row) =>
-              row.url.toLowerCase() === `${parsed.FileBasePath}${payload.Path}`.toLowerCase(),
+              row.url.toLowerCase() ===
+              `${parsed.FileBasePath}${payload.Path}`.toLowerCase(),
           );
           if (matchingFromLookup) {
             // Add the ids from existing lookup if we have them for rendered_content, and both meta tables, for upserts, otherwise leave blank to auto create.  If the rows exist, the content_id foreign keys will just propogate on due to no conflict.

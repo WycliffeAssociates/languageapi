@@ -2,7 +2,7 @@ import {app, InvocationContext, Timer} from "@azure/functions";
 import {getDb as startDb} from "../db/config";
 import {onConflictSetAllFieldsToSqlExcluded} from "../utils";
 import * as dbSchema from "../db/schema/schema";
-import {eq, and, isNotNull, like, notInArray, ne} from "drizzle-orm";
+import {eq, and, isNotNull, like, notInArray, ne, sql} from "drizzle-orm";
 import {parse as yamlParse} from "yaml";
 import {basename} from "path";
 
@@ -215,25 +215,19 @@ async function transactDbRowForUsfm({
 }: TransactDbRowForUsfmArgs) {
   const {scripturalRenderingMetadata, rendering} = dbSchema;
   return await db.transaction(async (tx) => {
-    const renderedRow = await tx
-      .insert(rendering)
-      .values({
-        contentId: contentId,
-        fileType: "usfm",
-        fileSizeBytes: size,
-        url: rawUrl,
-        hash: sha,
-      })
-      .onConflictDoUpdate({
-        target: [rendering.url],
-        set: onConflictSetAllFieldsToSqlExcluded(rendering, [
-          "contentId",
-          "modifiedOn",
-        ]),
-      })
-      .returning({
-        id: rendering.id,
-      });
+    // Case-insensitive upsert (one row per lower(url)); raw SQL because drizzle's
+    // typed onConflict can't target the lower(url) expression index. Mirrors the
+    // prior behavior: don't overwrite content_id / modified_on on conflict.
+    const renderedRow = (await tx.execute(sql`
+      INSERT INTO ${rendering} (content_id, file_type, file_size_bytes, url, hash)
+      VALUES (${contentId}, 'usfm', ${size}, ${rawUrl}, ${sha})
+      ON CONFLICT (lower(url)) DO UPDATE SET
+        file_type = excluded.file_type,
+        file_size_bytes = excluded.file_size_bytes,
+        url = excluded.url,
+        hash = excluded.hash
+      RETURNING id
+    `)) as unknown as {id: number}[];
     // meta row insertion
     await tx
       .insert(scripturalRenderingMetadata)

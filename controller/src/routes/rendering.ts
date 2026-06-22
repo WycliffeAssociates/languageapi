@@ -134,15 +134,33 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
     );
 
     const transacted = await db.transaction(async (tx) => {
-      const renderingInserted = await polymorphicInsert({
-        tableKey: "rendering", //extra string for type completion instead of tablename variable above
-        content: reduced.renderPayloads,
-        transactionHandle: tx,
-        onConflictDoUpdateArgs: {
-          target: schema.rendering.url,
-          set: onConflictSetAllFieldsToSqlExcluded(schema.rendering),
-        },
-      });
+      // Case-INSENSITIVE upsert: collapse onto the existing row whatever its
+      // casing and let the latest casing win (url = excluded.url). Matches the
+      // unique(lower(url)) index. drizzle's typed onConflict can't target an
+      // expression index, so this one insert is raw SQL.
+      const renderRows = reduced.renderPayloads;
+      const renderingInserted = renderRows.length
+        ? ((await tx.execute(sql`
+            INSERT INTO ${schema.rendering} (content_id, file_type, file_size_bytes, url, hash, created_at, modified_on)
+            VALUES ${sql.join(
+              renderRows.map(
+                (r) =>
+                  sql`(${r.contentId}, ${r.fileType}, ${r.fileSizeBytes ?? null}, ${r.url}, ${
+                    r.hash ?? null
+                  }, ${r.createdAt ?? null}, ${r.modifiedOn ?? sql`now()`})`
+              ),
+              sql`, `
+            )}
+            ON CONFLICT (lower(url)) DO UPDATE SET
+              content_id = excluded.content_id,
+              file_type = excluded.file_type,
+              file_size_bytes = excluded.file_size_bytes,
+              url = excluded.url,
+              hash = excluded.hash,
+              modified_on = now()
+            RETURNING id, url, hash
+          `)) as unknown as {id: number; url: string; hash: string | null}[])
+        : [];
       if (Array.isArray(renderingInserted)) {
         reduced.scripturalMetaPayloads.forEach((payload) => {
           const matchingWithTmpId = reduced.renderPayloads.find((inserted) => {

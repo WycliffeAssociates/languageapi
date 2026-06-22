@@ -14,6 +14,7 @@ import {
   bigint,
   index,
 } from "drizzle-orm/pg-core";
+import {sql} from "drizzle-orm";
 import {
   langDirectionsEnum,
   contentTypeEnum,
@@ -230,7 +231,11 @@ export const rendering = pgTable(
       .notNull(),
     fileType: varchar("file_type").notNull(),
     fileSizeBytes: bigint("file_size_bytes", {mode: "number"}),
-    url: text("url").notNull().unique(),
+    // NOT a plain unique: uniqueness is case-INSENSITIVE (one row per lower(url)).
+    // The text host (read.bibletranslationtools.org) is case-insensitive, and the
+    // ingest upserts on lower(url) with last-casing-wins. See the lower-url index
+    // below and the rendering route's onConflict target.
+    url: text("url").notNull(),
     hash: varchar("hash"),
     createdAt: timestamp("created_at", {mode: "string"}),
     modifiedOn: timestamp("modified_on", {mode: "string"}).defaultNow(),
@@ -238,6 +243,7 @@ export const rendering = pgTable(
   (table) => [
     index("render_content_id_idx").on(table.contentId),
     index("file_type_idx").on(table.fileType),
+    uniqueIndex("rendered_content_lower_url_idx").on(sql`lower(${table.url})`),
   ]
 );
 //@=============== RENDERING META  =============

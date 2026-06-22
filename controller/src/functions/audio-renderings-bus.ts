@@ -6,7 +6,7 @@ import * as validators from "../routes/validation";
 import { handlePost as handleContentPost } from "../routes/content";
 import { getDb as startDb } from "../db/config";
 import * as schema from "../db/schema/schema";
-import { eq, and, inArray } from "drizzle-orm";
+import { eq, and, inArray, sql } from "drizzle-orm";
 import { handlePost as handleRenderingPost } from "../routes/rendering";
 import { insertContent } from "../db/schema/validations";
 import { contentDomainEnum } from "../db/schema/constants";
@@ -115,9 +115,12 @@ export async function audioRenderedContentListener(message: unknown, context: In
         .where(
           and(
             eq(schema.rendering.contentId, contentCuid),
-            // we only have a slice of the files from bus meesage, so we should filter this result based on the urls from parsed queue message: What this query returns will be mapped against queue messages for ids and then updated.  If there is something from queue that is not in db, it'll be inserted.
+            // Case-INSENSITIVE match (one row per lower(url)): find the existing
+            // row whatever its casing so we can attach ids for the meta upserts.
+            // We only have a slice of the files from the bus message, so filter
+            // to those urls; anything not found gets inserted.
             inArray(
-              schema.rendering.url,
+              sql`lower(${schema.rendering.url})`,
               parsed.files.map((f) => f.url.toLowerCase()),
             ),
           ),
@@ -143,7 +146,7 @@ export async function audioRenderedContentListener(message: unknown, context: In
           namespace: parsed.namespace,
           contentId: contentCuid!,
           fileType: file.fileType,
-          url: file.url.toLowerCase(),
+          url: file.url,
           fileSizeBytes: file.size,
           hash: file.hash,
           scripturalMeta: {
