@@ -73,9 +73,15 @@ const contentPostSingle = dbValidators.insertContentSchema.extend({
 });
 export const contentPost = z.array(contentPostSingle);
 
-export const contentDelete = z.array(
-  z.object({name: z.string(), namespace: z.string()})
-);
+// name/namespace are lowercased on insert (see contentPostSingle), so normalize here too or deletes silently match nothing
+export const contentDelete = z
+  .array(
+    z.object({
+      name: z.string().trim().toLowerCase(),
+      namespace: z.string().trim().toLowerCase(),
+    })
+  )
+  .min(1);
 
 /* //@===========  Renderings   ===========   */
 export const contentRenderingWithMeta =
