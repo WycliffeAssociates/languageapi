@@ -278,7 +278,12 @@ async function handleDel<T extends TableConfig>({
     const deletedPayloads = await request.json();
     const deleteSchema = validators.contentDelete;
     const deletePayloadsParsed = deleteSchema.parse(deletedPayloads);
-    const deleteOnField = sql`(name, namespace) in ${deletePayloadsParsed}`;
+    // drizzle expands nested arrays into a list of tuples: ((name, namespace), ...). Passing the objects directly binds each whole object as a single param, which postgres rejects.
+    const values = deletePayloadsParsed.map(({name, namespace}) => [
+      name,
+      namespace,
+    ]);
+    const deleteOnField = sql`(name, namespace) in ${values}`;
     const result = await polymorphicDelete(tableName, deleteOnField);
     const returnVal = handleApiMethodReturn({
       result,
