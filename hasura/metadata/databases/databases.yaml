@@ -4,6 +4,9 @@
     connection_info:
       database_url:
         from_env: PG_DATABASE_URL
+      pool_settings:
+        max_connections: 8
+        idle_timeout: 60
       isolation_level: read-committed
       use_prepared_statements: false
   tables: "!include languageapi/tables/tables.yaml"
