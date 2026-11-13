@@ -1,19 +1,22 @@
 import * as schema from "../db/schema/schema";
 import {getDb} from "../db/config";
 import {eq, and, inArray, sql} from "drizzle-orm";
+import {DbHandle} from "../customTypes/types";
 
 const db = getDb();
 
 type prepareRenderedContentForUpsertArgs = {
   contentCuid: string;
   urlArray: string[];
+  handle?: DbHandle;
 };
 
 export async function getExistingRenderedContentRows({
   contentCuid,
   urlArray,
+  handle = db,
 }: prepareRenderedContentForUpsertArgs) {
-  const renderedContentRowsAlreadyInDb = await db
+  const renderedContentRowsAlreadyInDb = await handle
     .select({
       renderedRowId: schema.rendering.id,
       url: schema.rendering.url,

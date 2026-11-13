@@ -121,7 +121,8 @@ export async function wacsSbGitTopicsApi(
     });
   } catch (error) {
     console.error(error);
-    return;
+    // Rethrow so the runtime abandons the message: Service Bus redelivers it and dead-letters it once the subscription's max delivery count is exceeded. Swallowing here would complete (i.e. silently drop) a message we failed to process.
+    throw error;
   }
 }
 

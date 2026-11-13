@@ -19,10 +19,12 @@ src/docs
 
 src/functions
 - app.ts - entry point to azure function
+- Service bus listeners (`src/functions/*bus*`) log and then rethrow on failure. Don't swallow errors in them: a handler that returns normally completes the message, so a failure would be dropped silently. Throwing makes the runtime abandon it, so Service Bus retries and then dead-letters it once the subscription's max delivery count is exceeded.
 
 src/routes
 - index - a barrel to export the az. function routes
 - (fileName) - each file corresponds to a api route.
+- `handlePost` in content / rendering / git takes an optional `DbHandle`. If you call one from inside a `db.transaction`, pass your `tx`. Otherwise it checks out a second pool connection while yours is held, and enough concurrent messages will deadlock the (small) pool.
   
 src/routes/validation
 - These are extensions to the db/zod schemas that extend the bare table level schemas.  Some routes (e.g) language insert on several tables at once, so the schema for the aggregation of payloads for an api route is handled here.  These are exported and consumed in openApi and in the getMocks.ts file to generate mock data and build the schema. 

@@ -10,6 +10,7 @@ import { eq, and, inArray, sql } from "drizzle-orm";
 import { handlePost as handleRenderingPost } from "../routes/rendering";
 import { insertContent } from "../db/schema/validations";
 import { contentDomainEnum } from "../db/schema/constants";
+import { DbHandle } from "../customTypes/types";
 
 const db = startDb();
 
@@ -77,6 +78,7 @@ export async function audioRenderedContentListener(message: unknown, context: In
         parsed.modifiedOn = parsed.modifiedOn || new Date().toISOString();
         contentCuid = await createContentRow({
           context,
+          handle: tx,
           row: parsed,
         });
       } else {
@@ -100,7 +102,7 @@ export async function audioRenderedContentListener(message: unknown, context: In
       }
 
       // messages for audio can't always fit into a single message from the queue due to size constraints.  We can't make that assumption and just delete all the previous renderings as such, So, this operation is an upsert on the unique url for each rendering and its metadata. Migrating to a different cdn or somethign would likley mean scrubbing these row based on a url startsWith {oldCdnUrl}
-      const renderedContentRowsAlreadyInDb = await db
+      const renderedContentRowsAlreadyInDb = await tx
         .select({
           renderedRowId: schema.rendering.id,
           url: schema.rendering.url,
@@ -169,7 +171,7 @@ export async function audioRenderedContentListener(message: unknown, context: In
         }
         return payload;
       });
-      const postResult = await handleRenderingPost(dbPayload);
+      const postResult = await handleRenderingPost(dbPayload, tx);
       if (postResult.status != 200) {
         tx.rollback();
         if (postResult.jsonBody) {
@@ -198,14 +200,17 @@ export async function audioRenderedContentListener(message: unknown, context: In
         context.error(JSON.stringify(issue));
       });
     }
+    // Rethrow so the runtime abandons the message: Service Bus redelivers it and dead-letters it once the subscription's max delivery count is exceeded. Swallowing here would complete (i.e. silently drop) a message we failed to process.
+    throw error;
   }
 }
 
 type createContentRowArgs = {
   context: InvocationContext;
   row: z.infer<typeof audioMessageSchema>;
+  handle: DbHandle;
 };
-async function createContentRow({ context, row }: createContentRowArgs) {
+async function createContentRow({ context, row, handle }: createContentRowArgs) {
   context.log(`${row.namespace}-${row.name} is not already in api. Creating new row in table`);
   const cuid = createId();
   // type guard to keep enum clean
@@ -228,7 +233,7 @@ async function createContentRow({ context, row }: createContentRowArgs) {
     title: row.resourceTitle ? row.resourceTitle : null,
   } as const;
   const newContentRow: z.infer<typeof validators.contentPost> = [newContentPayload];
-  const newRowRes = await handleContentPost(newContentRow);
+  const newRowRes = await handleContentPost(newContentRow, handle);
   if (newRowRes.status !== 200) {
     // Not catching here.  Failing to have an actual content row when we needed to create one is reason for top level throw to catch this.
     throw new Error(`Failed to create new content row for ${row.namespace}-${row.name} `);

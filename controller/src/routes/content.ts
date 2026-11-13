@@ -5,6 +5,7 @@ import {
 } from "@azure/functions";
 import {
   apiRouteHandlerArgs,
+  DbHandle,
   externalRouteType,
   genericErrShape,
 } from "../customTypes/types";
@@ -88,7 +89,10 @@ async function handlePostRequest<T extends TableConfig>({
   return result;
 }
 
-export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
+export async function handlePost(
+  payload: unknown,
+  handle: DbHandle = db
+): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
@@ -150,7 +154,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
       }
     );
 
-    const transacted = await db.transaction(async (tx) => {
+    const transacted = await handle.transaction(async (tx) => {
       // Content must insert before git bc git entries have a fk on
       // not all content must have git id
       // git id is serial generated
