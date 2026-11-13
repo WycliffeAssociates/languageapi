@@ -7,6 +7,7 @@ import {inArray, sql} from "drizzle-orm";
 import {TableConfig} from "drizzle-orm/pg-core";
 import {
   apiRouteHandlerArgs,
+  DbHandle,
   externalRouteType,
   genericErrShape,
   zodValidationKeys,
@@ -86,7 +87,10 @@ async function handlePostRequest<T extends TableConfig>({
   const result = await handlePost(payload);
   return result;
 }
-export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
+export async function handlePost(
+  payload: unknown,
+  handle: DbHandle = db
+): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
   let status = 200;
@@ -133,7 +137,7 @@ export async function handlePost(payload: unknown): Promise<HttpResponseInit> {
       }
     );
 
-    const transacted = await db.transaction(async (tx) => {
+    const transacted = await handle.transaction(async (tx) => {
       // Case-INSENSITIVE upsert: collapse onto the existing row whatever its
       // casing and let the latest casing win (url = excluded.url). Matches the
       // unique(lower(url)) index. drizzle's typed onConflict can't target an

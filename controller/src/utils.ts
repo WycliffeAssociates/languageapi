@@ -6,7 +6,7 @@ import {
   TableConfig,
 } from "drizzle-orm/pg-core";
 import {PostgresError} from "postgres";
-import {handlerReturnError} from "./customTypes/types";
+import {DbHandle, handlerReturnError} from "./customTypes/types";
 import {ZodError} from "zod";
 import * as schema from "./db/schema/schema";
 import {PostgresJsDatabase} from "drizzle-orm/postgres-js";
@@ -265,7 +265,7 @@ export async function checkContentExists({
 }: {
   name: string;
   namespace: string;
-  db: PostgresJsDatabase<typeof schema>;
+  db: DbHandle;
 }) {
   const doesExist = await db
     .select({id: schema.content.id})

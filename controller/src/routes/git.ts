@@ -5,6 +5,7 @@ import {
 } from "@azure/functions";
 import {
   apiRouteHandlerArgs,
+  DbHandle,
   externalRouteType,
   genericErrShape,
 } from "../customTypes/types";
@@ -79,7 +80,8 @@ async function handle(
   }
 }
 export async function handlePost<T extends TableConfig>(
-  payload: unknown
+  payload: unknown,
+  handle: DbHandle = db
 ): Promise<HttpResponseInit> {
   const thisMethod = "post";
   let addlErrs: genericErrShape[] = [];
@@ -90,7 +92,7 @@ export async function handlePost<T extends TableConfig>(
     const validationSchema = validators.gitPost;
     const payloadParsed = validationSchema.parse(payload);
 
-    const transacted = await db.transaction(async (tx) => {
+    const transacted = await handle.transaction(async (tx) => {
       const gitInserted = await polymorphicInsert({
         tableKey: tableName,
         content: payloadParsed,

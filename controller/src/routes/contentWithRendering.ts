@@ -94,7 +94,7 @@ async function handlePostRequest({
     );
 
     const transacted = await db.transaction(async (tx) => {
-      const contentInserted = await handleContentPost(content);
+      const contentInserted = await handleContentPost(content, tx);
       context.log({
         message: "inserting content",
       });
@@ -109,7 +109,7 @@ async function handlePostRequest({
       // Get those ids from inserted and add to the renderings for fk constraint
       for await (const payload of payloadParsed) {
         const existing = await checkContentExists({
-          db,
+          db: tx,
           name: payload.name,
           namespace: payload.namespace,
         });
@@ -130,7 +130,7 @@ async function handlePostRequest({
         .map((payload) => payload.renderings)
         .flat();
       // post the renderings
-      const renderingsInserted = await handleRenderingPost(renderingsOnly);
+      const renderingsInserted = await handleRenderingPost(renderingsOnly, tx);
       context.log({
         message: "inserting renderings for that content",
         payload: JSON.stringify(renderingsOnly),

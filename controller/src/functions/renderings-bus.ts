@@ -54,7 +54,7 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
   const namespace = "wacs";
   let contentCuid: string | null = null; //we need the guid of a content row to insert or upsert on the renderings Table.
 
-  // If zod or the db action below throws here, the message will end up in the dead letter queue.
+  // If zod or the db action below throws here, the catch logs and rethrows: the message is retried and ends up in the dead letter queue once the subscription's max delivery count is exceeded.
   try {
     const successStatus = z.object({ Successful: z.boolean() }).parse(message);
     const wasSuccessful = !!successStatus.Successful;
@@ -107,7 +107,7 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
         }
 
         const newContentRow: z.infer<typeof validators.contentPost> = [newContentPayload];
-        const newRowRes = await handleContentPost(newContentRow);
+        const newRowRes = await handleContentPost(newContentRow, tx);
         if (newRowRes.status !== 200) {
           context.log(
             `Failed to create new content row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`,
@@ -143,7 +143,7 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
           username: parsed.User,
         },
       ];
-      const gitResult = await handleGitPost(newGitRow);
+      const gitResult = await handleGitPost(newGitRow, tx);
       if (gitResult.status !== 200) {
         context.error(
           `Failed to create new git row for ${`${parsed.User}/${parsed.Repo}`.toLowerCase()}`,
@@ -155,6 +155,7 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
       // Note: query what's already in DB to perform upserts on the existing content given the URL's of this payload. If we end up in a spot with URls that should apply anymore, it'll be a `delete where url startsWith` sort of sql scrub. This upserts on any existing rendered_content, and the meta tables
 
       const renderedContentRowsAlreadyInDb = await getExistingRenderedContentRows({
+        handle: tx,
         contentCuid,
         // Store upstream casing verbatim. This exact-match lookup only attaches
         // existing ids for the metadata upserts; the rendering upsert itself
@@ -229,7 +230,7 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
 
       // Insert new renderings and meta
       context.log(`Posting new renderings for ${parsed.User}/${parsed.Repo}`);
-      const postResult = await handleRenderingPost(renderedContentPayload);
+      const postResult = await handleRenderingPost(renderedContentPayload, tx);
       if (postResult.status != 200) {
         tx.rollback();
         if (postResult.jsonBody) {
@@ -259,6 +260,8 @@ export async function wacsSbRenderingsApi(message: unknown, context: InvocationC
     } else {
       context.error(error);
     }
+    // Rethrow so the runtime abandons the message: Service Bus redelivers it and dead-letters it once the subscription's max delivery count is exceeded. Swallowing here would complete (i.e. silently drop) a message we failed to process.
+    throw error;
   }
 }
 

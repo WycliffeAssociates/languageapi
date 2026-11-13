@@ -4,17 +4,23 @@ import {InferSelectModel, SQL} from "drizzle-orm";
 import {
   AnyPgColumn,
   IndexColumn,
+  PgDatabase,
   PgTableWithColumns,
   PgTransaction,
   PgUpdateSetSource,
   TableConfig,
 } from "drizzle-orm/pg-core";
+import {PostgresJsQueryResultHKT} from "drizzle-orm/postgres-js";
 import {z} from "zod";
+import * as schema from "../db/schema/schema";
 
 export type externalRouteType = {
   name: string;
   details: HttpFunctionOptions;
 };
+// The global db or an open transaction. Callers already inside db.transaction pass their tx so the work stays on that connection (a nested .transaction() becomes a savepoint) instead of checking out a second one from the pool and deadlocking it.
+export type DbHandle = PgDatabase<PostgresJsQueryResultHKT, typeof schema>;
+
 export type zodValidationKeys = keyof typeof validations.insertSchemas;
 // export type zodValidationObj<T extends zodValidationKeys> = typeof validations.insertSchemas<T>
 
